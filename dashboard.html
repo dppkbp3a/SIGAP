@@ -63,20 +63,21 @@
         <div class="flex-1 flex flex-col overflow-y-auto">
             
             <!-- Top Navbar -->
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Monitoring Agenda & Kepegawaian</span>
-                    <div class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold border border-emerald-200">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span>Update Otomatis Aktif</span>
-                    </div>
+                    <!-- Switch Role Simulator (Untuk Demo Testing) -->
+                    <button onclick="toggleRole()" class="text-xs bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate text-blue-600"></i>
+                        <span>Ganti Role: <strong id="lblCurrentRole" class="text-blue-600 uppercase">ADMIN</strong></span>
+                    </button>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="text-right">
-                        <p class="text-sm font-bold text-gray-800">Admin DPPKBP3A</p>
-                        <p class="text-xs text-gray-500">NIP. 19811110 200604 2 007</p>
+                        <p id="userNameDisplay" class="text-sm font-bold text-gray-800">Admin DPPKBP3A</p>
+                        <p id="userRoleBadge" class="text-xs text-blue-600 font-semibold">Mode Administrator</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                    <div id="userAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
                         A
                     </div>
                 </div>
@@ -87,10 +88,11 @@
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white mb-6 shadow-md flex justify-between items-center">
                     <div>
-                        <h2 class="text-xl font-bold mb-1">Selamat Datang di SIGAP, Admin!</h2>
+                        <h2 id="welcomeText" class="text-xl font-bold mb-1">Selamat Datang di SIGAP!</h2>
                         <p class="text-sm text-blue-100">Pantau dan kelola data pegawai serta agenda kedinasan DPPKBP3A dengan mudah.</p>
                     </div>
-                    <button onclick="bukaModalAgenda()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
+                    <!-- Tombol ini hanya muncul jika role = ADMIN -->
+                    <button id="btnTambahAgenda" onclick="bukaModalAgenda()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition items-center gap-2 hidden">
                         <i class="fa-solid fa-plus"></i> Tambah Agenda
                     </button>
                 </div>
@@ -100,7 +102,7 @@
                     <a href="datapegawai.html" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md hover:border-blue-400 transition cursor-pointer">
                         <div>
                             <p class="text-xs text-gray-500 font-medium uppercase">Total Pegawai</p>
-                            <h3 id="totalPegawaiCount" class="text-2xl font-bold text-gray-800 mt-1">93</h3>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1">93</h3>
                         </div>
                         <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-users"></i>
@@ -110,7 +112,7 @@
                     <a href="kenaikan-pangkat.html" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md hover:border-yellow-400 transition cursor-pointer">
                         <div>
                             <p class="text-xs text-gray-500 font-medium uppercase">Kenaikan Pangkat</p>
-                            <h3 id="kpCount" class="text-2xl font-bold text-yellow-600 mt-1">3</h3>
+                            <h3 class="text-2xl font-bold text-yellow-600 mt-1">3</h3>
                         </div>
                         <div class="w-12 h-12 rounded-lg bg-yellow-50 text-yellow-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-arrow-up-right-dots"></i>
@@ -120,7 +122,7 @@
                     <a href="penghargaan.html" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md hover:border-green-400 transition cursor-pointer">
                         <div>
                             <p class="text-xs text-gray-500 font-medium uppercase">Penghargaan</p>
-                            <h3 id="penghargaanCount" class="text-2xl font-bold text-green-600 mt-1">8</h3>
+                            <h3 class="text-2xl font-bold text-green-600 mt-1">8</h3>
                         </div>
                         <div class="w-12 h-12 rounded-lg bg-green-50 text-green-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-award"></i>
@@ -130,7 +132,7 @@
                     <a href="pensiun.html" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md hover:border-purple-400 transition cursor-pointer">
                         <div>
                             <p class="text-xs text-gray-500 font-medium uppercase">Pensiun</p>
-                            <h3 id="pensiunCount" class="text-2xl font-bold text-purple-600 mt-1">45</h3>
+                            <h3 class="text-2xl font-bold text-purple-600 mt-1">45</h3>
                         </div>
                         <div class="w-12 h-12 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-user-xmark"></i>
@@ -154,11 +156,11 @@
                                     <th class="py-3 px-6">Kegiatan & Tempat</th>
                                     <th class="py-3 px-6">Pegawai / Bidang</th>
                                     <th class="py-3 px-6">Status</th>
-                                    <th class="py-3 px-6 text-center">Aksi</th>
+                                    <th class="py-3 px-6 text-center th-aksi">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="agendaTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
-                                <!-- Data akan di-load otomatis dari LocalStorage via Javascript -->
+                                <!-- Data di-load via Javascript -->
                             </tbody>
                         </table>
                     </div>
@@ -228,31 +230,65 @@
         </div>
     </div>
 
-    <!-- SCRIPT SISTEM OTO-SIMPAN (LOCALSTORAGE) -->
+    <!-- SCRIPT OTOMATISASI ROLE & LOCALSTORAGE -->
     <script>
-        // Data default bawaan jika memori masih kosong
         const dataBawaan = [
-            {
-                id: 1,
-                waktu: "08:30 WIB",
-                tanggal: "01 Jun 2026",
-                nama: "Rapat Koordinasi Stunting",
-                tempat: "Aula Utama Kantor Bupati",
-                bidang: "Bidang Dalduk & KB",
-                status: "Berlangsung"
-            },
-            {
-                id: 2,
-                waktu: "13:00 WIB",
-                tanggal: "01 Jun 2026",
-                nama: "Sosialisasi Perlindungan Anak",
-                tempat: "Kecamatan Kuningan",
-                bidang: "Bidang PPA",
-                status: "Akan Datang"
-            }
+            { id: 1, waktu: "08:30 WIB", tanggal: "01 Jun 2026", nama: "Rapat Koordinasi Stunting", tempat: "Aula Utama Kantor Bupati", bidang: "Bidang Dalduk & KB", status: "Berlangsung" },
+            { id: 2, waktu: "13:00 WIB", tanggal: "01 Jun 2026", nama: "Sosialisasi Perlindungan Anak", tempat: "Kecamatan Kuningan", bidang: "Bidang PPA", status: "Akan Datang" }
         ];
 
-        // 1. Ambil Data dari LocalStorage
+        // 1. FUNGSI HAK AKSES & ROLE
+        function getActiveRole() {
+            return localStorage.getItem('sigap_user_role') || 'admin';
+        }
+
+        function toggleRole() {
+            const current = getActiveRole();
+            const nextRole = current === 'admin' ? 'pegawai' : 'admin';
+            localStorage.setItem('sigap_user_role', nextRole);
+            terapkanHakAkses();
+            renderTabelAgenda();
+        }
+
+        function terapkanHakAkses() {
+            const role = getActiveRole();
+            const btnTambah = document.getElementById('btnTambahAgenda');
+            const lblRole = document.getElementById('lblCurrentRole');
+            const nameDisplay = document.getElementById('userNameDisplay');
+            const roleBadge = document.getElementById('userRoleBadge');
+            const avatar = document.getElementById('userAvatar');
+            const welcomeText = document.getElementById('welcomeText');
+
+            lblRole.innerText = role.toUpperCase();
+
+            if (role === 'admin') {
+                btnTambah.classList.remove('hidden');
+                btnTambah.classList.add('flex');
+                nameDisplay.innerText = "Admin DPPKBP3A";
+                roleBadge.innerText = "Mode Administrator";
+                roleBadge.className = "text-xs text-blue-600 font-semibold";
+                avatar.innerText = "A";
+                avatar.className = "w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold";
+                welcomeText.innerText = "Selamat Datang di SIGAP, Admin!";
+            } else {
+                btnTambah.classList.add('hidden');
+                btnTambah.classList.remove('flex');
+                nameDisplay.innerText = "Budi Santoso, S.STP";
+                roleBadge.innerText = "NIP. 19890312 201201 1 002";
+                roleBadge.className = "text-xs text-slate-500 font-normal";
+                avatar.innerText = "B";
+                avatar.className = "w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold";
+                welcomeText.innerText = "Selamat Datang di SIGAP, Budi!";
+            }
+        }
+
+        // 2. FUNGSI DATA AGENDA
+        function formatTanggalIndo(tanggalStr) {
+            if (!tanggalStr.includes('-')) return tanggalStr;
+            const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
+            return new Date(tanggalStr).toLocaleDateString('id-ID', opsi);
+        }
+
         function ambilAgenda() {
             const dataDisimpan = localStorage.getItem('sigap_agendas');
             if (!dataDisimpan) {
@@ -262,11 +298,22 @@
             return JSON.parse(dataDisimpan);
         }
 
-        // 2. Tampilkan Data ke Tabel
         function renderTabelAgenda() {
+            const role = getActiveRole();
             const dataAgenda = ambilAgenda();
             const tbody = document.getElementById('agendaTableBody');
+            const thAksiList = document.querySelectorAll('.th-aksi');
+            
+            // Sembunyikan Header Aksi jika role Pegawai
+            thAksiList.forEach(th => th.style.display = (role === 'admin') ? '' : 'none');
+
             tbody.innerHTML = '';
+
+            if (dataAgenda.length === 0) {
+                const colspan = role === 'admin' ? 5 : 4;
+                tbody.innerHTML = `<tr><td colspan="${colspan}" class="py-6 text-center text-gray-400">Belum ada agenda kedinasan.</td></tr>`;
+                return;
+            }
 
             dataAgenda.forEach((agenda, index) => {
                 let badgeClass = "bg-blue-100 text-blue-800";
@@ -274,6 +321,13 @@
                 if (agenda.status === "Selesai") badgeClass = "bg-emerald-100 text-emerald-800";
 
                 const tr = document.createElement('tr');
+                let tdAksiHTML = role === 'admin' ? `
+                    <td class="py-4 px-6 text-center">
+                        <button onclick="hapusAgenda(${index})" class="text-red-500 hover:text-red-700 transition text-xs font-semibold">
+                            <i class="fa-solid fa-trash"></i> Hapus
+                        </button>
+                    </td>` : '';
+
                 tr.innerHTML = `
                     <td class="py-4 px-6">
                         <span class="font-medium">${agenda.waktu}</span>
@@ -287,40 +341,44 @@
                     <td class="py-4 px-6">
                         <span class="${badgeClass} text-xs px-3 py-1 rounded-full font-medium">${agenda.status}</span>
                     </td>
-                    <td class="py-4 px-6 text-center">
-                        <button onclick="hapusAgenda(${index})" class="text-red-500 hover:text-red-700 transition text-xs font-semibold">
-                            <i class="fa-solid fa-trash"></i> Hapus
-                        </button>
-                    </td>
+                    ${tdAksiHTML}
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // 3. Simpan Agenda Baru Permanen
         function simpanAgendaBaru(event) {
             event.preventDefault();
+            if (getActiveRole() !== 'admin') {
+                alert("Akses ditolak! Hanya Admin yang dapat menambah data.");
+                return;
+            }
 
+            const tglInput = document.getElementById('inputTanggal').value;
             const agendaBaru = {
                 id: Date.now(),
                 nama: document.getElementById('inputNamaKegiatan').value,
                 tempat: document.getElementById('inputTempat').value,
-                tanggal: document.getElementById('inputTanggal').value,
+                tanggal: formatTanggalIndo(tglInput),
                 waktu: document.getElementById('inputWaktu').value + " WIB",
                 bidang: document.getElementById('inputBidang').value,
                 status: document.getElementById('inputStatus').value
             };
 
             const dataAgenda = ambilAgenda();
-            dataAgenda.unshift(agendaBaru); // Tambah di paling atas
+            dataAgenda.unshift(agendaBaru);
             localStorage.setItem('sigap_agendas', JSON.stringify(dataAgenda));
 
             renderTabelAgenda();
             tutupModalAgenda();
         }
 
-        // 4. Hapus Agenda jika salah input
         function hapusAgenda(index) {
+            if (getActiveRole() !== 'admin') {
+                alert("Akses ditolak! Hanya Admin yang dapat menghapus data.");
+                return;
+            }
+
             if (confirm("Apakah kamu yakin ingin menghapus agenda ini?")) {
                 const dataAgenda = ambilAgenda();
                 dataAgenda.splice(index, 1);
@@ -329,9 +387,10 @@
             }
         }
 
-        // Modal Controls
         function bukaModalAgenda() {
-            document.getElementById('modalTambahAgenda').classList.remove('hidden');
+            if (getActiveRole() === 'admin') {
+                document.getElementById('modalTambahAgenda').classList.remove('hidden');
+            }
         }
 
         function tutupModalAgenda() {
@@ -344,8 +403,11 @@
             document.getElementById('section-tabel-agenda').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Load data otomatis saat pertama kali buka halaman
-        document.addEventListener('DOMContentLoaded', renderTabelAgenda);
+        // Inisialisasi Pertama Kali
+        document.addEventListener('DOMContentLoaded', () => {
+            terapkanHakAkses();
+            renderTabelAgenda();
+        });
     </script>
 </body>
 </html>
