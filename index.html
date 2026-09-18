@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <!-- Script Validasi Login -->
+    <!-- Script Validasi Login & Perbedaan Role -->
     <script>
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault(); // Mencegah reload halaman
@@ -61,22 +61,31 @@
         const usernameInput = document.getElementById('username').value.trim();
         const passwordInput = document.getElementById('password').value.trim();
 
-        // KATA SANDI TUNGGAL UNTUK SEMUA USER (ADMIN & PEGAWAI)
+        // KATA SANDI TUNGGAL UNTUK SEMUA USER
         const kataSandiSama = "31Agustus2026";
 
-        // Cek apakah password yang dimasukkan benar
         if (passwordInput === kataSandiSama) {
-          // Username bisa berupa 'admin' atau NIP angka
-          if (usernameInput === "admin" || /^\d+$/.test(usernameInput)) {
+          // 1. JIKA LOGIN SEBAGAI ADMIN
+          if (usernameInput.toLowerCase() === "admin") {
+            localStorage.setItem("userRole", "admin");
+            localStorage.setItem("username", "Admin Utama");
             window.location.href = "dashboard.html";
             return;
-          } else {
-            alert("Username/NIP tidak valid!");
+          } 
+          
+          // 2. JIKA LOGIN SEBAGAI PEGAWAI (NIP BERUPA ANGKA)
+          if (/^\d+$/.test(usernameInput)) {
+            localStorage.setItem("userRole", "pegawai");
+            localStorage.setItem("username", usernameInput);
+            window.location.href = "dashboard.html";
             return;
           }
+
+          alert("Username atau NIP tidak valid!");
+          return;
         }
 
-        // Jika kata sandi salah
+        // JIKA KATA SANDI SALAH
         alert("Kata Sandi salah!");
       });
     </script>
