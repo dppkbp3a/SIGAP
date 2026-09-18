@@ -56,25 +56,28 @@
     <!-- Script Validasi Login -->
     <script>
       document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Mencegah form reload otomatis
+        e.preventDefault(); // Mencegah reload halaman
         
         const usernameInput = document.getElementById('username').value.trim();
         const passwordInput = document.getElementById('password').value.trim();
 
-        // 1. LOGIN ADMIN
-        if (usernameInput === "admin" && passwordInput === "admin") {
-          window.location.href = "dashboard.html";
-          return;
+        // KATA SANDI TUNGGAL UNTUK SEMUA USER (ADMIN & PEGAWAI)
+        const kataSandiSama = "31Agustus2026";
+
+        // Cek apakah password yang dimasukkan benar
+        if (passwordInput === kataSandiSama) {
+          // Username bisa berupa 'admin' atau NIP angka
+          if (usernameInput === "admin" || /^\d+$/.test(usernameInput)) {
+            window.location.href = "dashboard.html";
+            return;
+          } else {
+            alert("Username/NIP tidak valid!");
+            return;
+          }
         }
 
-        // 2. LOGIN PEGAWAI (Username berupa NIP angka & password: pegawai123)
-        if (/^\d+$/.test(usernameInput) && passwordInput === "pegawai123") {
-          window.location.href = "dashboard.html";
-          return;
-        }
-
-        // Jika username / password salah
-        alert("NIP/Username atau Kata Sandi salah!");
+        // Jika kata sandi salah
+        alert("Kata Sandi salah!");
       });
     </script>
 
