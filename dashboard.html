@@ -205,28 +205,47 @@
 
     <!-- LOGIK JAVASCRIPT AUTH & ADMIN SINGLE NIP -->
     <script>
-        // NIP Khusus Admin Tunggal
-        const ADMIN_NIP = "198111102006042007";
+        // Database Nama Pegawai berdasarkan NIP
+const DATA_PEGAWAI = {
+    "198111102006042007": "NOPA PUJIHASTUTI, SE., M.A.P." // GANTI DENGAN NAMA ASLI ADMIN DI SINI
+};
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Ambil data user yang tersimpan di browser
-            const currentUserNIP = localStorage.getItem("user_nip") || "198111102006042007";
-            const currentUserName = localStorage.getItem("user_nama") || "Pengguna SIGAP";
+// NIP Khusus Admin Tunggal
+const ADMIN_NIP = "198111102006042007";
 
-            // Tampilkan Nama & NIP Asli
-            const nameEl = document.getElementById("user-display-name");
-            const nipEl = document.getElementById("user-display-nip");
-            const welcomeEl = document.getElementById("welcome-user-name");
-            const avatarEl = document.getElementById("user-avatar");
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Ambil NIP yang tersimpan (atau default Admin jika belum login)
+    const currentUserNIP = localStorage.getItem("user_nip") || ADMIN_NIP;
+    
+    // 2. Cari nama berdasarkan NIP di database, jika tidak ada baru ambil dari localStorage/default
+    let currentUserName = DATA_PEGAWAI[currentUserNIP] || localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
 
-            if (nameEl) nameEl.innerText = currentUserName;
-            if (nipEl) nipEl.innerText = `NIP. ${currentUserNIP}`;
-            if (welcomeEl) welcomeEl.innerText = currentUserName.split(',')[0]; // Nama depan saja untuk sapaan
-            
-            // Generate Inisial untuk Avatar
-            if (avatarEl && currentUserName) {
-                avatarEl.innerText = currentUserName.charAt(0).toUpperCase();
-            }
+    // 3. Tampilkan Nama & NIP Asli di Dashboard
+    const nameEl = document.getElementById("user-display-name");
+    const nipEl = document.getElementById("user-display-nip");
+    const welcomeEl = document.getElementById("welcome-user-name");
+    const avatarEl = document.getElementById("user-avatar");
+
+    if (nameEl) nameEl.innerText = currentUserName;
+    if (nipEl) nipEl.innerText = `NIP. ${currentUserNIP}`;
+    if (welcomeEl) welcomeEl.innerText = currentUserName.split(',')[0]; // Ambil nama depan saja untuk sapaan
+    
+    // Inisial untuk Avatar Bulat
+    if (avatarEl && currentUserName) {
+        avatarEl.innerText = currentUserName.charAt(0).toUpperCase();
+    }
+
+    // 4. Cek Hak Akses Admin
+    const isAdmin = (currentUserNIP === ADMIN_NIP);
+    if (isAdmin) {
+        console.log("Akses Diterima: Login sebagai Admin.");
+    }
+});
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
 
             // Cek Hak Akses Admin
             const isAdmin = (currentUserNIP === ADMIN_NIP);
