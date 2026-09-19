@@ -80,7 +80,7 @@
                     <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">Memuat...</h4>
                     <span id="user-display-nip" class="text-xs text-slate-500">NIP. -</span>
                 </div>
-                <div id="user-avatar" class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
+                <div id="user-avatar" class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
                     -
                 </div>
             </div>
@@ -92,8 +92,9 @@
                 <h3 class="text-2xl font-bold mb-1">Selamat Datang di SIGAP, <span id="welcome-user-name">Pegawai</span>!</h3>
                 <p class="text-blue-100 text-sm">Pantau dan kelola data pegawai serta agenda kedinasan DPPKBP3A dengan mudah.</p>
             </div>
+            <!-- Badge Keterangan Role / Jabatan -->
             <span id="admin-badge" class="bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1">
-                <i class="fa-solid fa-shield-halved"></i> <span id="admin-badge-text">Mode Admin</span>
+                <i class="fa-solid fa-user-shield"></i> <span id="admin-badge-text">Mode Admin</span>
             </span>
         </div>
 
@@ -166,7 +167,7 @@
                             <th class="p-4 px-6">Kegiatan & Tempat</th>
                             <th class="p-4 px-6">Pegawai / Bidang</th>
                             <th class="p-4 px-6">Status</th>
-                            <th id="th-aksi" class="p-4 px-6 text-center admin-only">Aksi</th>
+                            <th id="th-aksi" class="p-4 px-6 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="agenda-table-body" class="divide-y divide-slate-100 text-slate-700">
@@ -251,7 +252,7 @@
             muatAgenda();
         });
 
-        // FUNGSI LOAD DATA PROFIL LOGIN
+        // FUNGSI MEMBACA DATA LOGGED IN USER
         function muatDataUser() {
             const role = localStorage.getItem("userRole") || "pegawai";
             const nip = localStorage.getItem("userNip") || localStorage.getItem("user_nip") || "-";
@@ -262,10 +263,10 @@
             document.getElementById("user-display-nip").textContent = "NIP. " + nip;
             document.getElementById("user-avatar").textContent = nama.charAt(0).toUpperCase();
 
-            // Update Banner
+            // Update Banner Welcome
             document.getElementById("welcome-user-name").textContent = nama;
 
-            // Update Badge Peran (Admin vs Pegawai)
+            // Update Badge Banner
             const badge = document.getElementById("admin-badge");
             const badgeText = document.getElementById("admin-badge-text");
 
@@ -273,15 +274,16 @@
                 badge.className = "bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
                 badgeText.textContent = "Mode Admin";
             } else {
+                // Tampilan khusus jika login sebagai Pegawai (Tampilan "Pegawai DPPKBP3A" tanpa NIP di badge)
                 badge.className = "bg-emerald-500 text-white font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
                 badgeText.textContent = "Pegawai DPPKBP3A";
 
-                // Sembunyikan fitur admin
+                // Sembunyikan Tombol Tambah & Kolom Aksi Hapus untuk Pegawai
                 const btnTambah = document.getElementById("btn-tambah-agenda");
-                if(btnTambah) btnTambah.style.display = "none";
+                if (btnTambah) btnTambah.style.display = "none";
                 
                 const thAksi = document.getElementById("th-aksi");
-                if(thAksi) thAksi.style.display = "none";
+                if (thAksi) thAksi.style.display = "none";
             }
         }
 
@@ -323,7 +325,7 @@
                     <td class="p-4 px-6">${statusBadge}</td>
                 `;
 
-                // Tampilkan kolom aksi hapus HANYA untuk Admin
+                // Tampilkan Aksi Hapus Hanya untuk Mode Admin
                 if (role === "admin") {
                     htmlContent += `
                         <td class="p-4 px-6 text-center">
