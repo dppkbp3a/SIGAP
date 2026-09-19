@@ -6,7 +6,12 @@
     <title>Kenaikan Gaji Berkala (KGB) - SIGAP DPPKBP3A</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Library Export Excel & PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body class="bg-gray-100 font-sans">
 
@@ -37,7 +42,6 @@
                     <a href="kenaikan-pangkat.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-arrow-up-right-dots w-5"></i> Kenaikan Pangkat
                     </a>
-                    
                     <a href="penghargaan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-award w-5"></i> Penghargaan
                     </a>
@@ -70,18 +74,21 @@
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
-                    <button onclick="toggleRole()" class="text-xs bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-2">
-                        <i class="fa-solid fa-arrows-rotate text-blue-600"></i>
-                        <span>Ganti Role: <strong id="lblCurrentRole" class="text-blue-600 uppercase">ADMIN</strong></span>
-                    </button>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right">
-                        <p id="userNameDisplay" class="text-sm font-bold text-gray-800">Admin DPPKBP3A</p>
-                        <p class="text-xs text-gray-500">NIP. 198111102006042007</p>
-                    </div>
-                    <div id="userAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                        A
+                <div class="flex items-center gap-4">
+                    <!-- Toggle Fast Switch khusus Testing / Demo User -->
+                    <button onclick="simulasiGantiUser()" class="text-xs bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-blue-600"></i>
+                        <span id="btnSwitchUserLabel">Switch ke Pegawai</span>
+                    </button>
+                    <div class="flex items-center gap-3 border-l pl-4 border-gray-200">
+                        <div class="text-right">
+                            <p id="userNameDisplay" class="text-sm font-bold text-gray-800">NOPA PUJIHASTUTI, SE., M.A.P.</p>
+                            <p id="userNipDisplay" class="text-xs text-gray-500">NIP. 19811110 200604 2 007</p>
+                        </div>
+                        <div id="userAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                            N
+                        </div>
                     </div>
                 </div>
             </header>
@@ -94,6 +101,7 @@
                         <h2 class="text-xl font-bold mb-1">Daftar Usulan Kenaikan Gaji Berkala (KGB) - TAHUN 2026</h2>
                         <p class="text-sm text-blue-100">Monitoring dan pengelolaan berkas usulan KGB Pegawai Negeri Sipil DPPKBP3A Kuningan.</p>
                     </div>
+                    <!-- Tombol Tambah Usulan KGB (Hanya Tampil Jika Admin) -->
                     <button id="btnTambahKgb" onclick="bukaModalKgb()" class="bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
                         <i class="fa-solid fa-plus"></i> Tambah Usulan KGB
                     </button>
@@ -136,14 +144,28 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="p-5 border-b border-gray-200 flex flex-col md:flex-row gap-4 justify-between items-center">
                         <h3 class="font-bold text-gray-800 text-base">Daftar Usulan KGB PNS</h3>
-                        <div class="w-full md:w-80 relative">
-                            <input type="text" id="searchInput" onkeyup="filterKgbTable()" placeholder="Cari Nama, NIP, Golongan..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400 text-sm"></i>
+                        
+                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                            <!-- Tombol Export Excel & PDF -->
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-file-excel"></i> Export Excel
+                                </button>
+                                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-file-pdf"></i> Cetak PDF
+                                </button>
+                            </div>
+
+                            <!-- Pencarian -->
+                            <div class="w-full md:w-64 relative">
+                                <input type="text" id="searchInput" onkeyup="filterKgbTable()" placeholder="Cari Nama, NIP, Golongan..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400 text-sm"></i>
+                            </div>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full text-left border-collapse" id="tableKgb">
                             <thead>
                                 <tr class="bg-gray-50 text-gray-600 text-xs uppercase font-semibold">
                                     <th class="py-3.5 px-4 text-center">No</th>
@@ -156,7 +178,7 @@
                                 </tr>
                             </thead>
                             <tbody id="kgbTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
-                                <!-- Data Excel dimuat via JS -->
+                                <!-- Data dimuat via JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -165,11 +187,11 @@
         </div>
     </div>
 
-    <!-- MODAL POP-UP TAMBAH USULAN KGB -->
+    <!-- MODAL POP-UP TAMBAH / EDIT USULAN KGB -->
     <div id="modalTambahKgb" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
             <div class="p-5 border-b flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-gray-800 flex items-center gap-2">
+                <h3 class="font-bold text-gray-800 flex items-center gap-2" id="modalTitle">
                     <i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru
                 </h3>
                 <button onclick="tutupModalKgb()" class="text-gray-400 hover:text-gray-600 transition">
@@ -177,7 +199,8 @@
                 </button>
             </div>
             
-            <form id="formKgb" onsubmit="simpanKgbBaru(event)" class="p-5 space-y-3 text-sm">
+            <form id="formKgb" onsubmit="simpanKgb(event)" class="p-5 space-y-3 text-sm">
+                <input type="hidden" id="editIndex" value="-1">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">NIP Pegawai</label>
                     <input type="text" id="inputNip" placeholder="Contoh: 19700810 199002 1 001" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
@@ -224,7 +247,7 @@
 
     <!-- SCRIPT MANAJEMEN DATA & LOCALSTORAGE -->
     <script>
-        // Data Bawaan Import Langsung dari File Excel "data usulan KGB DPPKBP3A.xlsx"
+        // Data Bawaan KGB
         const dataExcelKgb = [
             { id: 1, no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-02-01", usulan2026: "2026-02-01", kgbBerikutnya: "2028-02-01" },
             { id: 2, no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
@@ -257,12 +280,54 @@
             { id: 29, no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "Pengatur Tk.I", gol: "II/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" }
         ];
 
-        // Manajemen RBAC Role
+        // Profile Data Admin & Pegawai Biasa
+        const userProfiles = {
+            admin: {
+                nama: "NOPA PUJIHASTUTI, SE., M.A.P.",
+                nip: "19811110 200604 2 007",
+                avatar: "N",
+                role: "admin"
+            },
+            pegawai: {
+                nama: "Budi Santoso, S.STP",
+                nip: "19890312 201201 1 002",
+                avatar: "B",
+                role: "pegawai"
+            }
+        };
+
         function getActiveRole() {
             return localStorage.getItem('sigap_user_role') || 'admin';
         }
 
-        function toggleRole() {
+        function terapkanHakAkses() {
+            const role = getActiveRole();
+            const profile = userProfiles[role];
+            
+            const btnTambah = document.getElementById('btnTambahKgb');
+            const nameDisplay = document.getElementById('userNameDisplay');
+            const nipDisplay = document.getElementById('userNipDisplay');
+            const avatar = document.getElementById('userAvatar');
+            const btnSwitchLabel = document.getElementById('btnSwitchUserLabel');
+
+            nameDisplay.innerText = profile.nama;
+            nipDisplay.innerText = "NIP. " + profile.nip;
+            avatar.innerText = profile.avatar;
+
+            if (role === 'admin') {
+                btnTambah.classList.remove('hidden');
+                btnTambah.classList.add('flex');
+                avatar.className = "w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold";
+                btnSwitchLabel.innerText = "Switch ke Pegawai";
+            } else {
+                btnTambah.classList.add('hidden');
+                btnTambah.classList.remove('flex');
+                avatar.className = "w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold";
+                btnSwitchLabel.innerText = "Switch ke Admin";
+            }
+        }
+
+        function simulasiGantiUser() {
             const current = getActiveRole();
             const nextRole = current === 'admin' ? 'pegawai' : 'admin';
             localStorage.setItem('sigap_user_role', nextRole);
@@ -270,36 +335,6 @@
             renderTabelKgb();
         }
 
-        function terapkanHakAkses() {
-            const role = getActiveRole();
-            const btnTambah = document.getElementById('btnTambahKgb');
-            const lblRole = document.getElementById('lblCurrentRole');
-            const nameDisplay = document.getElementById('userNameDisplay');
-            const roleBadge = document.getElementById('userRoleBadge');
-            const avatar = document.getElementById('userAvatar');
-
-            lblRole.innerText = role.toUpperCase();
-
-            if (role === 'admin') {
-                btnTambah.classList.remove('hidden');
-                btnTambah.classList.add('flex');
-                nameDisplay.innerText = "Admin DPPKBP3A";
-                roleBadge.innerText = "Mode Administrator";
-                roleBadge.className = "text-xs text-blue-600 font-semibold";
-                avatar.innerText = "A";
-                avatar.className = "w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold";
-            } else {
-                btnTambah.classList.add('hidden');
-                btnTambah.classList.remove('flex');
-                nameDisplay.innerText = "Budi Santoso, S.STP";
-                roleBadge.innerText = "NIP. 19890312 201201 1 002";
-                roleBadge.className = "text-xs text-slate-500 font-normal";
-                avatar.innerText = "B";
-                avatar.className = "w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold";
-            }
-        }
-
-        // Format Tanggal ISO ke Teks Indonesia
         function formatTglIndo(tglStr) {
             if (!tglStr) return "-";
             const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -331,7 +366,10 @@
                 tr.className = "hover:bg-slate-50 transition";
 
                 let tdAksi = role === 'admin' ? `
-                    <td class="py-3.5 px-6 text-center">
+                    <td class="py-3.5 px-6 text-center space-x-2">
+                        <button onclick="editKgb(${index})" class="text-blue-600 hover:text-blue-800 font-semibold text-xs transition">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
                         <button onclick="hapusKgb(${index})" class="text-red-500 hover:text-red-700 font-semibold text-xs transition">
                             <i class="fa-solid fa-trash"></i> Hapus
                         </button>
@@ -356,12 +394,13 @@
             });
         }
 
-        function simpanKgbBaru(e) {
+        function simpanKgb(e) {
             e.preventDefault();
             if (getActiveRole() !== 'admin') return;
 
+            const editIndex = parseInt(document.getElementById('editIndex').value);
             const newItem = {
-                id: Date.now(),
+                id: editIndex >= 0 ? ambilDataKgb()[editIndex].id : Date.now(),
                 nip: document.getElementById('inputNip').value,
                 nama: document.getElementById('inputNama').value,
                 jabatan: document.getElementById('inputJabatan').value,
@@ -372,15 +411,37 @@
             };
 
             const data = ambilDataKgb();
-            data.unshift(newItem);
-            localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
+            if (editIndex >= 0) {
+                data[editIndex] = newItem;
+            } else {
+                data.unshift(newItem);
+            }
 
+            localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
             renderTabelKgb();
             tutupModalKgb();
         }
 
+        function editKgb(index) {
+            if (getActiveRole() !== 'admin') return;
+            const item = ambilDataKgb()[index];
+            
+            document.getElementById('editIndex').value = index;
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Usulan KGB`;
+            document.getElementById('inputNip').value = item.nip;
+            document.getElementById('inputNama').value = item.nama;
+            document.getElementById('inputJabatan').value = item.jabatan;
+            document.getElementById('inputGol').value = item.gol;
+            document.getElementById('inputKgbTerakhir').value = item.kgbTerakhir;
+            document.getElementById('inputUsulan2026').value = item.usulan2026;
+            document.getElementById('inputKgbBerikutnya').value = item.kgbBerikutnya;
+
+            bukaModalKgb();
+        }
+
         function hapusKgb(index) {
-            if (confirm("Apakah kamu yakin ingin menghapus data usulan KGB ini?")) {
+            if (getActiveRole() !== 'admin') return;
+            if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
                 const data = ambilDataKgb();
                 data.splice(index, 1);
                 localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
@@ -405,6 +466,61 @@
         function tutupModalKgb() {
             document.getElementById('modalTambahKgb').classList.add('hidden');
             document.getElementById('formKgb').reset();
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
+        }
+
+        // Export data ke format Excel (.xlsx)
+        function exportToExcel() {
+            const listKgb = ambilDataKgb();
+            const dataFormatted = listKgb.map((item, index) => ({
+                "No": index + 1,
+                "NIP": item.nip,
+                "Nama Pegawai": item.nama,
+                "Jabatan": item.jabatan,
+                "Gol.": item.gol,
+                "KGB Terakhir": formatTglIndo(item.kgbTerakhir),
+                "Usulan KGB 2026": formatTglIndo(item.usulan2026),
+                "KGB Berikutnya": formatTglIndo(item.kgbBerikutnya)
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(dataFormatted);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB 2026");
+            XLSX.writeFile(workbook, "Daftar_Usulan_KGB_DPPKBP3A_2026.xlsx");
+        }
+
+        // Export/Cetak data ke format PDF (.pdf)
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('landscape');
+
+            doc.setFontSize(14);
+            doc.text("DAFTAR USULAN KENAIKAN GAJI BERKALA (KGB) TAHUN 2026", 14, 15);
+            doc.setFontSize(10);
+            doc.text("DPPKBP3A Kabupaten Kuningan", 14, 22);
+
+            const listKgb = ambilDataKgb();
+            const tableRows = listKgb.map((item, index) => [
+                index + 1,
+                item.nip,
+                item.nama,
+                item.jabatan + " (" + item.gol + ")",
+                formatTglIndo(item.kgbTerakhir),
+                formatTglIndo(item.usulan2026),
+                formatTglIndo(item.kgbBerikutnya)
+            ]);
+
+            doc.autoTable({
+                head: [["No", "NIP", "Nama Pegawai", "Jabatan & Gol", "KGB Terakhir", "Usulan KGB 2026", "KGB Berikutnya"]],
+                body: tableRows,
+                startY: 28,
+                theme: 'grid',
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [29, 78, 216] }
+            });
+
+            doc.save("Daftar_Usulan_KGB_DPPKBP3A_2026.pdf");
         }
 
         document.addEventListener('DOMContentLoaded', () => {
