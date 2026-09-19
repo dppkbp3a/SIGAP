@@ -12,13 +12,88 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Style Khusus Cetak / Print -->
+    <style>
+        @media print {
+            /* Sembunyikan elemen navigasi, filter, dan tombol */
+            aside, header, .no-print, #detailModal {
+                display: none !important;
+            }
+
+            /* Reset layout utama agar menggunakan seluruh ukuran halaman cetak */
+            body, html {
+                background: #fff !important;
+                color: #000 !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            .flex, .flex-1, main {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Penyesuaian Tabel untuk Cetak */
+            .bg-white, .shadow-sm, .border {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+
+            th, td {
+                border: 1px solid #cbd5e1 !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+            }
+
+            thead {
+                display: table-header-group; /* Agar header tabel muncul di setiap awal halaman */
+            }
+
+            tr {
+                page-break-inside: avoid; /* Mencegah baris terpotong di tengah halaman */
+            }
+
+            thead tr {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Sembunyikan kolom Aksi saat dicetak */
+            .col-aksi {
+                display: none !important;
+            }
+
+            /* Judul cetak resmi */
+            .print-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Default tampilan layar biasa untuk judul cetak */
+        .print-header {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
     <div class="flex h-screen overflow-hidden">
         
         <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between shrink-0">
+        <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between shrink-0 no-print">
             <div>
                 <!-- Brand -->
                 <div class="h-16 flex items-center px-6 bg-slate-950 text-white font-bold text-lg gap-3">
@@ -68,7 +143,7 @@
         <div class="flex-1 flex flex-col overflow-y-auto">
             
             <!-- Top Navbar -->
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0 no-print">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Kelola Data Pegawai</span>
                 </div>
@@ -85,8 +160,15 @@
 
             <!-- Main Content -->
             <main class="p-6">
+                <!-- Header khusus saat hasil cetak -->
+                <div class="print-header">
+                    <h1 class="text-xl font-bold uppercase">Daftar Pegawai DPPKBP3A</h1>
+                    <p class="text-sm">Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak</p>
+                    <hr class="my-2 border-black">
+                </div>
+
                 <!-- Header Actions -->
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 no-print">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Daftar Seluruh Pegawai</h2>
                         <p class="text-sm text-gray-500">Master data seluruh Aparatur Sipil Negara dan Pegawai di lingkungan DPPKBP3A.</p>
@@ -106,7 +188,7 @@
                 </div>
 
                 <!-- Filter & Search Bar -->
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center no-print">
                     <div class="relative w-full md:w-80">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                         <input type="text" id="searchInput" placeholder="Cari NIP, Nama, GolRu, atau Jabatan..." class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -127,7 +209,7 @@
                                     <th class="py-3.5 px-4 text-center">Gol/Ruang</th>
                                     <th class="py-3.5 px-4">Jabatan</th>
                                     <th class="py-3.5 px-4">Unit Kerja</th>
-                                    <th class="py-3.5 px-4 text-center">Aksi</th>
+                                    <th class="py-3.5 px-4 text-center col-aksi">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="pegawaiTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -310,7 +392,7 @@
                     </td>
                     <td class="py-3 px-4">${item.jabatan}</td>
                     <td class="py-3 px-4 text-xs text-gray-600">${item.unit}</td>
-                    <td class="py-3 px-4 text-center">
+                    <td class="py-3 px-4 text-center col-aksi">
                         <button onclick="openModal('${item.nip}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Lihat Detail">
                             <i class="fa-solid fa-eye"></i>
                         </button>
