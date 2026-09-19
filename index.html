@@ -53,14 +53,11 @@
         </div>
     </div>
 
-    <!-- Script Validasi Login & Database Pegawai Utuh -->
+    <!-- Script Validasi Login -->
     <script>
-      // DATABASE LENGKAP PEGAWAI DPPKBP3A
+      // DAFTAR PEGAWAI DPPKBP3A
       const DATA_PEGAWAI = {
-          // Admin Kepegawaian (Admin Utama)
           "198111102006042007": "NOPA PUJIHASTUTI, SE., M.A.P.",
-          
-          // Daftar Seluruh Pegawai & Pejabat DPPKBP3A
           "197008101990021001": "Drs. H. KEPALA DINAS, M.Si",
           "197001011990031001": "SEKRETARIS DINAS",
           "197505121998031002": "Kabid Pengendalian Penduduk, S.Sos",
@@ -68,9 +65,7 @@
           "198508202010011004": "Kabid Perlindungan Anak, M.Si",
           "198812042011012005": "Kasubag Umum & Kepegawaian",
           "199002102014021006": "Analis Kepegawaian Ahli Pertama",
-          "199306182019032007": "Pengelola Data Kepegawaian",
-          "199501152020121008": "Staf Pelaksana Bagian Umum",
-          "199204052018012009": "Pengelola Sarana & Prasarana"
+          "199306182019032007": "Pengelola Data Kepegawaian"
       };
 
       const ADMIN_NIP = "198111102006042007";
@@ -80,13 +75,16 @@
         
         const usernameInput = document.getElementById('username').value.trim();
         const passwordInput = document.getElementById('password').value.trim();
-
-        // KATA SANDI TUNGGAL UNTUK SEMUA USER
         const kataSandiSama = "31Agustus2026";
 
         if (passwordInput === kataSandiSama) {
-          
-          // 1. LOGIN ADMIN (Username 'admin' ATAU NIP Nopa Pujihastuti)
+          // PAKSA CLEAR SESSION SEBELUM SET DATA BARU
+          localStorage.removeItem("userRole");
+          localStorage.removeItem("userNip");
+          localStorage.removeItem("user_nip");
+          localStorage.removeItem("user_nama");
+
+          // 1. JIKA LOGIN SEBAGAI ADMIN (HANYA UNTUK USERNAME 'admin' ATAU NIP NOPA)
           if (usernameInput.toLowerCase() === "admin" || usernameInput === ADMIN_NIP) {
             localStorage.setItem("userRole", "admin");
             localStorage.setItem("userNip", ADMIN_NIP);
@@ -96,9 +94,8 @@
             return;
           } 
           
-          // 2. LOGIN PEGAWAI (Semua Angka NIP Lainnya)
+          // 2. JIKA LOGIN SEBAGAI PEGAWAI (SEMUA NIP SELAIN ADMIN)
           if (/^\d+$/.test(usernameInput)) {
-            // Ambil nama pegawai jika terdaftar, jika tidak terdaftar gunakan nama umum
             const namaPegawai = DATA_PEGAWAI[usernameInput] || "Pegawai DPPKBP3A";
 
             localStorage.setItem("userRole", "pegawai");
@@ -110,7 +107,7 @@
             return;
           }
 
-          alert("Username atau NIP harus berupa angka NIP yang valid!");
+          alert("Username atau NIP tidak valid!");
           return;
         }
 
