@@ -6,9 +6,7 @@
     <title>Dashboard - SIGAP DPPKBP3A</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -80,7 +78,7 @@
                     <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">Memuat...</h4>
                     <span id="user-display-nip" class="text-xs text-slate-500">NIP. -</span>
                 </div>
-                <div id="user-avatar" class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
+                <div id="user-avatar" class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
                     -
                 </div>
             </div>
@@ -92,9 +90,10 @@
                 <h3 class="text-2xl font-bold mb-1">Selamat Datang di SIGAP, <span id="welcome-user-name">Pegawai</span>!</h3>
                 <p class="text-blue-100 text-sm">Pantau dan kelola data pegawai serta agenda kedinasan DPPKBP3A dengan mudah.</p>
             </div>
-            <!-- Badge Keterangan Role / Jabatan -->
-            <span id="admin-badge" class="bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1">
-                <i class="fa-solid fa-user-shield"></i> <span id="admin-badge-text">Mode Admin</span>
+            
+            <!-- Badge Keterangan Status -->
+            <span id="admin-badge" class="font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1">
+                <i id="admin-badge-icon" class="fa-solid fa-user"></i> <span id="admin-badge-text">Pegawai DPPKBP3A</span>
             </span>
         </div>
 
@@ -147,12 +146,11 @@
                 <h3 class="font-bold text-slate-800">Agenda Kedinasan Terbaru</h3>
                 
                 <div class="flex items-center gap-3">
-                    <!-- Tombol Tambah Agenda (Khusus Admin) -->
-                    <button id="btn-tambah-agenda" onclick="bukaModalAgenda()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2 cursor-pointer">
+                    <!-- Tombol Tambah Agenda (Ditampilkan HANYA jika Admin) -->
+                    <button id="btn-tambah-agenda" onclick="bukaModalAgenda()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs px-4 py-2 rounded-lg transition shadow-sm items-center gap-2 cursor-pointer hidden">
                         <i class="fa-solid fa-plus"></i> Tambah Agenda Baru
                     </button>
                     
-                    <!-- Tombol Lihat Semua -->
                     <button onclick="lihatSemuaAgenda()" class="text-xs text-blue-600 font-semibold hover:underline flex items-center gap-1 cursor-pointer">
                         Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </button>
@@ -167,11 +165,11 @@
                             <th class="p-4 px-6">Kegiatan & Tempat</th>
                             <th class="p-4 px-6">Pegawai / Bidang</th>
                             <th class="p-4 px-6">Status</th>
-                            <th id="th-aksi" class="p-4 px-6 text-center">Aksi</th>
+                            <th id="th-aksi" class="p-4 px-6 text-center hidden">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="agenda-table-body" class="divide-y divide-slate-100 text-slate-700">
-                        <!-- Dimuat otomatis melalui JavaScript -->
+                        <!-- Dimuat otomatis via JS -->
                     </tbody>
                 </table>
             </div>
@@ -224,7 +222,7 @@
         </div>
     </div>
 
-    <!-- LOGIKA JAVASCRIPT AGENDA & PROFIL USER -->
+    <!-- LOGIKA JAVASCRIPT DASHBOARD -->
     <script>
         const defaultAgenda = [
             {
@@ -252,42 +250,48 @@
             muatAgenda();
         });
 
-        // FUNGSI MEMBACA DATA LOGGED IN USER
         function muatDataUser() {
+            // Ambil data session
             const role = localStorage.getItem("userRole") || "pegawai";
             const nip = localStorage.getItem("userNip") || localStorage.getItem("user_nip") || "-";
             const nama = localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
 
-            // Update Topbar
+            // Pasang Ke Header Topbar
             document.getElementById("user-display-name").textContent = nama;
             document.getElementById("user-display-nip").textContent = "NIP. " + nip;
             document.getElementById("user-avatar").textContent = nama.charAt(0).toUpperCase();
 
-            // Update Banner Welcome
+            // Pasang Ke Welcome Banner
             document.getElementById("welcome-user-name").textContent = nama;
 
-            // Update Badge Banner
+            // ELEMEN UNTUK AKSES KONTROL (ADMIN VS PEGAWAI)
             const badge = document.getElementById("admin-badge");
             const badgeText = document.getElementById("admin-badge-text");
+            const badgeIcon = document.getElementById("admin-badge-icon");
+            const btnTambah = document.getElementById("btn-tambah-agenda");
+            const thAksi = document.getElementById("th-aksi");
 
             if (role === "admin") {
+                // Tampilan Admin
                 badge.className = "bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
+                badgeIcon.className = "fa-solid fa-shield-halved";
                 badgeText.textContent = "Mode Admin";
+
+                btnTambah.classList.remove("hidden");
+                btnTambah.classList.add("flex");
+                thAksi.classList.remove("hidden");
             } else {
-                // Tampilan khusus jika login sebagai Pegawai (Tampilan "Pegawai DPPKBP3A" tanpa NIP di badge)
+                // Tampilan Pegawai Biasa
                 badge.className = "bg-emerald-500 text-white font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
+                badgeIcon.className = "fa-solid fa-user-check";
                 badgeText.textContent = "Pegawai DPPKBP3A";
 
-                // Sembunyikan Tombol Tambah & Kolom Aksi Hapus untuk Pegawai
-                const btnTambah = document.getElementById("btn-tambah-agenda");
-                if (btnTambah) btnTambah.style.display = "none";
-                
-                const thAksi = document.getElementById("th-aksi");
-                if (thAksi) thAksi.style.display = "none";
+                btnTambah.classList.add("hidden");
+                btnTambah.classList.remove("flex");
+                thAksi.classList.add("hidden");
             }
         }
 
-        // FUNGSI MUAT AGENDA
         function muatAgenda() {
             let dataAgenda = JSON.parse(localStorage.getItem("sigap_agenda"));
             if (!dataAgenda || dataAgenda.length === 0) {
@@ -325,7 +329,6 @@
                     <td class="p-4 px-6">${statusBadge}</td>
                 `;
 
-                // Tampilkan Aksi Hapus Hanya untuk Mode Admin
                 if (role === "admin") {
                     htmlContent += `
                         <td class="p-4 px-6 text-center">
