@@ -8,10 +8,85 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Library untuk Ekspor PDF & Excel -->
+   <!-- Library untuk Export PDF & Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Style Khusus Cetak / Print -->
+    <style>
+        @media print {
+            /* Sembunyikan elemen navigasi, filter, dan tombol */
+            aside, header, .no-print, #detailModal {
+                display: none !important;
+            }
+
+            /* Reset layout utama agar menggunakan seluruh ukuran halaman cetak */
+            body, html {
+                background: #fff !important;
+                color: #000 !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            .flex, .flex-1, main {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Penyesuaian Tabel untuk Cetak */
+            .bg-white, .shadow-sm, .border {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+
+            th, td {
+                border: 1px solid #cbd5e1 !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+            }
+
+            thead {
+                display: table-header-group; /* Agar header tabel muncul di setiap awal halaman */
+            }
+
+            tr {
+                page-break-inside: avoid; /* Mencegah baris terpotong di tengah halaman */
+            }
+
+            thead tr {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Sembunyikan kolom Aksi saat dicetak */
+            .col-aksi {
+                display: none !important;
+            }
+
+            /* Judul cetak resmi */
+            .print-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Default tampilan layar biasa untuk judul cetak */
+        .print-header {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
