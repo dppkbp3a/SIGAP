@@ -77,11 +77,11 @@
             <!-- Profile User Dinamis -->
             <div class="flex items-center gap-3">
                 <div class="text-right">
-                    <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">NOPA PUJIHASTUTI, SE., M.A.P.</h4>
-                    <span id="user-display-nip" class="text-xs text-slate-500">NIP. 198111102006042007</span>
+                    <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">Memuat...</h4>
+                    <span id="user-display-nip" class="text-xs text-slate-500">NIP. -</span>
                 </div>
                 <div id="user-avatar" class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
-                    N
+                    -
                 </div>
             </div>
         </div>
@@ -89,11 +89,11 @@
         <!-- BANNER SELAMAT DATANG -->
         <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-2xl mb-8 shadow-md flex justify-between items-center">
             <div>
-                <h3 class="text-2xl font-bold mb-1">Selamat Datang di SIGAP, <span id="welcome-user-name">NOPA PUJIHASTUTI</span>!</h3>
+                <h3 class="text-2xl font-bold mb-1">Selamat Datang di SIGAP, <span id="welcome-user-name">Pegawai</span>!</h3>
                 <p class="text-blue-100 text-sm">Pantau dan kelola data pegawai serta agenda kedinasan DPPKBP3A dengan mudah.</p>
             </div>
             <span id="admin-badge" class="bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1">
-                <i class="fa-solid fa-shield-halved"></i> Mode Admin
+                <i class="fa-solid fa-shield-halved"></i> <span id="admin-badge-text">Mode Admin</span>
             </span>
         </div>
 
@@ -146,12 +146,12 @@
                 <h3 class="font-bold text-slate-800">Agenda Kedinasan Terbaru</h3>
                 
                 <div class="flex items-center gap-3">
-                    <!-- Tombol Tambah Agenda (Selalu Aktif untuk Admin) -->
+                    <!-- Tombol Tambah Agenda (Khusus Admin) -->
                     <button id="btn-tambah-agenda" onclick="bukaModalAgenda()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-plus"></i> Tambah Agenda Baru
                     </button>
                     
-                    <!-- Tombol Lihat Semua yang Sekarang Berfungsi -->
+                    <!-- Tombol Lihat Semua -->
                     <button onclick="lihatSemuaAgenda()" class="text-xs text-blue-600 font-semibold hover:underline flex items-center gap-1 cursor-pointer">
                         Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </button>
@@ -166,7 +166,7 @@
                             <th class="p-4 px-6">Kegiatan & Tempat</th>
                             <th class="p-4 px-6">Pegawai / Bidang</th>
                             <th class="p-4 px-6">Status</th>
-                            <th id="th-aksi" class="p-4 px-6 text-center">Aksi</th>
+                            <th id="th-aksi" class="p-4 px-6 text-center admin-only">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="agenda-table-body" class="divide-y divide-slate-100 text-slate-700">
@@ -223,11 +223,8 @@
         </div>
     </div>
 
-    <!-- LOGIKA JAVASCRIPT AGENDA & ADMIN -->
+    <!-- LOGIKA JAVASCRIPT AGENDA & PROFIL USER -->
     <script>
-        const ADMIN_NIP = "198111102006042007";
-        const ADMIN_NAME = "NOPA PUJIHASTUTI, SE., M.A.P.";
-
         const defaultAgenda = [
             {
                 id: 1,
@@ -250,14 +247,45 @@
         ];
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Paksa simpan data admin agar konsisten
-            localStorage.setItem("user_nip", ADMIN_NIP);
-            localStorage.setItem("user_nama", ADMIN_NAME);
-            localStorage.setItem("userRole", "admin");
-
+            muatDataUser();
             muatAgenda();
         });
 
+        // FUNGSI LOAD DATA PROFIL LOGIN
+        function muatDataUser() {
+            const role = localStorage.getItem("userRole") || "pegawai";
+            const nip = localStorage.getItem("userNip") || localStorage.getItem("user_nip") || "-";
+            const nama = localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
+
+            // Update Topbar
+            document.getElementById("user-display-name").textContent = nama;
+            document.getElementById("user-display-nip").textContent = "NIP. " + nip;
+            document.getElementById("user-avatar").textContent = nama.charAt(0).toUpperCase();
+
+            // Update Banner
+            document.getElementById("welcome-user-name").textContent = nama;
+
+            // Update Badge Peran (Admin vs Pegawai)
+            const badge = document.getElementById("admin-badge");
+            const badgeText = document.getElementById("admin-badge-text");
+
+            if (role === "admin") {
+                badge.className = "bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
+                badgeText.textContent = "Mode Admin";
+            } else {
+                badge.className = "bg-emerald-500 text-white font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
+                badgeText.textContent = "Pegawai DPPKBP3A";
+
+                // Sembunyikan fitur admin
+                const btnTambah = document.getElementById("btn-tambah-agenda");
+                if(btnTambah) btnTambah.style.display = "none";
+                
+                const thAksi = document.getElementById("th-aksi");
+                if(thAksi) thAksi.style.display = "none";
+            }
+        }
+
+        // FUNGSI MUAT AGENDA
         function muatAgenda() {
             let dataAgenda = JSON.parse(localStorage.getItem("sigap_agenda"));
             if (!dataAgenda || dataAgenda.length === 0) {
@@ -265,6 +293,7 @@
                 localStorage.setItem("sigap_agenda", JSON.stringify(dataAgenda));
             }
 
+            const role = localStorage.getItem("userRole") || "pegawai";
             const tbody = document.getElementById("agenda-table-body");
             tbody.innerHTML = "";
 
@@ -280,7 +309,8 @@
 
                 let tr = document.createElement("tr");
                 tr.className = "hover:bg-slate-50/50";
-                tr.innerHTML = `
+                
+                let htmlContent = `
                     <td class="p-4 px-6 font-medium">
                         <div class="text-slate-800 font-semibold">${item.waktu}</div>
                         <div class="text-xs text-slate-400">${item.tanggal}</div>
@@ -291,12 +321,20 @@
                     </td>
                     <td class="p-4 px-6">${item.bidang}</td>
                     <td class="p-4 px-6">${statusBadge}</td>
-                    <td class="p-4 px-6 text-center">
-                        <button onclick="hapusAgenda(${item.id})" class="text-rose-500 hover:text-rose-700 transition" title="Hapus Agenda">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
                 `;
+
+                // Tampilkan kolom aksi hapus HANYA untuk Admin
+                if (role === "admin") {
+                    htmlContent += `
+                        <td class="p-4 px-6 text-center">
+                            <button onclick="hapusAgenda(${item.id})" class="text-rose-500 hover:text-rose-700 transition" title="Hapus Agenda">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    `;
+                }
+
+                tr.innerHTML = htmlContent;
                 tbody.appendChild(tr);
             });
         }
