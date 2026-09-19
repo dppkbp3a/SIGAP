@@ -8,36 +8,61 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Library untuk Ekspor PDF & Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
+    <!-- Style Khusus Cetak / Print -->
     <style>
-        @page {
-            size: A4 portrait;
-            margin: 15mm; /* Mengatur margin halaman cetak agar bersih dari header/footer browser */
-        }
-
         @media print {
-            aside, header, .no-print {
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+            /* Sembunyikan semua elemen selain tabel saat print */
+            aside, header, footer, .no-print, .stat-cards, .filter-bar, .page-header {
                 display: none !important;
             }
-            body {
-                background: #fff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            main {
+            body, html {
+                background: #ffffff !important;
+                color: #000000 !important;
+                height: auto !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 overflow: visible !important;
             }
-            .print-shadow-none {
-                box-shadow: none !important;
-                border: 1px solid #cbd5e1 !important;
+            .flex, .flex-1, main {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
             }
-            /* Membiarkan konten terbagi ke halaman berikutnya secara alami jika tidak muat */
+            .table-container {
+                border: none !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin: 0 !important;
+            }
+            th, td {
+                border: 1px solid #333 !important;
+                padding: 6px 8px !important;
+                font-size: 8pt !important;
+                color: #000 !important;
+                vertical-align: middle !important;
+            }
+            thead {
+                display: table-header-group;
+            }
+            thead tr {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
             tr {
-                break-inside: avoid;
                 page-break-inside: avoid;
             }
         }
