@@ -7,6 +7,11 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Library untuk Export PDF & Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gray-100 font-sans">
 
@@ -40,8 +45,8 @@
                     <a href="pensiun.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-user-xmark w-5"></i> Pensiun
                     </a>
-                        <a href="usulan-kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                            <i class="fa-solid fa-money-bill-wave w-5"></i> Kenaikan Gaji Berkala
+                    <a href="usulan-kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-money-bill-wave w-5"></i> Kenaikan Gaji Berkala
                     </a>
                     <a href="laporan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-file-lines w-5"></i> Laporan
@@ -86,7 +91,14 @@
                         <h2 class="text-xl font-bold text-gray-800">Daftar Seluruh Pegawai</h2>
                         <p class="text-sm text-gray-500">Master data seluruh Aparatur Sipil Negara dan Pegawai di lingkungan DPPKBP3A.</p>
                     </div>
-                    <div class="flex gap-2">
+                    <!-- Group Tombol Aksi Export -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="exportToPDF()" class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-red-700 shadow-sm flex items-center gap-2 transition">
+                            <i class="fa-solid fa-file-pdf"></i> PDF
+                        </button>
+                        <button onclick="exportToExcel()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-emerald-700 shadow-sm flex items-center gap-2 transition">
+                            <i class="fa-solid fa-file-excel"></i> Excel
+                        </button>
                         <button onclick="window.print()" class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm flex items-center gap-2 transition">
                             <i class="fa-solid fa-print text-blue-600"></i> Cetak Data
                         </button>
@@ -115,6 +127,7 @@
                                     <th class="py-3.5 px-4 text-center">Gol/Ruang</th>
                                     <th class="py-3.5 px-4">Jabatan</th>
                                     <th class="py-3.5 px-4">Unit Kerja</th>
+                                    <th class="py-3.5 px-4 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="pegawaiTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -124,6 +137,52 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Modal Detail Pegawai -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                <h3 class="font-bold text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-user-id-card text-blue-400"></i> Detail Pegawai
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm">
+                <div class="flex items-center gap-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg shrink-0" id="modalAvatar">
+                        -
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-base" id="modalNama">-</h4>
+                        <p class="text-xs text-blue-600 font-semibold" id="modalNip">-</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4">
+                    <div>
+                        <span class="text-xs text-gray-400 block font-medium uppercase">Golongan / Ruang</span>
+                        <span class="font-semibold text-gray-700" id="modalGolru">-</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 block font-medium uppercase">Jabatan</span>
+                        <span class="font-semibold text-gray-700" id="modalJabatan">-</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-4">
+                    <span class="text-xs text-gray-400 block font-medium uppercase">Unit Kerja</span>
+                    <span class="font-semibold text-gray-700" id="modalUnit">-</span>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-6 py-3 text-right border-t border-gray-100">
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-lg hover:bg-slate-700 transition">
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 
@@ -224,6 +283,8 @@
             {"no": 93, "nip": "19870511 202521 1 088", "nama": "INDRA SURYA MANGGALA", "golru": "NON", "jabatan": "Operator Layanan Operasional", "unit": "UPTD Pengendalian Penduduk Subang"}
         ];
 
+        let filteredData = [...dataPegawai];
+
         function renderTable(data) {
             const tbody = document.getElementById('pegawaiTableBody');
             const countEl = document.getElementById('pegawaiCount');
@@ -231,7 +292,7 @@
             countEl.textContent = data.length;
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-500">Data tidak ditemukan</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-500">Data tidak ditemukan</td></tr>`;
                 return;
             }
 
@@ -249,24 +310,95 @@
                     </td>
                     <td class="py-3 px-4">${item.jabatan}</td>
                     <td class="py-3 px-4 text-xs text-gray-600">${item.unit}</td>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="openModal('${item.nip}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Lihat Detail">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
+        // Search Filter
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase();
-            const filtered = dataPegawai.filter(item => 
+            filteredData = dataPegawai.filter(item => 
                 item.nama.toLowerCase().includes(keyword) ||
                 item.nip.toLowerCase().includes(keyword) ||
                 item.jabatan.toLowerCase().includes(keyword) ||
                 item.unit.toLowerCase().includes(keyword) ||
                 item.golru.toLowerCase().includes(keyword)
             );
-            renderTable(filtered);
+            renderTable(filteredData);
         });
 
-        // Render awal
+        // Modal Functions
+        function openModal(nip) {
+            const item = dataPegawai.find(p => p.nip === nip);
+            if (!item) return;
+
+            document.getElementById('modalAvatar').innerText = item.nama.charAt(0);
+            document.getElementById('modalNama').innerText = item.nama;
+            document.getElementById('modalNip').innerText = `NIP. ${item.nip}`;
+            document.getElementById('modalGolru').innerText = item.golru;
+            document.getElementById('modalJabatan').innerText = item.jabatan;
+            document.getElementById('modalUnit').innerText = item.unit;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // Export PDF Function
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("Daftar Pegawai - SIGAP DPPKBP3A", 14, 15);
+            
+            const tableHeaders = [["No", "Nama Pegawai", "NIP", "Gol/Ruang", "Jabatan", "Unit Kerja"]];
+            const tableRows = filteredData.map((item, index) => [
+                index + 1,
+                item.nama,
+                item.nip,
+                item.golru,
+                item.jabatan,
+                item.unit
+            ]);
+
+            doc.autoTable({
+                head: tableHeaders,
+                body: tableRows,
+                startY: 20,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [15, 23, 42] }
+            });
+
+            doc.save("Data_Pegawai_DPPKBP3A.pdf");
+        }
+
+        // Export Excel Function
+        function exportToExcel() {
+            const exportData = filteredData.map((item, index) => ({
+                "No": index + 1,
+                "Nama Pegawai": item.nama,
+                "NIP": item.nip,
+                "Gol/Ruang": item.golru,
+                "Jabatan": item.jabatan,
+                "Unit Kerja": item.unit
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Data Pegawai");
+
+            XLSX.writeFile(workbook, "Data_Pegawai_DPPKBP3A.xlsx");
+        }
+
+        // Initial Render
         renderTable(dataPegawai);
     </script>
 </body>
