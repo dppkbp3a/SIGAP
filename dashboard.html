@@ -55,7 +55,7 @@
                 <i class="fa-solid fa-user-xmark w-5"></i> Pensiun
             </a>
 
-            <!-- Menu Kenaikan Gaji Berkala (Ditempatkan di atas Laporan) -->
+            <!-- Menu Kenaikan Gaji Berkala -->
             <a href="kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-money-bill-wave w-5"></i> Kenaikan Gaji Berkala
             </a>
@@ -76,7 +76,7 @@
     <!-- MAIN CONTENT AREA -->
     <main class="flex-1 p-8 overflow-y-auto">
         
-        <!-- TOPBAR HEADER (Tanpa Tombol Mode Role) -->
+        <!-- TOPBAR HEADER -->
         <div class="flex justify-between items-center bg-white p-4 px-6 rounded-xl shadow-sm border border-slate-200/80 mb-6">
             <div>
                 <h2 class="font-bold text-slate-800 text-lg">Monitoring Agenda & Kepegawaian</h2>
@@ -86,8 +86,8 @@
             <!-- Profile User Dinamis -->
             <div class="flex items-center gap-3">
                 <div class="text-right">
-                    <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">Admin DPKBP3A</h4>
-                    <span id="user-display-nip" class="text-xs text-slate-500">NIP 198111102006042007</span>
+                    <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">Loading...</h4>
+                    <span id="user-display-nip" class="text-xs text-slate-500">NIP. -</span>
                 </div>
                 <div id="user-avatar" class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
                     ?
@@ -206,59 +206,52 @@
     <!-- LOGIK JAVASCRIPT AUTH & ADMIN SINGLE NIP -->
     <script>
         // Database Nama Pegawai berdasarkan NIP
-const DATA_PEGAWAI = {
-    "198111102006042007": "NOPA PUJIHASTUTI, SE., M.A.P." // GANTI DENGAN NAMA ASLI ADMIN DI SINI
-};
+        const DATA_PEGAWAI = {
+            "198111102006042007": "NOPA PUJIHASTUTI, SE., M.A.P.", // Admin Utama
+            "197001011990031001": "Drs. H. Kepala Dinas, M.Si",
+            "197505121998031002": "Kabid Pengendalian Penduduk, S.Sos",
+            "198203152005012003": "Kabid KB & Sejahtera, S.KM",
+            "198508202010011004": "Kabid Perlindungan Anak, M.Si",
+            "198812042011012005": "Kasubag Umum & Kepegawaian",
+            "199002102014021006": "Analis Kepegawaian Ahli Pertama",
+            "199306182019032007": "Pengelola Data Kepegawaian"
+        };
 
-// NIP Khusus Admin Tunggal
-const ADMIN_NIP = "198111102006042007";
+        // NIP Khusus Admin Tunggal
+        const ADMIN_NIP = "198111102006042007";
 
-document.addEventListener("DOMContentLoaded", function () {
-    // 1. Ambil NIP yang tersimpan (atau default Admin jika belum login)
-    const currentUserNIP = localStorage.getItem("user_nip") || ADMIN_NIP;
-    
-    // 2. Cari nama berdasarkan NIP di database, jika tidak ada baru ambil dari localStorage/default
-    let currentUserName = DATA_PEGAWAI[currentUserNIP] || localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1. Ambil NIP & Nama dari localStorage (Set default Admin jika belum login)
+            const currentUserNIP = localStorage.getItem("user_nip") || ADMIN_NIP;
+            let currentUserName = DATA_PEGAWAI[currentUserNIP] || localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
 
-    // 3. Tampilkan Nama & NIP Asli di Dashboard
-    const nameEl = document.getElementById("user-display-name");
-    const nipEl = document.getElementById("user-display-nip");
-    const welcomeEl = document.getElementById("welcome-user-name");
-    const avatarEl = document.getElementById("user-avatar");
+            // 2. Tampilkan Nama & NIP di Dashboard UI
+            const nameEl = document.getElementById("user-display-name");
+            const nipEl = document.getElementById("user-display-nip");
+            const welcomeEl = document.getElementById("welcome-user-name");
+            const avatarEl = document.getElementById("user-avatar");
 
-    if (nameEl) nameEl.innerText = currentUserName;
-    if (nipEl) nipEl.innerText = `NIP. ${currentUserNIP}`;
-    if (welcomeEl) welcomeEl.innerText = currentUserName.split(',')[0]; // Ambil nama depan saja untuk sapaan
-    
-    // Inisial untuk Avatar Bulat
-    if (avatarEl && currentUserName) {
-        avatarEl.innerText = currentUserName.charAt(0).toUpperCase();
-    }
+            if (nameEl) nameEl.innerText = currentUserName;
+            if (nipEl) nipEl.innerText = `NIP. ${currentUserNIP}`;
+            if (welcomeEl) welcomeEl.innerText = currentUserName.split(',')[0]; // Ambil nama depan saja
+            
+            // Inisial untuk Avatar Bulat
+            if (avatarEl && currentUserName) {
+                avatarEl.innerText = currentUserName.charAt(0).toUpperCase();
+            }
 
-    // 4. Cek Hak Akses Admin
-    const isAdmin = (currentUserNIP === ADMIN_NIP);
-    if (isAdmin) {
-        console.log("Akses Diterima: Login sebagai Admin.");
-    }
-});
-
-function logout() {
-    localStorage.clear();
-    window.location.href = "login.html";
-}
-
-            // Cek Hak Akses Admin
-            const isAdmin = (currentUserNIP === ADMIN_NIP);
+            // 3. Cek Role Akses
+            const isAdmin = (currentUserNIP === ADMIN_NIP || localStorage.getItem("userRole") === "admin");
             if (isAdmin) {
-                console.log("Akses Diterima: Login sebagai Admin.");
+                console.log("Akses Diterima: Logged in as Admin");
             } else {
-                console.log("Akses Diterima: Login sebagai Pegawai.");
+                console.log("Akses Diterima: Logged in as Pegawai");
             }
         });
 
         function logout() {
             localStorage.clear();
-            window.location.href = "login.html"; // Ubah sesuai file halaman login kamu
+            window.location.href = "index.html"; // Mengarahkan kembali ke index.html saat logout
         }
     </script>
 </body>
