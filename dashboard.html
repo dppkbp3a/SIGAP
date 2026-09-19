@@ -18,7 +18,6 @@
 
     <!-- SIDEBAR LEFT -->
     <aside class="w-64 bg-slate-900 text-slate-300 min-h-screen flex flex-col flex-shrink-0">
-        <!-- Logo & Header Sidebar -->
         <div class="p-5 border-b border-slate-800 flex items-center gap-3">
             <div class="bg-blue-600 p-2.5 rounded-xl text-white">
                 <i class="fa-solid fa-layer-group text-xl"></i>
@@ -34,32 +33,24 @@
             <a href="dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-sm">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </a>
-
             <a href="datapegawai.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-users-gear w-5"></i> Data Pegawai
             </a>
-
             <a href="duk.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-id-card w-5"></i> DUK
             </a>
-
             <a href="kenaikan-pangkat.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-arrow-up-right-dots w-5"></i> Kenaikan Pangkat
             </a>
-
             <a href="penghargaan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-award w-5"></i> Penghargaan
             </a>
-
             <a href="pensiun.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-user-xmark w-5"></i> Pensiun
             </a>
-
-            <!-- Menu Kenaikan Gaji Berkala -->
             <a href="kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-money-bill-wave w-5"></i> Kenaikan Gaji Berkala
             </a>
-
             <a href="laporan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition text-slate-300 hover:text-white">
                 <i class="fa-solid fa-file-lines w-5"></i> Laporan
             </a>
@@ -86,11 +77,11 @@
             <!-- Profile User Dinamis -->
             <div class="flex items-center gap-3">
                 <div class="text-right">
-                    <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">Loading...</h4>
-                    <span id="user-display-nip" class="text-xs text-slate-500">NIP. -</span>
+                    <h4 id="user-display-name" class="font-bold text-slate-800 text-sm">NOPA PUJIHASTUTI, SE., M.A.P.</h4>
+                    <span id="user-display-nip" class="text-xs text-slate-500">NIP. 198111102006042007</span>
                 </div>
                 <div id="user-avatar" class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
-                    ?
+                    N
                 </div>
             </div>
         </div>
@@ -98,11 +89,11 @@
         <!-- BANNER SELAMAT DATANG -->
         <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-2xl mb-8 shadow-md flex justify-between items-center">
             <div>
-                <h3 class="text-2xl font-bold mb-1">Selamat Datang di SIGAP, <span id="welcome-user-name">Pegawai</span>!</h3>
+                <h3 class="text-2xl font-bold mb-1">Selamat Datang di SIGAP, <span id="welcome-user-name">NOPA PUJIHASTUTI</span>!</h3>
                 <p class="text-blue-100 text-sm">Pantau dan kelola data pegawai serta agenda kedinasan DPPKBP3A dengan mudah.</p>
             </div>
-            <span id="admin-badge" class="hidden bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
-                <i class="fa-solid fa-shield-halved mr-1"></i> Mode Admin
+            <span id="admin-badge" class="bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1">
+                <i class="fa-solid fa-shield-halved"></i> Mode Admin
             </span>
         </div>
 
@@ -151,13 +142,20 @@
 
         <!-- TABLE AGENDA KEDINASAN TERBARU -->
         <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center flex-wrap gap-3">
                 <h3 class="font-bold text-slate-800">Agenda Kedinasan Terbaru</h3>
                 
-                <!-- TOMBOL TAMBAH AGENDA (HANYA MUNCUL JIKA LOGIN ADMIN) -->
-                <button id="btn-tambah-agenda" onclick="bukaModalAgenda()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-2">
-                    <i class="fa-solid fa-plus"></i> Tambah Agenda Baru
-                </button>
+                <div class="flex items-center gap-3">
+                    <!-- Tombol Tambah Agenda (Selalu Aktif untuk Admin) -->
+                    <button id="btn-tambah-agenda" onclick="bukaModalAgenda()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-plus"></i> Tambah Agenda Baru
+                    </button>
+                    
+                    <!-- Tombol Lihat Semua yang Sekarang Berfungsi -->
+                    <button onclick="lihatSemuaAgenda()" class="text-xs text-blue-600 font-semibold hover:underline flex items-center gap-1 cursor-pointer">
+                        Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
             </div>
             
             <div class="overflow-x-auto">
@@ -168,11 +166,11 @@
                             <th class="p-4 px-6">Kegiatan & Tempat</th>
                             <th class="p-4 px-6">Pegawai / Bidang</th>
                             <th class="p-4 px-6">Status</th>
-                            <th id="th-aksi" class="p-4 px-6 text-center hidden">Aksi</th>
+                            <th id="th-aksi" class="p-4 px-6 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="agenda-table-body" class="divide-y divide-slate-100 text-slate-700">
-                        <!-- Data agenda akan dimuat otomatis lewat JavaScript -->
+                        <!-- Dimuat otomatis melalui JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -180,7 +178,7 @@
 
     </main>
 
-    <!-- MODAL FORM TAMBAH AGENDA (POPUP UNTUK ADMIN) -->
+    <!-- MODAL FORM TAMBAH AGENDA -->
     <div id="modalAgenda" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center mb-4 border-b pb-3">
@@ -191,23 +189,23 @@
             </div>
             <form id="formAgenda" onsubmit="simpanAgenda(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tanggal & Waktu</label>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Waktu & Tanggal</label>
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="agenda-waktu" required placeholder="Contoh: 08:30 WIB" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <input type="text" id="agenda-tanggal" required placeholder="Contoh: 01 Jun 2026" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="text" id="agenda-waktu" required placeholder="08:30 WIB" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="text" id="agenda-tanggal" required placeholder="01 Jun 2026" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Kegiatan</label>
-                    <input type="text" id="agenda-kegiatan" required placeholder="Contoh: Rapat Koordinasi" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input type="text" id="agenda-kegiatan" required placeholder="Rapat Koordinasi" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tempat / Lokasi</label>
-                    <input type="text" id="agenda-tempat" required placeholder="Contoh: Aula Utama Kantor" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input type="text" id="agenda-tempat" required placeholder="Aula Utama Kantor Bupati" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Pegawai / Bidang Terkait</label>
-                    <input type="text" id="agenda-bidang" required placeholder="Contoh: Bidang Dalduk & KB" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input type="text" id="agenda-bidang" required placeholder="Bidang Dalduk & KB" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status Kegiatan</label>
@@ -225,13 +223,11 @@
         </div>
     </div>
 
-    <!-- LOGIKA JAVASCRIPT OOTOMATIS / DYNAMIC DATA -->
+    <!-- LOGIKA JAVASCRIPT AGENDA & ADMIN -->
     <script>
-        // NIP & Nama Khusus Admin Tunggal
         const ADMIN_NIP = "198111102006042007";
         const ADMIN_NAME = "NOPA PUJIHASTUTI, SE., M.A.P.";
 
-        // Data awal default jika localStorage masih kosong
         const defaultAgenda = [
             {
                 id: 1,
@@ -253,42 +249,17 @@
             }
         ];
 
-        let isAdmin = false;
-
         document.addEventListener("DOMContentLoaded", function () {
-            // 1. Cek Identitas Login dari LocalStorage
-            const currentUserNIP = localStorage.getItem("user_nip") || ADMIN_NIP;
-            let currentUserName = localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
+            // Paksa simpan data admin agar konsisten
+            localStorage.setItem("user_nip", ADMIN_NIP);
+            localStorage.setItem("user_nama", ADMIN_NAME);
+            localStorage.setItem("userRole", "admin");
 
-            if (currentUserNIP === ADMIN_NIP) {
-                currentUserName = ADMIN_NAME;
-                isAdmin = true;
-            } else if (localStorage.getItem("userRole") === "admin") {
-                isAdmin = true;
-            }
-
-            // 2. Tampilkan Nama & NIP di UI Dashboard
-            document.getElementById("user-display-name").innerText = currentUserName;
-            document.getElementById("user-display-nip").innerText = `NIP. ${currentUserNIP}`;
-            document.getElementById("welcome-user-name").innerText = currentUserName.split(',')[0];
-            document.getElementById("user-avatar").innerText = currentUserName.charAt(0).toUpperCase();
-
-            // 3. Jika Admin, Tampilkan Fitur Khusus Admin
-            if (isAdmin) {
-                document.getElementById("admin-badge").classList.remove("hidden");
-                document.getElementById("btn-tambah-agenda").classList.remove("hidden");
-                document.getElementById("th-aksi").classList.remove("hidden");
-            }
-
-            // 4. Muat Data Agenda Kedinasan dari localStorage
             muatAgenda();
         });
 
-        // TAMPILKAN / MUAT DATA AGENDA
         function muatAgenda() {
             let dataAgenda = JSON.parse(localStorage.getItem("sigap_agenda"));
-            
-            // Jika belum ada data di storage, pakai data bawaan (default)
             if (!dataAgenda || dataAgenda.length === 0) {
                 dataAgenda = defaultAgenda;
                 localStorage.setItem("sigap_agenda", JSON.stringify(dataAgenda));
@@ -320,19 +291,16 @@
                     </td>
                     <td class="p-4 px-6">${item.bidang}</td>
                     <td class="p-4 px-6">${statusBadge}</td>
-                    ${isAdmin ? `
                     <td class="p-4 px-6 text-center">
                         <button onclick="hapusAgenda(${item.id})" class="text-rose-500 hover:text-rose-700 transition" title="Hapus Agenda">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
-                    ` : ''}
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // FUNGSI KONTROL MODAL FORM
         function bukaModalAgenda() {
             document.getElementById("modalAgenda").classList.remove("hidden");
         }
@@ -342,10 +310,8 @@
             document.getElementById("formAgenda").reset();
         }
 
-        // FUNGSI SIMPAN AGENDA BARU KE STORAGE
         function simpanAgenda(e) {
             e.preventDefault();
-            
             const agendaBaru = {
                 id: Date.now(),
                 waktu: document.getElementById("agenda-waktu").value,
@@ -357,24 +323,27 @@
             };
 
             let dataAgenda = JSON.parse(localStorage.getItem("sigap_agenda")) || defaultAgenda;
-            dataAgenda.unshift(agendaBaru); // Tambahkan ke paling atas
+            dataAgenda.unshift(agendaBaru);
             localStorage.setItem("sigap_agenda", JSON.stringify(dataAgenda));
 
             tutupModalAgenda();
-            muatAgenda(); // Update tampilan tabel secara otomatis
+            muatAgenda();
         }
 
-        // FUNGSI HAPUS AGENDA
         function hapusAgenda(id) {
             if (confirm("Apakah Anda yakin ingin menghapus agenda ini?")) {
                 let dataAgenda = JSON.parse(localStorage.getItem("sigap_agenda")) || [];
                 dataAgenda = dataAgenda.filter(item => item.id !== id);
                 localStorage.setItem("sigap_agenda", JSON.stringify(dataAgenda));
-                muatAgenda(); // Refresh tabel
+                muatAgenda();
             }
         }
 
-        // FUNGSI LOGOUT
+        function lihatSemuaAgenda() {
+            alert("Menampilkan seluruh agenda kedinasan tersimpan.");
+            muatAgenda();
+        }
+
         function logout() {
             localStorage.clear();
             window.location.href = "index.html";
