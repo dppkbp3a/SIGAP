@@ -53,8 +53,25 @@
         </div>
     </div>
 
-    <!-- Script Validasi Login & Perbedaan Role -->
+    <!-- Script Validasi Login & Database Pegawai -->
     <script>
+      // DATABASE DATA PEGAWAI DPPKBP3A
+      const DATA_PEGAWAI = {
+          // Admin Kepegawaian (Admin Tunggal)
+          "198111102006042007": "Admin Kepegawaian, S.STP",
+          
+          // Pejabat & Pegawai
+          "197001011990031001": "Drs. H. Kepala Dinas, M.Si",
+          "197505121998031002": "Kabid Pengendalian Penduduk, S.Sos",
+          "198203152005012003": "Kabid KB & Sejahtera, S.KM",
+          "198508202010011004": "Kabid Perlindungan Anak, M.Si",
+          "198812042011012005": "Kasubag Umum & Kepegawaian",
+          "199002102014021006": "Analis Kepegawaian Ahli Pertama",
+          "199306182019032007": "Pengelola Data Kepegawaian"
+      };
+
+      const ADMIN_NIP = "198111102006042007";
+
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault(); // Mencegah reload halaman
         
@@ -65,10 +82,19 @@
         const kataSandiSama = "31Agustus2026";
 
         if (passwordInput === kataSandiSama) {
-          // 1. JIKA LOGIN SEBAGAI ADMIN
-          if (usernameInput.toLowerCase() === "admin") {
+          
+          // Cari nama pegawai berdasarkan NIP yang dimasukkan
+          const namaPegawai = DATA_PEGAWAI[usernameInput] || "Pegawai DPPKBP3A";
+
+          // Simpan NIP dan Nama Lengkap ke LocalStorage
+          localStorage.setItem("user_nip", usernameInput);
+          localStorage.setItem("user_nama", namaPegawai);
+
+          // 1. JIKA LOGIN SEBAGAI ADMIN (Teks 'admin' atau NIP Admin)
+          if (usernameInput.toLowerCase() === "admin" || usernameInput === ADMIN_NIP) {
             localStorage.setItem("userRole", "admin");
-            localStorage.setItem("username", "Admin Utama");
+            localStorage.setItem("user_nip", ADMIN_NIP);
+            localStorage.setItem("user_nama", DATA_PEGAWAI[ADMIN_NIP] || "Admin Utama");
             window.location.href = "dashboard.html";
             return;
           } 
@@ -76,7 +102,6 @@
           // 2. JIKA LOGIN SEBAGAI PEGAWAI (NIP BERUPA ANGKA)
           if (/^\d+$/.test(usernameInput)) {
             localStorage.setItem("userRole", "pegawai");
-            localStorage.setItem("username", usernameInput);
             window.location.href = "dashboard.html";
             return;
           }
