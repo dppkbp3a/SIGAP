@@ -13,6 +13,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
+        @page {
+            size: A4 portrait;
+            margin: 15mm; /* Mengatur margin halaman cetak agar bersih dari header/footer browser */
+        }
+
         @media print {
             aside, header, .no-print {
                 display: none !important;
@@ -24,19 +29,16 @@
             }
             main {
                 padding: 0 !important;
+                overflow: visible !important;
             }
             .print-shadow-none {
                 box-shadow: none !important;
                 border: 1px solid #cbd5e1 !important;
             }
-            /* Mencegah elemen terpotong di tengah baris/kotak saat dicetak */
-            tr, .print-break-avoid {
+            /* Membiarkan konten terbagi ke halaman berikutnya secara alami jika tidak muat */
+            tr {
                 break-inside: avoid;
                 page-break-inside: avoid;
-            }
-            .print-page-break {
-                break-before: page;
-                page-break-before: always;
             }
         }
     </style>
@@ -138,17 +140,17 @@
                     </div>
                 </div>
 
-                <!-- Area yang akan dicetak/di-export (Kop, Statistik, Tabel, Tanda Tangan) -->
+                <!-- Area yang akan dicetak/di-export -->
                 <div id="printableArea" class="bg-gray-100 md:bg-transparent p-0">
-                    <!-- Kop Surat Laporan (Tampil saat Print / Cetak / PDF) -->
+                    <!-- Kop Surat Laporan (Hanya tampil saat dicetak/PDF) -->
                     <div class="hidden print:block text-center border-b-2 border-black pb-4 mb-6">
-                        <h3 class="text-lg font-bold uppercase">Pemerintah Kabupaten Kuningan</h3>
-                        <h2 class="text-xl font-extrabold uppercase">Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak (DPPKBP3A)</h2>
+                        <h3 class="text-base font-bold uppercase">Pemerintah Kabupaten Kuningan</h3>
+                        <h2 class="text-lg font-extrabold uppercase">Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak (DPPKBP3A)</h2>
                         <p class="text-xs">Jl. Raya Cijoho No. 123, Kabupaten Kuningan, Jawa Barat | Telepon: (0232) 871234</p>
                     </div>
 
-                    <!-- Ringkasan Stat Cards (Otomatis Terhitung/Terubah) -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 print-break-avoid">
+                    <!-- Ringkasan Stat Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm print-shadow-none">
                             <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Usulan Pangkat (KP)</p>
                             <h3 class="text-2xl font-bold text-blue-700 mt-1" id="totalKP">0</h3>
@@ -168,7 +170,7 @@
                     </div>
 
                     <!-- SECTION 1: Rekapitulasi Kenaikan Pangkat -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none print-break-avoid">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
                                 <i class="fa-solid fa-arrow-up-right-dots text-blue-400"></i> Rekapitulasi Kenaikan Pangkat (KP)
@@ -195,7 +197,7 @@
                     </div>
 
                     <!-- SECTION 2: Rekapitulasi Penghargaan -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none print-break-avoid">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
                                 <i class="fa-solid fa-award text-amber-400"></i> Rekapitulasi Usulan Tanda Kehormatan / Penghargaan
@@ -222,7 +224,7 @@
                     </div>
 
                     <!-- Tanda Tangan Cetak Laporan -->
-                    <div class="flex justify-end mt-12 mb-8 print-break-avoid">
+                    <div class="flex justify-end mt-12 mb-8">
                         <div class="text-center w-64">
                             <p class="text-xs">Kuningan, 31 Agustus 2026</p>
                             <p class="text-xs font-bold mt-1">Kepala DPPKBP3A Kabupaten Kuningan</p>
@@ -239,7 +241,6 @@
 
     <!-- Script Data & Dynamic Logic -->
     <script>
-        // Database Rekapitulasi berdasarkan Tahun Anggaran
         const dbLaporan = {
             "2026": {
                 kp: [
@@ -278,11 +279,9 @@
             const currentData = dbLaporan[tahun];
             if (!currentData) return;
 
-            // 1. Update Badges Header Tabel
             document.getElementById('badgeKP').textContent = `Periode ${tahun}`;
             document.getElementById('badgePenghargaan').textContent = `Periode ${tahun}`;
 
-            // 2. Render Tabel Kenaikan Pangkat
             const tbodyKP = document.getElementById('tableKP');
             tbodyKP.innerHTML = '';
             let countApprovedKP = 0;
@@ -313,7 +312,6 @@
                 `;
             });
 
-            // 3. Render Tabel Penghargaan
             const tbodyPenghargaan = document.getElementById('tablePenghargaan');
             tbodyPenghargaan.innerHTML = '';
             let countApprovedPenghargaan = 0;
@@ -343,19 +341,16 @@
                 `;
             });
 
-            // 4. Update Ringkasan Stat Cards secara Otomatis
             document.getElementById('totalKP').textContent = currentData.kp.length;
             document.getElementById('approvedKP').textContent = countApprovedKP;
             document.getElementById('totalPenghargaan').textContent = currentData.penghargaan.length;
             document.getElementById('satyaCount').textContent = countApprovedPenghargaan;
         }
 
-        // Trigger perubahan data ketika select option berganti
         function switchTahun(tahun) {
             renderLaporan(tahun);
         }
 
-        // Fungsi Cetak PDF
         function exportPDF() {
             const element = document.getElementById('printableArea');
             const tahun = document.getElementById('periodeFilter').value;
@@ -370,12 +365,10 @@
             html2pdf().from(element).set(options).save();
         }
 
-        // Fungsi Ekspor ke Excel
         function exportExcel() {
             const tahun = document.getElementById('periodeFilter').value;
             const currentData = dbLaporan[tahun];
 
-            // Format Data KP
             let dataExcel = [
                 ["REKAPITULASI KENAIKAN PANGKAT (KP) - TAHUN " + tahun],
                 ["No", "NIP", "Nama Pegawai", "Golongan Lama", "Golongan Baru", "Periode KP", "Status Berkas"]
@@ -384,23 +377,20 @@
                 dataExcel.push([item.no, item.nip, item.nama, item.gol_lama, item.gol_baru, item.periode, item.status]);
             });
 
-            dataExcel.push([]); // Spasi baris
+            dataExcel.push([]);
             dataExcel.push(["REKAPITULASI USULAN TANDA KEHORMATAN / PENGHARGAAN - TAHUN " + tahun]);
             dataExcel.push(["No", "NIP", "Nama Pegawai", "Jenis Penghargaan", "Masa Kerja", "Tahun Usulan", "Status Usulan"]);
             currentData.penghargaan.forEach(item => {
                 dataExcel.push([item.no, item.nip, item.nama, item.jenis, item.masa_kerja, item.tahun, item.status]);
             });
 
-            // Buat Workbook Excel
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.aoa_to_sheet(dataExcel);
             XLSX.utils.book_append_sheet(wb, ws, "Laporan Rekapitulasi");
             
-            // Simpan file
             XLSX.writeFile(wb, `Laporan-Rekapitulasi-DPPKBP3A-${tahun}.xlsx`);
         }
 
-        // Render awal saat dokumen dimuat
         document.addEventListener('DOMContentLoaded', () => {
             const initialYear = document.getElementById('periodeFilter').value;
             renderLaporan(initialYear);
