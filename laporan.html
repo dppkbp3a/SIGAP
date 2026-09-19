@@ -19,13 +19,24 @@
             }
             body {
                 background: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             main {
                 padding: 0 !important;
             }
             .print-shadow-none {
                 box-shadow: none !important;
-                border: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            /* Mencegah elemen terpotong di tengah baris/kotak saat dicetak */
+            tr, .print-break-avoid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .print-page-break {
+                break-before: page;
+                page-break-before: always;
             }
         }
     </style>
@@ -137,7 +148,7 @@
                     </div>
 
                     <!-- Ringkasan Stat Cards (Otomatis Terhitung/Terubah) -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 print-break-avoid">
                         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm print-shadow-none">
                             <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Usulan Pangkat (KP)</p>
                             <h3 class="text-2xl font-bold text-blue-700 mt-1" id="totalKP">0</h3>
@@ -157,7 +168,7 @@
                     </div>
 
                     <!-- SECTION 1: Rekapitulasi Kenaikan Pangkat -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none print-break-avoid">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
                                 <i class="fa-solid fa-arrow-up-right-dots text-blue-400"></i> Rekapitulasi Kenaikan Pangkat (KP)
@@ -184,7 +195,7 @@
                     </div>
 
                     <!-- SECTION 2: Rekapitulasi Penghargaan -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none print-break-avoid">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
                                 <i class="fa-solid fa-award text-amber-400"></i> Rekapitulasi Usulan Tanda Kehormatan / Penghargaan
@@ -211,7 +222,7 @@
                     </div>
 
                     <!-- Tanda Tangan Cetak Laporan -->
-                    <div class="flex justify-end mt-12 mb-8">
+                    <div class="flex justify-end mt-12 mb-8 print-break-avoid">
                         <div class="text-center w-64">
                             <p class="text-xs">Kuningan, 31 Agustus 2026</p>
                             <p class="text-xs font-bold mt-1">Kepala DPPKBP3A Kabupaten Kuningan</p>
@@ -356,7 +367,6 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            // Sembunyikan kop sebelum cetak PDF jika di CSS di-handle terpisah, atau biarkan tampil karena sudah terpasang
             html2pdf().from(element).set(options).save();
         }
 
