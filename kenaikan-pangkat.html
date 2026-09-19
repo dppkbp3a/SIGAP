@@ -16,29 +16,32 @@
     <!-- Style Khusus Cetak / Print -->
     <style>
         @media print {
-            /* Pengaturan Halaman Cetak (Landscape) */
+            /* Set orientasi ke Landscape & atur margin kertas */
             @page {
                 size: A4 landscape;
-                margin: 12mm 10mm 12mm 10mm;
+                margin: 10mm;
             }
 
-            /* Sembunyikan elemen UI non-cetak */
+            /* 1. Sembunyikan SEMUA elemen luar & bagian atas */
             aside, 
             header, 
+            footer,
             .no-print, 
             #detailModal, 
             .stat-cards, 
-            .filter-bar {
+            .filter-bar,
+            main > div:not(.table-container) {
                 display: none !important;
             }
 
-            /* Reset body & wrapper agar penuh dan transparan */
+            /* 2. Reset tampilan halaman agar hanya menyisakan tabel */
             body, html {
                 background: #ffffff !important;
                 color: #000000 !important;
                 height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
                 overflow: visible !important;
-                font-family: Arial, sans-serif !important;
             }
 
             .flex, .flex-1, main {
@@ -49,76 +52,45 @@
                 margin: 0 !important;
             }
 
-            /* Judul Kop Resmi Cetak */
-            .print-header {
-                display: block !important;
-                text-align: center;
-                margin-bottom: 15px;
-                border-bottom: 2px solid #000;
-                padding-bottom: 8px;
-            }
-            .print-header h1 {
-                font-size: 16pt;
-                font-weight: bold;
-                text-transform: uppercase;
-                margin: 0;
-            }
-            .print-header h2 {
-                font-size: 12pt;
-                font-weight: bold;
-                margin: 2px 0 0 0;
-            }
-            .print-header p {
-                font-size: 9pt;
-                color: #333;
-                margin-top: 2px;
-            }
-
-            /* Penyesuaian Tabel */
+            /* 3. Atur wadah tabel agar langsung berada di paling atas halaman */
             .table-container {
                 border: none !important;
                 box-shadow: none !important;
-                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
             }
 
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
-                margin-top: 10px !important;
+                margin: 0 !important;
             }
 
             th, td {
                 border: 1px solid #333 !important;
-                padding: 5px 6px !important;
+                padding: 6px 8px !important;
                 font-size: 9pt !important;
                 color: #000 !important;
                 vertical-align: middle !important;
             }
 
+            /* Header tabel tetap muncul di bagian atas setiap halaman cetak */
             thead {
-                display: table-header-group; /* Cetak header tabel di tiap halaman */
+                display: table-header-group;
             }
 
             thead tr {
-                background-color: #f1f5f9 !important;
-                color: #000000 !important;
+                background-color: #0f172a !important;
+                color: #ffffff !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
+            /* Mencegah baris tabel terpotong di tengah halaman */
             tr {
-                page-break-inside: avoid; /* Jangan potong baris di tengah halaman */
+                page-break-inside: avoid;
             }
-
-            /* Sembunyikan kolom aksi jika ada */
-            .col-aksi {
-                display: none !important;
-            }
-        }
-
-        /* Sembunyikan judul cetak di layar biasa */
-        .print-header {
-            display: none;
         }
     </style>
 </head>
@@ -197,14 +169,7 @@
             <!-- Content Kenaikan Pangkat -->
             <main class="p-6">
 
-                <!-- Header Cetak Resmi (Hanya muncul saat di-print) -->
-                <div class="print-header">
-                    <h1>PEMERINTAH KABUPATEN KUNINGAN</h1>
-                    <h2>DINAS PENGENDALIAN PENDUDUK, KELUARGA BERENCANA, PEMBERDAYAAN PEREMPUAN DAN PERLINDUNGAN ANAK</h2>
-                    <p>Laporan Monitoring Jadwal Kenaikan Pangkat (KP) Pegawai</p>
-                </div>
-
-                <!-- Header Actions -->
+                <!-- Header Actions (Disembunyikan saat print) -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 no-print">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Jadwal Kenaikan Pangkat (KP)</h2>
@@ -224,7 +189,7 @@
                     </div>
                 </div>
 
-                <!-- Highlight Stat Cards -->
+                <!-- Highlight Stat Cards (Disembunyikan saat print) -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 stat-cards">
                     <div class="bg-red-50 p-4 rounded-xl border border-red-200 shadow-sm flex items-center justify-between">
                         <div>
@@ -255,7 +220,7 @@
                     </div>
                 </div>
 
-                <!-- Filter & Search Bar -->
+                <!-- Filter & Search Bar (Disembunyikan saat print) -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center filter-bar">
                     <div class="relative w-full md:w-80">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
@@ -266,23 +231,23 @@
                     </div>
                 </div>
 
-                <!-- Table Card -->
+                <!-- Table Card (Hanya bagian ini yang akan tercetak) -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-container">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse" id="kpTable">
                             <thead>
                                 <tr class="bg-slate-900 text-white text-xs uppercase font-semibold">
-                                    <th class="py-3.5 px-4 text-center w-12">No</th>
-                                    <th class="py-3.5 px-4">NIP & Nama Pegawai</th>
-                                    <th class="py-3.5 px-4 text-center">Gol/Ruang</th>
-                                    <th class="py-3.5 px-4">Jabatan & Unit Kerja</th>
-                                    <th class="py-3.5 px-4 text-center">KP Terakhir</th>
-                                    <th class="py-3.5 px-4 text-center">KP Berikutnya</th>
-                                    <th class="py-3.5 px-4 text-center">Status KP</th>
+                                    <th class="py-3.5 px-4 text-center w-12">NO</th>
+                                    <th class="py-3.5 px-4">NIP & NAMA PEGAWAI</th>
+                                    <th class="py-3.5 px-4 text-center">GOL/RUANG</th>
+                                    <th class="py-3.5 px-4">JABATAN & UNIT KERJA</th>
+                                    <th class="py-3.5 px-4 text-center">KP TERAKHIR</th>
+                                    <th class="py-3.5 px-4 text-center">KP BERIKUTNYA</th>
+                                    <th class="py-3.5 px-4 text-center">STATUS KP</th>
                                 </tr>
                             </thead>
                             <tbody id="kpTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
-                                <!-- Data rendered via JS -->
+                                <!-- Data pegawai akan terisi melalui JavaScript kamu -->
                             </tbody>
                         </table>
                     </div>
@@ -292,7 +257,7 @@
     </div>
 
     <script>
-        // Fungsi pemicu cetak
+        // Fungsi untuk pemicu Cetak
         function printData() {
             window.print();
         }
