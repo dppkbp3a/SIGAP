@@ -76,17 +76,13 @@
                     <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <!-- Toggle Fast Switch khusus Testing / Demo User -->
-                    <button onclick="simulasiGantiUser()" class="text-xs bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-2">
-                        <i class="fa-solid fa-user-gear text-blue-600"></i>
-                        <span id="btnSwitchUserLabel">Switch ke Pegawai</span>
-                    </button>
-                    <div class="flex items-center gap-3 border-l pl-4 border-gray-200">
+                    <!-- Profile Admin Khusus -->
+                    <div class="flex items-center gap-3 pl-4">
                         <div class="text-right">
-                            <p id="userNameDisplay" class="text-sm font-bold text-gray-800">NOPA PUJIHASTUTI, SE., M.A.P.</p>
-                            <p id="userNipDisplay" class="text-xs text-gray-500">NIP. 19811110 200604 2 007</p>
+                            <p class="text-sm font-bold text-gray-800">NOPA PUJIHASTUTI, SE., M.A.P.</p>
+                            <p class="text-xs text-gray-500">NIP. 19811110 200604 2 007</p>
                         </div>
-                        <div id="userAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
                             N
                         </div>
                     </div>
@@ -101,8 +97,8 @@
                         <h2 class="text-xl font-bold mb-1">Daftar Usulan Kenaikan Gaji Berkala (KGB) - TAHUN 2026</h2>
                         <p class="text-sm text-blue-100">Monitoring dan pengelolaan berkas usulan KGB Pegawai Negeri Sipil DPPKBP3A Kuningan.</p>
                     </div>
-                    <!-- Tombol Tambah Usulan KGB (Hanya Tampil Jika Admin) -->
-                    <button id="btnTambahKgb" onclick="bukaModalKgb()" class="bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
+                    <!-- Tombol Tambah Usulan KGB Admin -->
+                    <button onclick="bukaModalKgb()" class="bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
                         <i class="fa-solid fa-plus"></i> Tambah Usulan KGB
                     </button>
                 </div>
@@ -174,7 +170,7 @@
                                     <th class="py-3.5 px-4 text-center">KGB Terakhir</th>
                                     <th class="py-3.5 px-4 text-center">Usulan KGB 2026</th>
                                     <th class="py-3.5 px-4 text-center">KGB Berikutnya</th>
-                                    <th class="py-3.5 px-6 text-center th-aksi">Aksi</th>
+                                    <th class="py-3.5 px-6 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="kgbTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -280,61 +276,6 @@
             { id: 29, no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "Pengatur Tk.I", gol: "II/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" }
         ];
 
-        // Profile Data Admin & Pegawai Biasa
-        const userProfiles = {
-            admin: {
-                nama: "NOPA PUJIHASTUTI, SE., M.A.P.",
-                nip: "19811110 200604 2 007",
-                avatar: "N",
-                role: "admin"
-            },
-            pegawai: {
-                nama: "Budi Santoso, S.STP",
-                nip: "19890312 201201 1 002",
-                avatar: "B",
-                role: "pegawai"
-            }
-        };
-
-        function getActiveRole() {
-            return localStorage.getItem('sigap_user_role') || 'admin';
-        }
-
-        function terapkanHakAkses() {
-            const role = getActiveRole();
-            const profile = userProfiles[role];
-            
-            const btnTambah = document.getElementById('btnTambahKgb');
-            const nameDisplay = document.getElementById('userNameDisplay');
-            const nipDisplay = document.getElementById('userNipDisplay');
-            const avatar = document.getElementById('userAvatar');
-            const btnSwitchLabel = document.getElementById('btnSwitchUserLabel');
-
-            nameDisplay.innerText = profile.nama;
-            nipDisplay.innerText = "NIP. " + profile.nip;
-            avatar.innerText = profile.avatar;
-
-            if (role === 'admin') {
-                btnTambah.classList.remove('hidden');
-                btnTambah.classList.add('flex');
-                avatar.className = "w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold";
-                btnSwitchLabel.innerText = "Switch ke Pegawai";
-            } else {
-                btnTambah.classList.add('hidden');
-                btnTambah.classList.remove('flex');
-                avatar.className = "w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold";
-                btnSwitchLabel.innerText = "Switch ke Admin";
-            }
-        }
-
-        function simulasiGantiUser() {
-            const current = getActiveRole();
-            const nextRole = current === 'admin' ? 'pegawai' : 'admin';
-            localStorage.setItem('sigap_user_role', nextRole);
-            terapkanHakAkses();
-            renderTabelKgb();
-        }
-
         function formatTglIndo(tglStr) {
             if (!tglStr) return "-";
             const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -351,29 +292,15 @@
         }
 
         function renderTabelKgb() {
-            const role = getActiveRole();
             const listKgb = ambilDataKgb();
             const tbody = document.getElementById('kgbTableBody');
-            const thAksi = document.querySelectorAll('.th-aksi');
 
-            thAksi.forEach(th => th.style.display = (role === 'admin') ? '' : 'none');
             tbody.innerHTML = '';
-
             document.getElementById('totalUsulanCount').innerText = listKgb.length + " Pegawai";
 
             listKgb.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
-
-                let tdAksi = role === 'admin' ? `
-                    <td class="py-3.5 px-6 text-center space-x-2">
-                        <button onclick="editKgb(${index})" class="text-blue-600 hover:text-blue-800 font-semibold text-xs transition">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit
-                        </button>
-                        <button onclick="hapusKgb(${index})" class="text-red-500 hover:text-red-700 font-semibold text-xs transition">
-                            <i class="fa-solid fa-trash"></i> Hapus
-                        </button>
-                    </td>` : '';
 
                 tr.innerHTML = `
                     <td class="py-3.5 px-4 text-center font-medium text-gray-400">${index + 1}</td>
@@ -388,7 +315,14 @@
                     <td class="py-3.5 px-4 text-center text-gray-600">${formatTglIndo(item.kgbTerakhir)}</td>
                     <td class="py-3.5 px-4 text-center font-semibold text-blue-700 bg-blue-50/50">${formatTglIndo(item.usulan2026)}</td>
                     <td class="py-3.5 px-4 text-center text-emerald-700 font-medium">${formatTglIndo(item.kgbBerikutnya)}</td>
-                    ${tdAksi}
+                    <td class="py-3.5 px-6 text-center space-x-2">
+                        <button onclick="editKgb(${index})" class="text-blue-600 hover:text-blue-800 font-semibold text-xs transition">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                        <button onclick="hapusKgb(${index})" class="text-red-500 hover:text-red-700 font-semibold text-xs transition">
+                            <i class="fa-solid fa-trash"></i> Hapus
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -396,7 +330,6 @@
 
         function simpanKgb(e) {
             e.preventDefault();
-            if (getActiveRole() !== 'admin') return;
 
             const editIndex = parseInt(document.getElementById('editIndex').value);
             const newItem = {
@@ -423,7 +356,6 @@
         }
 
         function editKgb(index) {
-            if (getActiveRole() !== 'admin') return;
             const item = ambilDataKgb()[index];
             
             document.getElementById('editIndex').value = index;
@@ -440,7 +372,6 @@
         }
 
         function hapusKgb(index) {
-            if (getActiveRole() !== 'admin') return;
             if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
                 const data = ambilDataKgb();
                 data.splice(index, 1);
@@ -524,7 +455,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            terapkanHakAkses();
             renderTabelKgb();
         });
     </script>
