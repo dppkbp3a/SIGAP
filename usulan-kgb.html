@@ -3,460 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kenaikan Gaji Berkala (KGB) - SIGAP DPPKBP3A</title>
+    <title>Usulan Kenaikan Gaji Berkala (KGB) - DPPKBP3A</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Library Export Excel & PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
-    <div class="flex h-screen overflow-hidden">
-        
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between">
-            <div>
-                <!-- Brand -->
-                <div class="h-16 flex items-center px-6 bg-slate-950 text-white font-bold text-lg gap-3">
-                    <i class="fa-solid fa-calendar-check text-blue-500"></i>
-                    <div class="flex flex-col">
-                        <span class="leading-tight">SIGAP DPPKBP3A</span>
-                        <span class="text-xs text-slate-400 font-normal">Kab.Kuningan</span>
-                    </div>
+    <!-- HEADER / NAVBAR -->
+    <header class="bg-indigo-700 text-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-file-invoice-dollar text-2xl"></i>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">Sistem Usulan KGB</h1>
+                    <p class="text-xs text-indigo-200">DPPKBP3A KABUPATEN KUNINGAN</p>
                 </div>
-                <!-- Nav Links -->
-                <nav class="p-4 space-y-1 text-sm">
-                    <a href="dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
-                    </a>
-                    <a href="datapegawai.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-users-gear w-5"></i> Data Pegawai
-                    </a>
-                    <a href="duk.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-id-card w-5"></i> DUK
-                    </a>
-                    <a href="kenaikan-pangkat.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-arrow-up-right-dots w-5"></i> Kenaikan Pangkat
-                    </a>
-                    <a href="penghargaan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-award w-5"></i> Penghargaan
-                    </a>
-                    <a href="pensiun.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-user-xmark w-5"></i> Pensiun
-                    </a>
-                    <a href="usulan-kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium">
-                        <i class="fa-solid fa-money-bill-wave w-5"></i> Kenaikan Gaji Berkala
-                    </a>
-                    <a href="laporan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-file-lines w-5"></i> Laporan
-                    </a>
-                </nav>
             </div>
-            <!-- Settings & Logout -->
-            <div class="p-4 border-t border-slate-800 space-y-1">
-                <a href="pengaturan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 transition text-sm">
-                    <i class="fa-solid fa-gear w-5"></i> Pengaturan
-                </a>
-                <a href="login.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-red-400 hover:bg-slate-800 transition text-sm">
-                    <i class="fa-solid fa-right-from-bracket w-5"></i> Keluar
-                </a>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar -->
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
-                <div class="flex items-center gap-4">
-                    <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
+            <div class="flex items-center space-x-4">
+                <!-- Badge Identitas Login -->
+                <div class="text-right">
+                    <p id="user-name" class="font-semibold text-sm">Memuat...</p>
+                    <span id="user-badge" class="inline-block px-2 py-0.5 text-xs rounded-full bg-indigo-500 text-white font-medium">
+                        ...
+                    </span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <!-- Profile Admin Khusus -->
-                    <div class="flex items-center gap-3 pl-4">
-                        <div class="text-right">
-                            <p class="text-sm font-bold text-gray-800">NOPA PUJIHASTUTI, SE., M.A.P.</p>
-                            <p class="text-xs text-gray-500">NIP. 19811110 200604 2 007</p>
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                            N
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Main Content -->
-            <main class="p-6">
-                <!-- Banner Header -->
-                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-6 text-white mb-6 shadow-md flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold mb-1">Daftar Usulan Kenaikan Gaji Berkala (KGB) - TAHUN 2026</h2>
-                        <p class="text-sm text-blue-100">Monitoring dan pengelolaan berkas usulan KGB Pegawai Negeri Sipil DPPKBP3A Kuningan.</p>
-                    </div>
-                    <!-- Tombol Tambah Usulan KGB Admin -->
-                    <button onclick="bukaModalKgb()" class="bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Tambah Usulan KGB
-                    </button>
-                </div>
-
-                <!-- Section Card Summary -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium uppercase">Total Usulan 2026</p>
-                            <h3 id="totalUsulanCount" class="text-2xl font-bold text-gray-800 mt-1">29 Pegawai</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium uppercase">Periode KGB Terdekat</p>
-                            <h3 class="text-2xl font-bold text-amber-600 mt-1">Jan - Apr 2026</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium uppercase">KGB Berikutnya</p>
-                            <h3 class="text-2xl font-bold text-emerald-600 mt-1">Tahun 2028</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Table & Filter Section -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="p-5 border-b border-gray-200 flex flex-col md:flex-row gap-4 justify-between items-center">
-                        <h3 class="font-bold text-gray-800 text-base">Daftar Usulan KGB PNS</h3>
-                        
-                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-                            <!-- Tombol Export Excel & PDF -->
-                            <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-file-excel"></i> Export Excel
-                                </button>
-                                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-file-pdf"></i> Cetak PDF
-                                </button>
-                            </div>
-
-                            <!-- Pencarian -->
-                            <div class="w-full md:w-64 relative">
-                                <input type="text" id="searchInput" onkeyup="filterKgbTable()" placeholder="Cari Nama, NIP, Golongan..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400 text-sm"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse" id="tableKgb">
-                            <thead>
-                                <tr class="bg-gray-50 text-gray-600 text-xs uppercase font-semibold">
-                                    <th class="py-3.5 px-4 text-center">No</th>
-                                    <th class="py-3.5 px-6">NIP & Nama Pegawai</th>
-                                    <th class="py-3.5 px-6">Jabatan & Gol.</th>
-                                    <th class="py-3.5 px-4 text-center">KGB Terakhir</th>
-                                    <th class="py-3.5 px-4 text-center">Usulan KGB 2026</th>
-                                    <th class="py-3.5 px-4 text-center">KGB Berikutnya</th>
-                                    <th class="py-3.5 px-6 text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="kgbTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
-                                <!-- Data dimuat via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- MODAL POP-UP TAMBAH / EDIT USULAN KGB -->
-    <div id="modalTambahKgb" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            <div class="p-5 border-b flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-gray-800 flex items-center gap-2" id="modalTitle">
-                    <i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru
-                </h3>
-                <button onclick="tutupModalKgb()" class="text-gray-400 hover:text-gray-600 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button onclick="handleLogout()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm transition">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
                 </button>
             </div>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main class="container mx-auto px-4 py-8 flex-1">
+        
+        <!-- SECTION 1: FORM PENGAJUAN (HANYA UNTUK PEGAWAI) -->
+        <section id="section-form-pegawai" class="hidden bg-white p-6 rounded-xl shadow-md mb-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+                <i class="fa-solid fa-paper-plane mr-2 text-indigo-600"></i> Form Usulan KGB Baru Tahun 2026
+            </h2>
             
-            <form id="formKgb" onsubmit="simpanKgb(event)" class="p-5 space-y-3 text-sm">
-                <input type="hidden" id="editIndex" value="-1">
+            <form id="form-usulan-kgb" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">NIP Pegawai</label>
-                    <input type="text" id="inputNip" placeholder="Contoh: 19700810 199002 1 001" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">NIP Pegawai</label>
+                    <input type="text" id="input-nip" readonly class="w-full bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-sm text-gray-600 cursor-not-allowed">
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Lengkap & Gelar</label>
-                    <input type="text" id="inputNama" placeholder="Contoh: H. APIP ROPI'I, Ners, S.Sos..." required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                    <input type="text" id="input-nama" readonly class="w-full bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-sm text-gray-600 cursor-not-allowed">
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Jabatan</label>
-                        <input type="text" id="inputJabatan" placeholder="Pembina / Penata..." required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Gol / Ruang</label>
-                        <input type="text" id="inputGol" placeholder="IV/b, III/d, dll." required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Usulan KGB 2026</label>
+                    <input type="date" id="input-tmt" required class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
 
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">KGB Terakhir</label>
-                        <input type="date" id="inputKgbTerakhir" required class="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Usulan KGB 2026</label>
-                        <input type="date" id="inputUsulan2026" required class="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">KGB Berikutnya</label>
-                        <input type="date" id="inputKgbBerikutnya" required class="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Unggah Berkas Pendukung (PDF)</label>
+                    <input type="file" id="input-berkas" accept=".pdf" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 </div>
 
-                <div class="pt-3 flex justify-end gap-2 border-t">
-                    <button type="button" onclick="tutupModalKgb()" class="px-4 py-2 rounded-lg font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">Simpan Usulan</button>
+                <div class="md:col-span-2 text-right mt-2">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition">
+                        <i class="fa-solid fa-paper-plane mr-1"></i> Kirim Usulan KGB
+                    </button>
                 </div>
             </form>
-        </div>
-    </div>
+        </section>
 
-    <!-- SCRIPT MANAJEMEN DATA & LOCALSTORAGE -->
+        <!-- SECTION 2: TABEL DATA USULAN KGB -->
+        <section class="bg-white p-6 rounded-xl shadow-md">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b pb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center">
+                        <i class="fa-solid fa-list-check mr-2 text-indigo-600"></i>
+                        <span id="table-title">Daftar Usulan KGB 2026</span>
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1" id="table-description">Memuat data...</p>
+                </div>
+
+                <!-- Kontrol Pencarian -->
+                <div class="w-full sm:w-auto flex gap-2">
+                    <input type="text" id="search-input" onkeyup="filterTable()" placeholder="Cari NIP / Nama / Gol..." class="w-full sm:w-64 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+            </div>
+
+            <!-- TABEL DENGAN SCROLL RESPONSIVE -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-600">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-3 py-3 text-center">No</th>
+                            <th class="px-4 py-3">NIP & Nama Pegawai</th>
+                            <th class="px-3 py-3">Jabatan & Gol</th>
+                            <th class="px-3 py-3">KGB Terakhir</th>
+                            <th class="px-3 py-3">Usulan KGB 2026</th>
+                            <th class="px-3 py-3">KGB Berikutnya</th>
+                            <th class="px-3 py-3 text-center">Status</th>
+                            <th class="px-3 py-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="kgb-table-body">
+                        <!-- Data dari Excel dimasukkan secara dinamis -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t py-4 text-center text-xs text-gray-500">
+        &copy; 2026 DPPKBP3A Kabupaten Kuningan - Sistem Informasi Usulan KGB
+    </footer>
+
+    <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // Data Bawaan KGB
-        const dataExcelKgb = [
-            { id: 1, no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-02-01", usulan2026: "2026-02-01", kgbBerikutnya: "2028-02-01" },
-            { id: 2, no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 3, no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 4, no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 5, no: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 6, no: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 7, no: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 8, no: 12, nip: "19770205 200801 1 007", nama: "DIDIN AWALUDIN, S.Pd..", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 9, no: 13, nip: "19811104 200801 2 009", nama: "DINI NOVIANTI RATNA JUWITA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 10, no: 14, nip: "19780502 200801 2 009", nama: "SITI NURJANAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 11, no: 15, nip: "19730203 201001 1 001", nama: "SAID, SH.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 12, no: 16, nip: "19880718 201411 2 001", nama: "dr. ADHIANI KOESMAN", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-11-01", usulan2026: "2026-11-01", kgbBerikutnya: "2028-11-01" },
-            { id: 13, no: 17, nip: "19720210 200801 1 004", nama: "ERO JUHARA, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 14, no: 19, nip: "19780516 201001 2 001", nama: "YOYOM SITI MARIAM, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 15, no: 20, nip: "19811110 200604 2 007", nama: "NOPA PUJIHASTUTI, SE., M.A.P.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 16, no: 21, nip: "19730619 200801 2 006", nama: "ETI SUARTI, SE., M.Si.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 17, no: 23, nip: "19710831 200003 2 003", nama: "NUNUNG NURZAENAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 18, no: 24, nip: "19760823 200801 1 004", nama: "DIKDIK MEDIAGUSDIANA, SE..", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 19, no: 27, nip: "19750716 200801 1 005", nama: "JAJANG JARKASIH, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 20, no: 28, nip: "19750409 200801 2 007", nama: "EUIS NURMALA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 21, no: 33, nip: "19740823 201001 1 001", nama: "MAS`UD, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 22, no: 36, nip: "19721204 200003 1 004", nama: "RADIMAN, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 23, no: 37, nip: "19851205 201001 2 001", nama: "TATI HERNAWATI, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 24, no: 42, nip: "19710720 200604 1 008", nama: "H. RAHMAN, S.Sos.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 25, no: 45, nip: "19770920 201001 2 003", nama: "IDA SUCIATI, S.IP.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 26, no: 47, nip: "19920524 202203 2 007", nama: "AYU SEKARDINI, S.KM.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 27, no: 49, nip: "19790507 201001 1 003", nama: "DEDE ALIMUDINSYAH, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 28, no: 52, nip: "19730109 201409 1 001", nama: "TOTO SUGIANTO, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-09-01", usulan2026: "2026-09-01", kgbBerikutnya: "2028-09-01" },
-            { id: 29, no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "Pengatur Tk.I", gol: "II/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" }
+        // DATA USAULAN KGB (BERDASARKAN BERKAS EXCEL DPPKBP3A KABUPATEN KUNINGAN 2026)
+        let mockKgbData = [
+            { id: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jabatan: "Pembina Tk.I", gol: "IV/b", tmtAwal: "1990-02-01", kgbTerakhir: "2024-02-01", usulan2026: "2026-02-01", kgbBerikutnya: "2028-02-01", status: "Pending" },
+            { id: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", jabatan: "Pembina Tk.I", gol: "IV/b", tmtAwal: "2006-04-01", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01", status: "Pending" },
+            { id: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", jabatan: "Pembina", gol: "IV/a", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", jabatan: "Pembina", gol: "IV/a", tmtAwal: "1990-03-01", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01", status: "Pending" },
+            { id: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "1990-03-01", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01", status: "Pending" },
+            { id: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2006-04-01", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01", status: "Pending" },
+            { id: 12, nip: "19770205 200801 1 007", nama: "DIDIN AWALUDIN, S.Pd..", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 13, nip: "19811104 200801 2 009", nama: "DINI NOVIANTI RATNA JUWITA, SE.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 14, nip: "19780502 200801 2 009", nama: "SITI NURJANAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 15, nip: "19730203 201001 1 001", nama: "SAID, SH.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2010-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 16, nip: "19880718 201411 2 001", nama: "dr. ADHIANI KOESMAN", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2014-11-01", kgbTerakhir: "2024-11-01", usulan2026: "2026-11-01", kgbBerikutnya: "2028-11-01", status: "Pending" },
+            { id: 17, nip: "19720210 200801 1 004", nama: "ERO JUHARA, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 19, nip: "19780516 201001 2 001", nama: "YOYOM SITI MARIAM, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2010-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 20, nip: "19811110 200604 2 007", nama: "NOPA PUJIHASTUTI, SE., M.A.P.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2006-04-01", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01", status: "Pending" },
+            { id: 21, nip: "19730619 200801 2 006", nama: "ETI SUARTI, SE., M.Si.", jabatan: "Pembina", gol: "IV/a", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 23, nip: "19710831 200003 2 003", nama: "NUNUNG NURZAENAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2000-03-01", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01", status: "Pending" },
+            { id: 24, nip: "19760823 200801 1 004", nama: "DIKDIK MEDIAGUSDIANA, SE..", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 27, nip: "19750716 200801 1 005", nama: "JAJANG JARKASIH, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 28, nip: "19750409 200801 2 007", nama: "EUIS NURMALA, SE.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 33, nip: "19740823 201001 1 001", nama: "MAS`UD, SE.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2010-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 36, nip: "19721204 200003 1 004", nama: "RADIMAN, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2000-03-01", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01", status: "Pending" },
+            { id: 37, nip: "19851205 201001 2 001", nama: "TATI HERNAWATI, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2010-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 42, nip: "19710720 200604 1 008", nama: "H. RAHMAN, S.Sos.", jabatan: "Penata Tk.I", gol: "III/d", tmtAwal: "2006-04-01", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01", status: "Pending" },
+            { id: 45, nip: "19770920 201001 2 003", nama: "IDA SUCIATI, S.IP.", jabatan: "Penata muda Tk.I", gol: "III/b", tmtAwal: "2010-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 47, nip: "19920524 202203 2 007", nama: "AYU SEKARDINI, S.KM.", jabatan: "Penata muda Tk.I", gol: "III/b", tmtAwal: "2022-03-01", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01", status: "Pending" },
+            { id: 49, nip: "19790507 201001 1 003", nama: "DEDE ALIMUDINSYAH, S.IP.", jabatan: "penata muda", gol: "III/a", tmtAwal: "2010-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" },
+            { id: 52, nip: "19730109 201409 1 001", nama: "TOTO SUGIANTO, S.IP.", jabatan: "penata muda", gol: "III/a", tmtAwal: "2014-09-01", kgbTerakhir: "2024-09-01", usulan2026: "2026-09-01", kgbBerikutnya: "2028-09-01", status: "Pending" },
+            { id: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "pengatur Tk.I", gol: "II/d", tmtAwal: "2008-01-01", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01", status: "Pending" }
         ];
 
-        function formatTglIndo(tglStr) {
-            if (!tglStr) return "-";
-            const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
-            return new Date(tglStr).toLocaleDateString('id-ID', opsi);
-        }
+        // 1. INI CEK AUTENTIKASI DARI USER SESSION
+        document.addEventListener('DOMContentLoaded', () => {
+            let userSession = JSON.parse(localStorage.getItem('user_session'));
 
-        function ambilDataKgb() {
-            const disimpan = localStorage.getItem('sigap_kgb_list');
-            if (!disimpan) {
-                localStorage.setItem('sigap_kgb_list', JSON.stringify(dataExcelKgb));
-                return dataExcelKgb;
+            // Default fallback untuk pengujian jika belum login
+            if (!userSession) {
+                userSession = { isAdmin: true, nama: 'Administrator DPPKBP3A', nip: 'ADMIN-001' };
+                localStorage.setItem('user_session', JSON.stringify(userSession));
             }
-            return JSON.parse(disimpan);
+
+            renderUserProfile(userSession);
+            renderKgbTable(userSession);
+        });
+
+        // 2. PROFILE USER SESUAI AKUN LOGIN
+        function renderUserProfile(user) {
+            const userNameEl = document.getElementById('user-name');
+            const userBadgeEl = document.getElementById('user-badge');
+            const formSection = document.getElementById('section-form-pegawai');
+            const tableTitle = document.getElementById('table-title');
+            const tableDesc = document.getElementById('table-description');
+
+            if (user.isAdmin) {
+                userNameEl.textContent = "Administrator";
+                userBadgeEl.textContent = "Mode Admin";
+                userBadgeEl.className = "inline-block px-2 py-0.5 text-xs rounded-full bg-red-600 text-white font-medium";
+
+                formSection.classList.add('hidden');
+
+                tableTitle.textContent = "Kelola Usulan KGB Pegawai 2026";
+                tableDesc.textContent = `Menampilkan total ${mockKgbData.length} PNS DPPKBP3A yang diusulkan KGB tahun 2026.`;
+            } else {
+                userNameEl.textContent = user.nama;
+                userBadgeEl.textContent = "Pegawai";
+                userBadgeEl.className = "inline-block px-2 py-0.5 text-xs rounded-full bg-green-600 text-white font-medium";
+
+                document.getElementById('input-nip').value = user.nip;
+                document.getElementById('input-nama').value = user.nama;
+                
+                formSection.classList.remove('hidden');
+
+                tableTitle.textContent = "Riwayat Usulan KGB Saya";
+                tableDesc.textContent = "Status pengajuan Usulan KGB Tahun 2026 milik Anda.";
+            }
         }
 
-        function renderTabelKgb() {
-            const listKgb = ambilDataKgb();
-            const tbody = document.getElementById('kgbTableBody');
-
+        // 3. RENDER TABEL DATA
+        function renderKgbTable(user) {
+            const tbody = document.getElementById('kgb-table-body');
             tbody.innerHTML = '';
-            document.getElementById('totalUsulanCount').innerText = listKgb.length + " Pegawai";
 
-            listKgb.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
+            const userNipClean = user.nip ? user.nip.replace(/\s+/g, '') : '';
 
-                tr.innerHTML = `
-                    <td class="py-3.5 px-4 text-center font-medium text-gray-400">${index + 1}</td>
-                    <td class="py-3.5 px-6">
-                        <p class="font-bold text-gray-800">${item.nama}</p>
-                        <p class="text-xs text-gray-500 font-mono">NIP. ${item.nip}</p>
-                    </td>
-                    <td class="py-3.5 px-6">
-                        <p class="font-medium text-gray-700">${item.jabatan}</p>
-                        <span class="inline-block bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded border border-slate-200 mt-0.5 font-semibold">${item.gol}</span>
-                    </td>
-                    <td class="py-3.5 px-4 text-center text-gray-600">${formatTglIndo(item.kgbTerakhir)}</td>
-                    <td class="py-3.5 px-4 text-center font-semibold text-blue-700 bg-blue-50/50">${formatTglIndo(item.usulan2026)}</td>
-                    <td class="py-3.5 px-4 text-center text-emerald-700 font-medium">${formatTglIndo(item.kgbBerikutnya)}</td>
-                    <td class="py-3.5 px-6 text-center space-x-2">
-                        <button onclick="editKgb(${index})" class="text-blue-600 hover:text-blue-800 font-semibold text-xs transition">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit
+            // Admin melihat semua data, Pegawai hanya melihat datanya
+            const filteredData = user.isAdmin 
+                ? mockKgbData 
+                : mockKgbData.filter(item => item.nip.replace(/\s+/g, '') === userNipClean);
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-400">Belum ada data usulan KGB.</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach((item, index) => {
+                let statusBadge = '';
+                if (item.status === 'Pending') statusBadge = '<span class="bg-yellow-100 text-yellow-800 text-xs px-2.5 py-0.5 rounded-full font-medium">Pending</span>';
+                else if (item.status === 'Disetujui') statusBadge = '<span class="bg-green-100 text-green-800 text-xs px-2.5 py-0.5 rounded-full font-medium">Disetujui</span>';
+                else if (item.status === 'Ditolak') statusBadge = '<span class="bg-red-100 text-red-800 text-xs px-2.5 py-0.5 rounded-full font-medium">Ditolak</span>';
+
+                let actionButtons = '';
+                if (user.isAdmin) {
+                    if (item.status === 'Pending') {
+                        actionButtons = `
+                            <div class="flex justify-center space-x-1">
+                                <button onclick="updateStatus(${item.id}, 'Disetujui')" class="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded transition" title="Setujui">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                                <button onclick="updateStatus(${item.id}, 'Ditolak')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded transition" title="Tolak">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        actionButtons = `<span class="text-xs text-gray-400 italic">Verifikasi Selesai</span>`;
+                    }
+                } else {
+                    actionButtons = `
+                        <button onclick="alert('Membuka Berkas PDF...')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 text-xs px-2.5 py-1 rounded transition">
+                            <i class="fa-solid fa-file-pdf"></i> Berkas
                         </button>
-                        <button onclick="hapusKgb(${index})" class="text-red-500 hover:text-red-700 font-semibold text-xs transition">
-                            <i class="fa-solid fa-trash"></i> Hapus
-                        </button>
-                    </td>
+                    `;
+                }
+
+                const row = `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-3 py-3 text-center">${index + 1}</td>
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-gray-900">${item.nama}</div>
+                            <div class="text-xs text-gray-500">NIP: ${item.nip}</div>
+                        </td>
+                        <td class="px-3 py-3">
+                            <div class="text-gray-800">${item.jabatan}</div>
+                            <div class="text-xs font-bold text-indigo-600">Gol. ${item.gol}</div>
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap">${item.kgbTerakhir}</td>
+                        <td class="px-3 py-3 font-semibold text-indigo-700 whitespace-nowrap">${item.usulan2026}</td>
+                        <td class="px-3 py-3 whitespace-nowrap">${item.kgbBerikutnya}</td>
+                        <td class="px-3 py-3 text-center whitespace-nowrap">${statusBadge}</td>
+                        <td class="px-3 py-3 text-center whitespace-nowrap">${actionButtons}</td>
+                    </tr>
                 `;
-                tbody.appendChild(tr);
+                tbody.innerHTML += row;
             });
         }
 
-        function simpanKgb(e) {
+        // 4. SUBMIT FORM UNTUK PEGAWAI
+        function handleFormSubmit(e) {
             e.preventDefault();
+            const userSession = JSON.parse(localStorage.getItem('user_session'));
+            const tmt = document.getElementById('input-tmt').value;
 
-            const editIndex = parseInt(document.getElementById('editIndex').value);
-            const newItem = {
-                id: editIndex >= 0 ? ambilDataKgb()[editIndex].id : Date.now(),
-                nip: document.getElementById('inputNip').value,
-                nama: document.getElementById('inputNama').value,
-                jabatan: document.getElementById('inputJabatan').value,
-                gol: document.getElementById('inputGol').value,
-                kgbTerakhir: document.getElementById('inputKgbTerakhir').value,
-                usulan2026: document.getElementById('inputUsulan2026').value,
-                kgbBerikutnya: document.getElementById('inputKgbBerikutnya').value
+            const newUsulan = {
+                id: Date.now(),
+                nip: userSession.nip,
+                nama: userSession.nama,
+                jabatan: "Pegawai DPPKBP3A",
+                gol: "-",
+                kgbTerakhir: "-",
+                usulan2026: tmt,
+                kgbBerikutnya: "-",
+                status: 'Pending'
             };
 
-            const data = ambilDataKgb();
-            if (editIndex >= 0) {
-                data[editIndex] = newItem;
-            } else {
-                data.unshift(newItem);
-            }
-
-            localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
-            renderTabelKgb();
-            tutupModalKgb();
+            mockKgbData.unshift(newUsulan);
+            alert("Usulan KGB Berhasil Dikirim!");
+            document.getElementById('form-usulan-kgb').reset();
+            renderUserProfile(userSession);
+            renderKgbTable(userSession);
         }
 
-        function editKgb(index) {
-            const item = ambilDataKgb()[index];
-            
-            document.getElementById('editIndex').value = index;
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Usulan KGB`;
-            document.getElementById('inputNip').value = item.nip;
-            document.getElementById('inputNama').value = item.nama;
-            document.getElementById('inputJabatan').value = item.jabatan;
-            document.getElementById('inputGol').value = item.gol;
-            document.getElementById('inputKgbTerakhir').value = item.kgbTerakhir;
-            document.getElementById('inputUsulan2026').value = item.usulan2026;
-            document.getElementById('inputKgbBerikutnya').value = item.kgbBerikutnya;
-
-            bukaModalKgb();
-        }
-
-        function hapusKgb(index) {
-            if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
-                const data = ambilDataKgb();
-                data.splice(index, 1);
-                localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
-                renderTabelKgb();
+        // 5. UPDATE STATUS OLEH ADMIN
+        function updateStatus(id, statusBaru) {
+            const item = mockKgbData.find(d => d.id === id);
+            if (item) {
+                item.status = statusBaru;
+                alert(`Usulan KGB untuk ${item.nama} berhasil diubah menjadi: ${statusBaru}`);
+                const userSession = JSON.parse(localStorage.getItem('user_session'));
+                renderKgbTable(userSession);
             }
         }
 
-        function filterKgbTable() {
-            const input = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.getElementById("kgbTableBody").getElementsByTagName("tr");
-
-            for (let row of rows) {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(input) ? "" : "none";
-            }
+        // 6. LOGOUT
+        function handleLogout() {
+            localStorage.removeItem('user_session');
+            alert("Anda telah keluar.");
+            window.location.href = "login.html";
         }
 
-        function bukaModalKgb() {
-            document.getElementById('modalTambahKgb').classList.remove('hidden');
-        }
+        // 7. PENCARIAN & FILTER
+        function filterTable() {
+            const searchValue = document.getElementById('search-input').value.toLowerCase();
+            const rows = document.querySelectorAll('#kgb-table-body tr');
 
-        function tutupModalKgb() {
-            document.getElementById('modalTambahKgb').classList.add('hidden');
-            document.getElementById('formKgb').reset();
-            document.getElementById('editIndex').value = "-1";
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
-        }
-
-        // Export data ke format Excel (.xlsx)
-        function exportToExcel() {
-            const listKgb = ambilDataKgb();
-            const dataFormatted = listKgb.map((item, index) => ({
-                "No": index + 1,
-                "NIP": item.nip,
-                "Nama Pegawai": item.nama,
-                "Jabatan": item.jabatan,
-                "Gol.": item.gol,
-                "KGB Terakhir": formatTglIndo(item.kgbTerakhir),
-                "Usulan KGB 2026": formatTglIndo(item.usulan2026),
-                "KGB Berikutnya": formatTglIndo(item.kgbBerikutnya)
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(dataFormatted);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB 2026");
-            XLSX.writeFile(workbook, "Daftar_Usulan_KGB_DPPKBP3A_2026.xlsx");
-        }
-
-        // Export/Cetak data ke format PDF (.pdf)
-        function exportToPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('landscape');
-
-            doc.setFontSize(14);
-            doc.text("DAFTAR USULAN KENAIKAN GAJI BERKALA (KGB) TAHUN 2026", 14, 15);
-            doc.setFontSize(10);
-            doc.text("DPPKBP3A Kabupaten Kuningan", 14, 22);
-
-            const listKgb = ambilDataKgb();
-            const tableRows = listKgb.map((item, index) => [
-                index + 1,
-                item.nip,
-                item.nama,
-                item.jabatan + " (" + item.gol + ")",
-                formatTglIndo(item.kgbTerakhir),
-                formatTglIndo(item.usulan2026),
-                formatTglIndo(item.kgbBerikutnya)
-            ]);
-
-            doc.autoTable({
-                head: [["No", "NIP", "Nama Pegawai", "Jabatan & Gol", "KGB Terakhir", "Usulan KGB 2026", "KGB Berikutnya"]],
-                body: tableRows,
-                startY: 28,
-                theme: 'grid',
-                styles: { fontSize: 8 },
-                headStyles: { fillColor: [29, 78, 216] }
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
             });
-
-            doc.save("Daftar_Usulan_KGB_DPPKBP3A_2026.pdf");
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderTabelKgb();
-        });
     </script>
 </body>
 </html>
