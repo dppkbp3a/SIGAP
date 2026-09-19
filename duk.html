@@ -7,11 +7,14 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Library SheetJS untuk Ekspor Excel (.xlsx) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <!-- CSS Khusus Cetak / Print Multi-Halaman -->
     <style>
         @media print {
-            /* Sembunyikan elemen navigasi & filter saat mencetak */
+            /* Sembunyikan elemen navigasi & filter saat dicetak */
             #sidebar, 
             header, 
             .no-print, 
@@ -20,36 +23,53 @@
                 display: none !important;
             }
 
+            /* Hapus pembatasan tinggi h-screen dan overflow-y-auto agar halaman bisa berlanjut ke Hal 2, 3, dst */
+            html, body, .flex, .main-content, .overflow-y-auto, .overflow-x-auto, .h-screen {
+                height: auto !important;
+                min-height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                position: static !important;
+            }
+
             body {
                 background-color: #ffffff !important;
                 color: #000000 !important;
-                font-size: 10pt;
+                font-size: 9pt;
             }
 
-            /* Sesuaikan kontainer utama */
             .main-content {
                 margin: 0 !important;
                 padding: 0 !important;
-                overflow: visible !important;
+                width: 100% !important;
             }
 
-            /* Format tabel cetak */
+            /* Mengatur halaman cetak Landscape/Portrait */
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            /* Format tabel cetak utuh */
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
+                page-break-after: auto;
             }
 
             th, td {
-                border: 1px solid #cbd5e1 !important;
-                padding: 6px 8px !important;
+                border: 1px solid #94a3b8 !important;
+                padding: 6px 6px !important;
+                word-wrap: break-word;
             }
 
             thead {
-                display: table-header-group; /* Cetak header tabel di tiap halaman baru */
+                display: table-header-group; /* Cetak ulang header tabel di setiap awal halaman baru */
             }
 
             tr {
-                page-break-inside: avoid; /* Mencegah baris terpotong di tengah halaman */
+                page-break-inside: avoid; /* Jangan memotong baris pegawai di tengah halaman */
+                page-break-after: auto;
             }
 
             .badge-print {
@@ -57,6 +77,7 @@
                 background: none !important;
                 color: #000 !important;
                 padding: 0 !important;
+                font-weight: bold;
             }
         }
     </style>
@@ -86,7 +107,6 @@
                     <a href="datapegawai.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-users-gear w-5"></i> Data Pegawai
                     </a>
-                    <!-- Menu Aktif -->
                     <a href="duk.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-sm">
                         <i class="fa-solid fa-id-card w-5"></i> DUK
                     </a>
@@ -107,7 +127,7 @@
                     </a>
                 </nav>
             </div>
-            <!-- Pengaturan & Logout -->
+            <!-- Settings & Logout -->
             <div class="p-4 border-t border-slate-800 space-y-1">
                 <a href="pengaturan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 transition text-sm">
                     <i class="fa-solid fa-gear w-5"></i> Pengaturan
@@ -121,7 +141,7 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto main-content">
             
-            <!-- Top Navbar dengan Profil Dinamis -->
+            <!-- Top Navbar - Profil Dinamis -->
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
                 <div class="flex items-center gap-4">
                     <button id="openSidebar" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
@@ -131,18 +151,18 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
-                        <p id="userNama" class="text-sm font-bold text-gray-800">Admin DPPKBP3A</p>
-                        <p id="userNip" class="text-xs text-gray-500">NIP. 198111102006042007</p>
+                        <p id="userNama" class="text-sm font-bold text-gray-800">...</p>
+                        <p id="userNip" class="text-xs text-gray-500">...</p>
                     </div>
                     <div id="userAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shadow-sm uppercase">
-                        A
+                        -
                     </div>
                 </div>
             </header>
 
             <!-- Content DUK -->
             <main class="p-4 md:p-6">
-                <!-- Header Actions & Tombol Ekspor (Gaya Menu Data Pegawai) -->
+                <!-- Header Actions & Tombol Ekspor -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Daftar Urut Kepangkatan Pegawai</h2>
@@ -204,7 +224,7 @@
                 <!-- Table Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table id="dukTable" class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-900 text-white text-xs uppercase font-semibold">
                                     <th class="py-3.5 px-4 text-center">NO</th>
@@ -218,7 +238,6 @@
                                 </tr>
                             </thead>
                             <tbody id="dukTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
-                                <!-- Data DUK dirender via JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -228,7 +247,7 @@
     </div>
 
     <script>
-        // Data Dummy DUK Pegawai
+        // Data DUK Pegawai
         const dataDUK = [
             { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2026-03-01", jabatan: "Kepala Dinas", mk: "36,06 th", pendidikan: "Magister Kesehatan (S.2)", usia: "56" },
             { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2024-02-01", jabatan: "Sekretaris Dinas", mk: "20,04 Th", pendidikan: "Magister Management (S.2)", usia: "54" },
@@ -242,22 +261,44 @@
             { no: 10, nip: "19700305 199003 1 002", nama: "YAYAT SUDRAJAT, S.Pd.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-10-01", jabatan: "Penggerak Swadaya Masyarakat Ahli Muda", mk: "36,05 th", pendidikan: "Pendidikan Olahraga (S.1)", usia: "56" }
         ];
 
-        // Memuat Pengguna Aktif dari LocalStorage
+        let currentFilteredData = [...dataDUK];
+
+        // Memuat profil pengguna secara dinamis
         function loadLoggedInUser() {
-            const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+            const storedUserRaw = localStorage.getItem("loggedInUser") || 
+                                  localStorage.getItem("user") || 
+                                  localStorage.getItem("currentUser") || 
+                                  sessionStorage.getItem("loggedInUser");
 
-            if (currentUser) {
-                const elNama = document.getElementById("userNama");
-                const elNip = document.getElementById("userNip");
-                const elAvatar = document.getElementById("userAvatar");
-
-                if (elNama) elNama.innerText = currentUser.nama || "User";
-                if (elNip) elNip.innerText = currentUser.nip ? `NIP. ${currentUser.nip}` : "-";
-
-                if (elAvatar && currentUser.nama) {
-                    const initial = currentUser.nama.trim().charAt(0).toUpperCase();
-                    elAvatar.innerText = initial;
+            let user = null;
+            if (storedUserRaw) {
+                try {
+                    user = JSON.parse(storedUserRaw);
+                } catch(e) {
+                    user = null;
                 }
+            }
+
+            // Fallback default: Kepala Dinas
+            if (!user || !user.nama) {
+                user = {
+                    nama: dataDUK[0].nama,
+                    nip: dataDUK[0].nip
+                };
+            }
+
+            const elNama = document.getElementById("userNama");
+            const elNip = document.getElementById("userNip");
+            const elAvatar = document.getElementById("userAvatar");
+
+            if (elNama) elNama.innerText = user.nama || user.name || "Pegawai";
+            if (elNip) elNip.innerText = user.nip ? `NIP. ${user.nip}` : "-";
+
+            if (elAvatar) {
+                const textNama = user.nama || user.name || "P";
+                const cleanName = textNama.replace(/^dr\.\s*|^H\.\s*/i, '').trim();
+                const initial = cleanName.charAt(0).toUpperCase() || 'A';
+                elAvatar.innerText = initial;
             }
         }
 
@@ -331,7 +372,7 @@
             const searchValue = document.getElementById("searchInput").value.toLowerCase();
             const golValue = document.getElementById("golonganFilter").value;
 
-            const filtered = dataDUK.filter(item => {
+            currentFilteredData = dataDUK.filter(item => {
                 const matchSearch = item.nama.toLowerCase().includes(searchValue) ||
                                     item.nip.toLowerCase().includes(searchValue) ||
                                     item.gol.toLowerCase().includes(searchValue) ||
@@ -342,24 +383,60 @@
                 return matchSearch && matchGol;
             });
 
-            renderTable(filtered);
+            renderTable(currentFilteredData);
         }
 
+        // Fitur Ekspor Excel (.xlsx) Aktif
         function exportExcel() {
-            alert("Fitur ekspor Excel DUK siap diunduh.");
+            if (typeof XLSX === 'undefined') {
+                alert("Pustaka pengekspor Excel belum termuat. Pastikan koneksi internet aktif.");
+                return;
+            }
+
+            // Memformat data untuk file Excel
+            const excelData = currentFilteredData.map(item => ({
+                "NO": item.no,
+                "NAMA PEGAWAI": item.nama,
+                "NIP": item.nip,
+                "GOL/RUANG": item.gol,
+                "TMT PANGKAT": formatDate(item.tmt_pangkat),
+                "JABATAN": item.jabatan,
+                "MASA KERJA": item.mk,
+                "PENDIDIKAN": item.pendidikan,
+                "USIA": item.usia + " Th"
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Data DUK");
+
+            // Mengatur lebar kolom otomatis
+            worksheet['!cols'] = [
+                { wch: 5 },  // No
+                { wch: 40 }, // Nama
+                { wch: 22 }, // NIP
+                { wch: 12 }, // Gol
+                { wch: 15 }, // TMT
+                { wch: 35 }, // Jabatan
+                { wch: 12 }, // Masa Kerja
+                { wch: 30 }, // Pendidikan
+                { wch: 10 }  // Usia
+            ];
+
+            // Unduh File
+            XLSX.writeFile(workbook, "Data_DUK_DPPKBP3A.xlsx");
         }
 
         function logout() {
-            localStorage.removeItem("loggedInUser");
+            localStorage.clear();
+            sessionStorage.clear();
         }
 
-        // Event listeners
         document.getElementById("openSidebar")?.addEventListener("click", () => document.getElementById("sidebar").classList.remove("hidden"));
         document.getElementById("closeSidebar")?.addEventListener("click", () => document.getElementById("sidebar").classList.add("hidden"));
         document.getElementById("searchInput").addEventListener("input", filterData);
         document.getElementById("golonganFilter").addEventListener("change", filterData);
 
-        // Inisialisasi
         window.addEventListener("DOMContentLoaded", () => {
             loadLoggedInUser();
             updateStats();
