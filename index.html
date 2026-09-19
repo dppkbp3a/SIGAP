@@ -86,13 +86,15 @@
           // Cari nama pegawai berdasarkan NIP yang dimasukkan
           const namaPegawai = DATA_PEGAWAI[usernameInput] || "Pegawai DPPKBP3A";
 
-          // Simpan NIP dan Nama Lengkap ke LocalStorage
+          // Simpan NIP dan Nama Lengkap ke LocalStorage (digunakan oleh datapegawai.html)
+          localStorage.setItem("userNip", usernameInput);
           localStorage.setItem("user_nip", usernameInput);
           localStorage.setItem("user_nama", namaPegawai);
 
           // 1. JIKA LOGIN SEBAGAI ADMIN (Teks 'admin' atau NIP Admin)
           if (usernameInput.toLowerCase() === "admin" || usernameInput === ADMIN_NIP) {
             localStorage.setItem("userRole", "admin");
+            localStorage.setItem("userNip", ADMIN_NIP);
             localStorage.setItem("user_nip", ADMIN_NIP);
             localStorage.setItem("user_nama", DATA_PEGAWAI[ADMIN_NIP] || "Admin Utama");
             window.location.href = "dashboard.html";
