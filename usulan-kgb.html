@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Usulan Kenaikan Gaji Berkala (KGB) - SIGAP DPPKBP3A</title>
+    <title>Usulan Kenaikan Gaji Berkala (KGB) - SIGAP DPPKBP3A</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -73,7 +73,6 @@
         }
     </style>
 </head>
-</head>
 <body class="bg-gray-100 font-sans">
 
     <div class="flex h-screen overflow-hidden">
@@ -81,8 +80,6 @@
        <!-- Sidebar -->
         <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between shrink-0 no-print">
             <div>
-                <div class="h-16 flex items-center px-6 bg-slate-950 text-white font-bold text-lg gap-3">
-                    <i class="fa-solid fa-calendar-check text-blue-500"></i>
                 <!-- Brand -->
                 <div class="h-16 flex items-center px-6 bg-slate-950 text-white font-bold text-lg gap-3">
                     <i class="fa-solid fa-calendar-check text-blue-500"></i>
@@ -378,7 +375,8 @@
 
         function terapkanHakAkses() {
             const role = getActiveRole();
-            document.getElementById('roleSelector').value = role;
+            const roleSelectorEl = document.getElementById('roleSelector');
+            if (roleSelectorEl) roleSelectorEl.value = role;
 
             // Element khusus admin
             const elemenAdmin = document.querySelectorAll('.khusus-admin');
@@ -400,6 +398,7 @@
         function renderTabelKgb() {
             const listKgb = ambilDataKgb();
             const tbody = document.getElementById('kgbTableBody');
+            if (!tbody) return;
 
             tbody.innerHTML = '';
             document.getElementById('totalUsulanCount').innerText = listKgb.length + " Pegawai";
@@ -433,7 +432,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Terapkan penyesuaian hak akses setelah tabel di-render
             terapkanHakAkses();
         }
 
@@ -489,83 +487,54 @@
             }
         }
 
-        function filterKgbTable() {
-            const input = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.getElementById("kgbTableBody").getElementsByTagName("tr");
-
-            for (let row of rows) {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(input) ? "" : "none";
-            }
-        }
-
         function bukaModalKgb() {
-            document.getElementById('modalTambahKgb').classList.remove('hidden');
+            const modal = document.getElementById('modalTambahKgb');
+            if (modal) modal.classList.remove('hidden');
         }
 
         function tutupModalKgb() {
-            document.getElementById('modalTambahKgb').classList.add('hidden');
-            document.getElementById('formKgb').reset();
-            document.getElementById('editIndex').value = "-1";
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
+            const modal = document.getElementById('modalTambahKgb');
+            if (modal) {
+                modal.classList.add('hidden');
+                const form = document.getElementById('formKgb');
+                if (form) form.reset();
+                document.getElementById('editIndex').value = "-1";
+                document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
+            }
         }
 
-        // Export data ke format Excel (.xlsx)
+        function filterKgbTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('tableKgb');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                let tdText = trs[i].textContent || trs[i].innerText;
+                if (tdText.toLowerCase().indexOf(filter) > -1) {
+                    trs[i].style.display = "";
+                } else {
+                    trs[i].style.display = "none";
+                }
+            }
+        }
+
         function exportToExcel() {
-            const listKgb = ambilDataKgb();
-            const dataFormatted = listKgb.map((item, index) => ({
-                "No": index + 1,
-                "NIP": item.nip,
-                "Nama Pegawai": item.nama,
-                "Jabatan": item.jabatan,
-                "Gol.": item.gol,
-                "KGB Terakhir": formatTglIndo(item.kgbTerakhir),
-                "Usulan KGB 2026": formatTglIndo(item.usulan2026),
-                "KGB Berikutnya": formatTglIndo(item.kgbBerikutnya)
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(dataFormatted);
+            const data = ambilDataKgb();
+            const worksheet = XLSX.utils.json_to_sheet(data);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB 2026");
-            XLSX.writeFile(workbook, "Daftar_Usulan_KGB_DPPKBP3A_2026.xlsx");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB");
+            XLSX.writeFile(workbook, "Data_Usulan_KGB_2026.xlsx");
         }
 
-        // Export/Cetak data ke format PDF (.pdf)
         function exportToPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('landscape');
-
-            doc.setFontSize(14);
-            doc.text("DAFTAR USULAN KENAIKAN GAJI BERKALA (KGB) TAHUN 2026", 14, 15);
-            doc.setFontSize(10);
-            doc.text("DPPKBP3A Kabupaten Kuningan", 14, 22);
-
-            const listKgb = ambilDataKgb();
-            const tableRows = listKgb.map((item, index) => [
-                index + 1,
-                item.nip,
-                item.nama,
-                item.jabatan + " (" + item.gol + ")",
-                formatTglIndo(item.kgbTerakhir),
-                formatTglIndo(item.usulan2026),
-                formatTglIndo(item.kgbBerikutnya)
-            ]);
-
-            doc.autoTable({
-                head: [["No", "NIP", "Nama Pegawai", "Jabatan & Gol", "KGB Terakhir", "Usulan KGB 2026", "KGB Berikutnya"]],
-                body: tableRows,
-                startY: 28,
-                theme: 'grid',
-                styles: { fontSize: 8 },
-                headStyles: { fillColor: [29, 78, 216] }
-            });
-
-            doc.save("Daftar_Usulan_KGB_DPPKBP3A_2026.pdf");
+            window.print();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // Load awal saat halaman dibuka
+        window.onload = function() {
             renderTabelKgb();
-        });
+        };
     </script>
 </body>
 </html>
