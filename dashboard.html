@@ -56,7 +56,7 @@
         
         <!-- Footer / Logout -->
         <div class="p-4 border-t border-slate-800">
-            <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-rose-400 hover:bg-rose-500/10 transition text-sm font-medium">
+            <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-rose-400 hover:bg-rose-500/10 transition text-sm font-medium cursor-pointer">
                 <i class="fa-solid fa-right-from-bracket w-5"></i> Keluar
             </button>
         </div>
@@ -182,7 +182,7 @@
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center mb-4 border-b pb-3">
                 <h3 class="font-bold text-slate-800 text-lg">Tambah Agenda Kedinasan</h3>
-                <button onclick="tutupModalAgenda()" class="text-slate-400 hover:text-slate-600">
+                <button onclick="tutupModalAgenda()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -215,8 +215,8 @@
                     </select>
                 </div>
                 <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="tutupModalAgenda()" class="w-1/2 py-2.5 border rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50">Batal</button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-sm shadow">Simpan Agenda</button>
+                    <button type="button" onclick="tutupModalAgenda()" class="w-1/2 py-2.5 border rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50 cursor-pointer">Batal</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-sm shadow cursor-pointer">Simpan Agenda</button>
                 </div>
             </form>
         </div>
@@ -246,25 +246,27 @@
         ];
 
         document.addEventListener("DOMContentLoaded", function () {
+            // KEAMANAN: Cek apakah user sudah login atau belum
+            const userRole = localStorage.getItem("userRole");
+            if (!userRole) {
+                window.location.href = "index.html";
+                return;
+            }
+
             muatDataUser();
             muatAgenda();
         });
 
         function muatDataUser() {
-            // Ambil data session
             const role = localStorage.getItem("userRole") || "pegawai";
             const nip = localStorage.getItem("userNip") || localStorage.getItem("user_nip") || "-";
             const nama = localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
 
-            // Pasang Ke Header Topbar
             document.getElementById("user-display-name").textContent = nama;
             document.getElementById("user-display-nip").textContent = "NIP. " + nip;
             document.getElementById("user-avatar").textContent = nama.charAt(0).toUpperCase();
-
-            // Pasang Ke Welcome Banner
             document.getElementById("welcome-user-name").textContent = nama;
 
-            // ELEMEN UNTUK AKSES KONTROL (ADMIN VS PEGAWAI)
             const badge = document.getElementById("admin-badge");
             const badgeText = document.getElementById("admin-badge-text");
             const badgeIcon = document.getElementById("admin-badge-icon");
@@ -272,23 +274,29 @@
             const thAksi = document.getElementById("th-aksi");
 
             if (role === "admin") {
-                // Tampilan Admin
                 badge.className = "bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
                 badgeIcon.className = "fa-solid fa-shield-halved";
                 badgeText.textContent = "Mode Admin";
 
-                btnTambah.classList.remove("hidden");
-                btnTambah.classList.add("flex");
-                thAksi.classList.remove("hidden");
+                if (btnTambah) {
+                    btnTambah.classList.remove("hidden");
+                    btnTambah.classList.add("flex");
+                }
+                if (thAksi) {
+                    thAksi.classList.remove("hidden");
+                }
             } else {
-                // Tampilan Pegawai Biasa
                 badge.className = "bg-emerald-500 text-white font-bold px-3 py-1 rounded-full text-xs shadow-sm flex items-center gap-1";
                 badgeIcon.className = "fa-solid fa-user-check";
                 badgeText.textContent = "Pegawai DPPKBP3A";
 
-                btnTambah.classList.add("hidden");
-                btnTambah.classList.remove("flex");
-                thAksi.classList.add("hidden");
+                if (btnTambah) {
+                    btnTambah.classList.add("hidden");
+                    btnTambah.classList.remove("flex");
+                }
+                if (thAksi) {
+                    thAksi.classList.add("hidden");
+                }
             }
         }
 
@@ -332,7 +340,7 @@
                 if (role === "admin") {
                     htmlContent += `
                         <td class="p-4 px-6 text-center">
-                            <button onclick="hapusAgenda(${item.id})" class="text-rose-500 hover:text-rose-700 transition" title="Hapus Agenda">
+                            <button onclick="hapusAgenda(${item.id})" class="text-rose-500 hover:text-rose-700 transition cursor-pointer" title="Hapus Agenda">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </td>
@@ -388,7 +396,13 @@
         }
 
         function logout() {
-            localStorage.clear();
+            // Hapus semua data sesi login
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("userNip");
+            localStorage.removeItem("user_nip");
+            localStorage.removeItem("user_nama");
+            
+            // Arahkan kembali ke halaman index.html tanpa error
             window.location.href = "index.html";
         }
     </script>
