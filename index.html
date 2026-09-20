@@ -14,9 +14,10 @@
         <!-- Logo / Header -->
         <div class="text-center mb-8">
             <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-                <img src="logo.png" alt="Logo DPPKBP3A" class="max-h-full object-contain">
+                <img src="logo.png" alt="Logo DPPKBP3A" class="max-h-full object-contain" onerror="this.src='https://via.placeholder.com/80?text=SIGAP'">
             </div>
             <h1 class="text-2xl font-bold tracking-wider">SIGAP BAGIAN UMUM</h1>
+            <p class="text-xs text-blue-200 mt-1">Dinas Pemberdayaan Perempuan, Perlindungan Anak, Pengendalian Penduduk dan Keluarga Berencana</p>
         </div>
 
         <!-- Form Login -->
@@ -49,7 +50,7 @@
         </form>
 
         <div class="text-center mt-6 text-xs text-gray-400">
-            &copy; 2026 Dinas PPKBP3A. All rights reserved.
+            &copy; 2026 Dinas PPKBP3A Kab. Kuningan. All rights reserved.
         </div>
     </div>
 
@@ -69,6 +70,15 @@
       };
 
       const ADMIN_NIP = "198111102006042007";
+
+      // Cek apakah user sudah pernah login sebelumnya di browser ini
+      window.onload = function() {
+          const userRole = localStorage.getItem("userRole");
+          // Jika sudah ada sesi login, langsung lempar ke dashboard.html supaya gak perlu login ulang terus
+          if (userRole) {
+              window.location.href = "dashboard.html";
+          }
+      };
 
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
