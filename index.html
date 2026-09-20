@@ -71,14 +71,7 @@
 
       const ADMIN_NIP = "198111102006042007";
 
-      // Cek apakah user sudah pernah login sebelumnya di browser ini
-      window.onload = function() {
-          const userRole = localStorage.getItem("userRole");
-          // Jika sudah ada sesi login, langsung lempar ke dashboard.html supaya gak perlu login ulang terus
-          if (userRole) {
-              window.location.href = "dashboard.html";
-          }
-      };
+      
 
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
