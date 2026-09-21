@@ -8,6 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Library untuk Ekspor PDF & Excel (Opsional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <!-- Style Khusus Cetak / Print -->
     <style>
         @media print {
@@ -15,7 +19,6 @@
                 size: A4 landscape;
                 margin: 10mm;
             }
-            /* Sembunyikan semua elemen selain tabel saat print */
             aside, header, footer, .no-print, .stat-cards, .filter-bar, .page-header {
                 display: none !important;
             }
@@ -127,13 +130,23 @@
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Laporan Rekapitulasi Kepegawaian</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right">
-                        <p class="text-sm font-bold text-gray-800">Admin Kepegawaian</p>
-                        <p class="text-xs text-gray-500">DPPKBP3A Kabupaten Kuningan</p>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Simulasi Switch Role untuk Pengujian Admin / User -->
+                    <div class="bg-gray-100 p-1 rounded-lg flex items-center text-xs font-semibold">
+                        <span class="text-gray-500 px-2">Role:</span>
+                        <button onclick="setRole('admin')" id="btnRoleAdmin" class="px-3 py-1 rounded-md transition bg-blue-600 text-white shadow-sm">Admin</button>
+                        <button onclick="setRole('user')" id="btnRoleUser" class="px-3 py-1 rounded-md transition text-gray-600 hover:text-black">User / Pegawai</button>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                        A
+
+                    <div class="flex items-center gap-3 border-l pl-4">
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-800" id="profileName">Admin Kepegawaian</p>
+                            <p class="text-xs text-gray-500" id="profileRoleDesc">DPPKBP3A Kabupaten Kuningan</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" id="profileInitial">
+                            A
+                        </div>
                     </div>
                 </div>
             </header>
@@ -152,7 +165,6 @@
                             <option value="2025">Tahun Anggaran 2025</option>
                         </select>
                         
-                        <!-- Dropdown / Tombol Cetak & Ekspor -->
                         <button onclick="window.print()" class="bg-blue-600 text-white px-3 py-2 rounded-lg font-medium text-sm hover:bg-blue-700 shadow-sm flex items-center gap-2 transition">
                             <i class="fa-solid fa-print"></i> Cetak
                         </button>
@@ -167,7 +179,7 @@
 
                 <!-- Area yang akan dicetak/di-export -->
                 <div id="printableArea" class="bg-gray-100 md:bg-transparent p-0">
-                    <!-- Kop Surat Laporan (Hanya tampil saat dicetak/PDF) -->
+                    <!-- Kop Surat Laporan -->
                     <div class="hidden print:block text-center border-b-2 border-black pb-4 mb-6">
                         <h3 class="text-base font-bold uppercase">Pemerintah Kabupaten Kuningan</h3>
                         <h2 class="text-lg font-extrabold uppercase">Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak (DPPKBP3A)</h2>
@@ -176,26 +188,26 @@
 
                     <!-- Ringkasan Stat Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm print-shadow-none">
+                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                             <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Usulan Pangkat (KP)</p>
                             <h3 class="text-2xl font-bold text-blue-700 mt-1" id="totalKP">0</h3>
                         </div>
-                        <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-sm print-shadow-none">
+                        <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-sm">
                             <p class="text-xs text-emerald-600 font-semibold uppercase tracking-wider">KP Disetujui / SK</p>
                             <h3 class="text-2xl font-bold text-emerald-700 mt-1" id="approvedKP">0</h3>
                         </div>
-                        <div class="bg-white p-4 rounded-xl border border-purple-200 bg-purple-50/20 shadow-sm print-shadow-none">
+                        <div class="bg-white p-4 rounded-xl border border-purple-200 bg-purple-50/20 shadow-sm">
                             <p class="text-xs text-purple-600 font-semibold uppercase tracking-wider">Usulan Penghargaan</p>
                             <h3 class="text-2xl font-bold text-purple-700 mt-1" id="totalPenghargaan">0</h3>
                         </div>
-                        <div class="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-sm print-shadow-none">
+                        <div class="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/20 shadow-sm">
                             <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Penghargaan Masa Kerja (10/20/30 Th)</p>
                             <h3 class="text-2xl font-bold text-amber-700 mt-1" id="satyaCount">0</h3>
                         </div>
                     </div>
 
                     <!-- SECTION 1: Rekapitulasi Kenaikan Pangkat -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
                                 <i class="fa-solid fa-arrow-up-right-dots text-blue-400"></i> Rekapitulasi Kenaikan Pangkat (KP)
@@ -212,7 +224,8 @@
                                         <th class="py-3 px-4 text-center">Gol. Baru (Usulan)</th>
                                         <th class="py-3 px-4 text-center">Periode KP</th>
                                         <th class="py-3 px-4 text-center">Status Berkas</th>
-                                        <th class="py-3 px-4 text-center no-print">Aksi</th>
+                                        <!-- Kolom Aksi hanya dirender jika admin -->
+                                        <th class="py-3 px-4 text-center no-print admin-only-col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableKP" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -223,7 +236,7 @@
                     </div>
 
                     <!-- SECTION 2: Rekapitulasi Penghargaan -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 print-shadow-none">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
                                 <i class="fa-solid fa-award text-amber-400"></i> Rekapitulasi Usulan Tanda Kehormatan / Penghargaan
@@ -240,7 +253,8 @@
                                         <th class="py-3 px-4 text-center">Masa Kerja</th>
                                         <th class="py-3 px-4 text-center">Tahun Usulan</th>
                                         <th class="py-3 px-4 text-center">Status usulan</th>
-                                        <th class="py-3 px-4 text-center no-print">Aksi</th>
+                                        <!-- Kolom Aksi hanya dirender jika admin -->
+                                        <th class="py-3 px-4 text-center no-print admin-only-col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablePenghargaan" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -266,7 +280,7 @@
         </div>
     </div>
 
-    <!-- Modal Edit Data -->
+    <!-- Modal Edit Data (Hanya untuk Admin) -->
     <div id="editModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 no-print">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4 overflow-hidden">
             <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
@@ -325,8 +339,11 @@
         </div>
     </div>
 
-    <!-- Script Data & Dynamic Logic -->
+    <!-- Script Data & Role Validation Logic -->
     <script>
+        // State Role Pengguna Aktif (Simulasi: 'admin' atau 'user')
+        let currentUserRole = 'admin';
+
         const dbLaporan = {
             "2026": {
                 kp: [
@@ -361,12 +378,49 @@
             }
         };
 
+        function setRole(role) {
+            currentUserRole = role;
+            const btnAdmin = document.getElementById('btnRoleAdmin');
+            const btnUser = document.getElementById('btnRoleUser');
+            const profileName = document.getElementById('profileName');
+            const profileRoleDesc = document.getElementById('profileRoleDesc');
+            const profileInitial = document.getElementById('profileInitial');
+
+            if (role === 'admin') {
+                btnAdmin.className = "px-3 py-1 rounded-md transition bg-blue-600 text-white shadow-sm";
+                btnUser.className = "px-3 py-1 rounded-md transition text-gray-600 hover:text-black";
+                profileName.textContent = "Admin Kepegawaian";
+                profileRoleDesc.textContent = "DPPKBP3A Kabupaten Kuningan";
+                profileInitial.textContent = "A";
+            } else {
+                btnUser.className = "px-3 py-1 rounded-md transition bg-slate-700 text-white shadow-sm";
+                btnAdmin.className = "px-3 py-1 rounded-md transition text-gray-600 hover:text-black";
+                profileName.textContent = "Anwar Nasihin, S.Kom";
+                profileRoleDesc.textContent = "Pegawai / User Biasa";
+                profileInitial.textContent = "U";
+            }
+
+            // Render ulang tabel untuk menyesuaikan visibilitas kolom aksi
+            const tahun = document.getElementById('periodeFilter').value;
+            renderLaporan(tahun);
+        }
+
         function renderLaporan(tahun) {
             const currentData = dbLaporan[tahun];
             if (!currentData) return;
 
             document.getElementById('badgeKP').textContent = `Periode ${tahun}`;
             document.getElementById('badgePenghargaan').textContent = `Periode ${tahun}`;
+
+            // Sembunyikan atau tampilkan kolom aksi pada header tabel berdasarkan role
+            const adminCols = document.querySelectorAll('.admin-only-col');
+            adminCols.forEach(col => {
+                if (currentUserRole === 'admin') {
+                    col.classList.remove('hidden');
+                } else {
+                    col.classList.add('hidden');
+                }
+            });
 
             const tbodyKP = document.getElementById('tableKP');
             tbodyKP.innerHTML = '';
@@ -379,6 +433,14 @@
                 if (item.status === 'SK Terbit') badgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
                 else if (item.status === 'Verifikasi Berkas') badgeClass = 'bg-blue-100 text-blue-800 border-blue-300';
                 
+                let actionTd = currentUserRole === 'admin' ? `
+                    <td class="py-3 px-4 text-center no-print">
+                        <button onclick="openEditModal('kp', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600 shadow-sm transition flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                    </td>
+                ` : '';
+
                 tbodyKP.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="py-3 px-4 text-center font-bold text-slate-700 text-xs">${item.no}</td>
@@ -394,11 +456,7 @@
                                 ${item.status}
                             </span>
                         </td>
-                        <td class="py-3 px-4 text-center no-print">
-                            <button onclick="openEditModal('kp', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600 shadow-sm transition flex items-center gap-1 mx-auto">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                            </button>
-                        </td>
+                        ${actionTd}
                     </tr>
                 `;
             });
@@ -412,6 +470,14 @@
 
                 let badgeClass = 'bg-purple-100 text-purple-800 border-purple-300';
                 if (item.status.includes('Disetujui')) badgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+
+                let actionTd = currentUserRole === 'admin' ? `
+                    <td class="py-3 px-4 text-center no-print">
+                        <button onclick="openEditModal('penghargaan', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600 shadow-sm transition flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                    </td>
+                ` : '';
 
                 tbodyPenghargaan.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
@@ -428,11 +494,7 @@
                                 ${item.status}
                             </span>
                         </td>
-                        <td class="py-3 px-4 text-center no-print">
-                            <button onclick="openEditModal('penghargaan', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600 shadow-sm transition flex items-center gap-1 mx-auto">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                            </button>
-                        </td>
+                        ${actionTd}
                     </tr>
                 `;
             });
@@ -448,6 +510,12 @@
         }
 
         function openEditModal(type, index) {
+            // Proteksi keamanan tambahan di sisi fungsi
+            if (currentUserRole !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat mengedit data.');
+                return;
+            }
+
             const tahun = document.getElementById('periodeFilter').value;
             const item = dbLaporan[tahun][type][index];
 
@@ -484,6 +552,8 @@
 
         function saveEdit(event) {
             event.preventDefault();
+            if (currentUserRole !== 'admin') return;
+
             const tahun = document.getElementById('periodeFilter').value;
             const type = document.getElementById('editType').value;
             const index = document.getElementById('editIndex').value;
