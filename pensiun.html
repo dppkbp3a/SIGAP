@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Gaya Kusus untuk Cetak Laporan (Print / Save as PDF) */
+        /* Gaya Khusus untuk Cetak Laporan (Print / Save as PDF) */
         @media print {
             /* Sembunyikan elemen navigasi & antarmuka aplikasi */
             aside, header, .no-print, #searchInput, #tahunFilter {
@@ -443,25 +443,38 @@
             renderPensiun(filtered);
         }
 
+        // Event Listeners
         searchInput.addEventListener('input', filterData);
         tahunFilter.addEventListener('change', filterData);
 
-        // Inisialisasi Pertama
-        populateFilterYears();
-        renderPensiun(dataPensiun);
-
-        // Fungsi Export Excel Sederhana
+        // Export Excel Function (Opsional penunjang)
         function exportToExcel() {
-            let table = document.getElementById("pensiunTable");
-            let html = table.outerHTML;
-            let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+            let csv = [];
+            let rows = document.querySelectorAll("#pensiunTable tr");
+            
+            for (let i = 0; i < rows.length; i++) {
+                let row = [], cols = rows[i].querySelectorAll("td, th");
+                for (let j = 0; j < cols.length; j++) {
+                    row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
+                }
+                csv.push(row.join(","));
+            }
+
+            let csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
             let downloadLink = document.createElement("a");
-            downloadLink.href = url;
-            downloadLink.download = "Daftar_Usulan_Pensiun.xls";
+            downloadLink.download = "Data_Usulan_Pensiun_DPPKBP3A.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
         }
+
+        // Inisialisasi Pertama
+        document.addEventListener('DOMContentLoaded', () => {
+            populateFilterYears();
+            renderPensiun(dataPensiun);
+        });
     </script>
 </body>
 </html>
