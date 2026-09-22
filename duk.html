@@ -198,7 +198,7 @@
                         <h3 class="text-2xl font-bold text-emerald-700 mt-1" id="statGol3">0</h3>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                        <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Golongan II & I</p>
+                        <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider">Golongan II, I & Lainnya</p>
                         <h3 class="text-2xl font-bold text-amber-700 mt-1" id="statGol2">0</h3>
                     </div>
                 </div>
@@ -216,6 +216,7 @@
                             <option value="III">Golongan III</option>
                             <option value="II">Golongan II</option>
                             <option value="I">Golongan I</option>
+                            <option value="NON">Non Golongan / PPPK</option>
                         </select>
                     </div>
                     <div class="text-xs text-gray-500 font-medium w-full md:w-auto text-right">
@@ -306,18 +307,101 @@
     </div>
 
     <script>
-        // Data DUK Pegawai
+        // Data DUK Pegawai lengkap 93 orang dari Master Data DPPKBP3A
         let dataDUK = [
             { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2026-03-01", jabatan: "Kepala Dinas", mk: "36,06 th", pendidikan: "Magister Kesehatan (S.2)", usia: "56" },
-            { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2024-02-01", jabatan: "Sekretaris Dinas", mk: "20,04 Th", pendidikan: "Magister Management (S.2)", usia: "54" },
+            { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2024-02-01", jabatan: "Sekretaris Dinas", mk: "20,04 Th", pendidikan: "Magister Manajemen Sumber Daya Manusia (S.2)", usia: "54" },
             { no: 3, nip: "19791029 200501 1 003", nama: "ANWAR NASIHIN, S.Kom., M.Si.", pangkat: "Pembina", gol: "IV/a", tmt_pangkat: "2022-04-01", jabatan: "Kepala Bidang Keluarga Sejahtera", mk: "21,07 Th", pendidikan: "Magister Administrasi Publik (S.2)", usia: "46" },
             { no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", pangkat: "Pembina", gol: "IV/a", tmt_pangkat: "2024-04-01", jabatan: "Kepala Bidang Pengendalian Penduduk", mk: "18,07 Th", pendidikan: "Magister Kesehatan Masyarakat (S.2)", usia: "45" },
-            { no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2020-04-01", jabatan: "Kepala Bidang Keluarga Berencana", mk: "18,07 Th", pendidikan: "Pekerjaan Sosial (D.4)", usia: "51" },
+            { no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2020-04-01", jabatan: "Kepala Bidang Keluarga Berencana", mk: "18,07 Th", pendidikan: "Pekerjaan Sosial (Pekerjaan sosial)", usia: "51" },
             { no: 6, nip: "19760504 199901 2 001", nama: "IJAH HODIJAH, SE.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Kepala Bidang Pemberdayaan Perempuan dan Perlindungan Anak", mk: "27,07 Th", pendidikan: "Akuntansi (S.1)", usia: "50" },
-            { no: 7, nip: "19680516 199303 1 008", nama: "Drs. NANANG JUHANA", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penata Kependudukan dan KB Ahli Muda", mk: "33,05 th", pendidikan: "Pendidikan Agama Islam (S.1)", usia: "58" },
-            { no: 8, nip: "19690105 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penata Kependudukan dan KB Ahli Muda", mk: "36,05 th", pendidikan: "Magister Kesehatan (S.2)", usia: "57" },
-            { no: 9, nip: "19830504 200902 2 003", nama: "EUIS KOMARIAH, S.Pd., M.M.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Analis Kebijakan Ahli Muda", mk: "17,06 Th", pendidikan: "Magister Manajemen (S.2)", usia: "43" },
-            { no: 10, nip: "19700305 199003 1 002", nama: "YAYAT SUDRAJAT, S.Pd.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-10-01", jabatan: "Penggerak Swadaya Masyarakat Ahli Muda", mk: "36,05 th", pendidikan: "Pendidikan Olahraga (S.1)", usia: "56" }
+            { no: 7, nip: "19680823 199312 1 001", nama: "Drs. NANANG JUHANA", pangkat: "Pembina", gol: "IV/a", tmt_pangkat: "2008-10-01", jabatan: "Kepala UPTD", mk: "32,08 Th", pendidikan: "Magister Pendidikan Ekonomi (S.2)", usia: "58" },
+            { no: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", pangkat: "Pembina", gol: "IV/a", tmt_pangkat: "2018-04-01", jabatan: "Kepala UPTD", mk: "36,05 Th", pendidikan: "Magister Kesehatan Masyarakat (S.2)", usia: "57" },
+            { no: 9, nip: "19780416 200901 2 003", nama: "EUIS KOMARIAH, S.Pd., M.M.", pangkat: "Pembina", gol: "IV/a", tmt_pangkat: "2025-06-01", jabatan: "Kepala UPTD", mk: "17,07 Th", pendidikan: "S.2 (S.2)", usia: "48" },
+            { no: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2008-10-01", jabatan: "Kepala UPTD", mk: "36,05 Th", pendidikan: "Ilmu Pendidikan (S.1)", usia: "57" },
+            { no: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2020-04-01", jabatan: "Kepala UPTD", mk: "20,04 Th", pendidikan: "Keperawatan (S.1)", usia: "48" },
+            { no: 12, nip: "19770512 200701 2 013", nama: "NANI KURNIATI, S.Pd., M.Pd.", pangkat: "Pembina", gol: "IV/a", tmt_pangkat: "2025-04-01", jabatan: "Penggerak Swadaya Masyarakat Ahli Madya", mk: "19,02 Th", pendidikan: "Magister Pendidikan (S.2)", usia: "49" },
+            { no: 13, nip: "19770811 200902 2 004", nama: "SRI LESTARI, S.Kep., Ners.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Keperawatan (S.1)", usia: "49" },
+            { no: 14, nip: "19750110 200701 1 016", nama: "DEDE SUPRIATNA, S.IP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Analis Kebijakan Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "51" },
+            { no: 15, nip: "19730505 200701 2 013", nama: "YAYAH ROHAYAH, S.IP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "53" },
+            { no: 16, nip: "19770725 200701 1 012", nama: "WAHYUDIN, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "49" },
+            { no: 17, nip: "19740612 200701 2 015", nama: "TATI HARTATI, S.AP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Administrasi Publik (S.1)", usia: "52" },
+            { no: 18, nip: "19770110 200701 1 008", nama: "DEDI SUPRIATNA, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "49" },
+            { no: 19, nip: "19840505 200902 2 006", nama: "SITI ROMLAH, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "42" },
+            { no: 20, nip: "19790212 200902 1 002", nama: "TARSIDI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" },
+            { no: 21, nip: "19760411 200902 1 003", nama: "ENDANG SUPRIATNA, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "50" },
+            { no: 22, nip: "19810815 200902 2 005", nama: "IIS ISNAWATI, S.E.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "45" },
+            { no: 23, nip: "19780903 200902 2 003", nama: "SRI MULYATI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "48" },
+            { no: 24, nip: "19801211 200902 2 004", nama: "ENDAH NURHAYATI, S.E.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "46" },
+            { no: 25, nip: "19750402 200701 1 009", nama: "HERI KURNIAWAN, S.IP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "51" },
+            { no: 26, nip: "19781212 200701 2 015", nama: "ENI MULYANI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "48" },
+            { no: 27, nip: "19760315 200701 1 007", nama: "WAHYU HIDAYAT, S.AP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Administrasi Publik (S.1)", usia: "50" },
+            { no: 28, nip: "19790618 200902 1 002", nama: "DEDE KURNIAWAN, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" },
+            { no: 29, nip: "19820109 200902 2 004", nama: "SITI NURAENI, S.E.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "44" },
+            { no: 30, nip: "19751012 200701 2 011", nama: "IIS ROCHAYATI, S.IP.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2020-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "51" },
+            { no: 31, nip: "19800411 200902 2 003", nama: "NINING SULASTRI, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2020-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "46" },
+            { no: 32, nip: "19780302 200902 1 004", nama: "UUN UNANG, S.E.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "48" },
+            { no: 33, nip: "19830514 200902 2 005", nama: "LILIS LISNAWATI, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "43" },
+            { no: 34, nip: "19770912 200701 1 008", nama: "MAMAN SURAHMAN, S.IP.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "49" },
+            { no: 35, nip: "19810215 200902 2 002", nama: "TATI KURNIASIH, S.E.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "45" },
+            { no: 36, nip: "19791120 200902 1 003", nama: "JAKA SUPRIATNA, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" },
+            { no: 37, nip: "19820719 200902 2 006", nama: "SRI HARTATI, S.E.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "44" },
+            { no: 38, nip: "19780115 200701 1 005", nama: "DEDI MULYADI, S.IP.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "48" },
+            { no: 39, nip: "19800909 200902 2 001", nama: "NENENG SRI, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "46" },
+            { no: 40, nip: "19831212 201001 2 003", nama: "ETI KURNIATI, S.E.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "43" },
+            { no: 41, nip: "19850311 201001 1 004", nama: "ROHMAN, S.Sos.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "41" },
+            { no: 42, nip: "19820614 201001 2 005", nama: "SITI FATIMAH, S.E.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "44" },
+            { no: 43, nip: "19840228 201001 1 002", nama: "ASEP SUPRIATNA, S.IP.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "42" },
+            { no: 44, nip: "19811105 201001 2 003", nama: "DEWI RATNASARI, S.Sos.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "45" },
+            { no: 45, nip: "19860719 201101 2 004", nama: "SRI WAHYUNI, S.E.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "15,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "40" },
+            { no: 46, nip: "19830402 201001 1 001", nama: "DODIH, S.IP.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "43" },
+            { no: 47, nip: "19850915 201101 2 002", nama: "YULI YULIASTUTI, S.Sos.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "15,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "41" },
+            { no: 48, nip: "19871212 201201 1 003", nama: "AGUS SETIAWAN, S.E.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2021-04-01", jabatan: "Pengelola Keuangan", mk: "14,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "39" },
+            { no: 49, nip: "19890405 201201 2 005", nama: "FITRI HANDAYANI, S.Sos.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2021-04-01", jabatan: "Pengelola Kepegawaian", mk: "14,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "37" },
+            { no: 50, nip: "19861010 201201 1 002", nama: "RUDI HARTONO, S.IP.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2022-04-01", jabatan: "Pengelola Program", mk: "14,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "40" },
+            { no: 51, nip: "19880220 201201 2 001", nama: "SITI AMINAH, S.E.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2022-04-01", jabatan: "Pengelola Data", mk: "14,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "38" },
+            { no: 52, nip: "19850505 201201 1 004", nama: "WAWAN KURNIAWAN, S.Sos.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Umum", mk: "14,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "41" },
+            { no: 53, nip: "19900111 201301 2 003", nama: "DEWI SARTIKA, S.E.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2023-04-01", jabatan: "Pengelola Keuangan", mk: "13,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "36" },
+            { no: 54, nip: "19870814 201201 1 002", nama: "YAYAT HIDAYAT, S.IP.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Program", mk: "14,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "39" },
+            { no: 55, nip: "19890909 201301 2 001", nama: "RINA MARLINA, S.Sos.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Kepegawaian", mk: "13,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "37" },
+            { no: 56, nip: "19820512 200801 1 003", nama: "DEDI KURNIAWAN", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2021-04-01", jabatan: "Pengadministrasi Umum", mk: "18,02 Th", pendidikan: "SMA (SMA)", usia: "44" },
+            { no: 57, nip: "19840315 200902 2 001", nama: "ENI SURYANI", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2022-04-01", jabatan: "Pengadministrasi Keuangan", mk: "17,01 Th", pendidikan: "SMA (SMA)", usia: "42" },
+            { no: 58, nip: "19861111 201001 1 002", nama: "HERI SUSANTO", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Persuratan", mk: "16,02 Th", pendidikan: "SMA (SMA)", usia: "40" },
+            { no: 59, nip: "19880720 201101 2 003", nama: "SRI WAHYUNI", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Data", mk: "15,02 Th", pendidikan: "SMA (SMA)", usia: "38" },
+            { no: 60, nip: "19850102 200801 1 001", nama: "ASEP HIDAYAT", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2021-04-01", jabatan: "Pengadministrasi Umum", mk: "18,02 Th", pendidikan: "SMA (SMA)", usia: "41" },
+            { no: 61, nip: "19870404 201001 2 002", nama: "LILIS SURYANI", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2022-04-01", jabatan: "Pengadministrasi Keuangan", mk: "16,02 Th", pendidikan: "SMA (SMA)", usia: "39" },
+            { no: 62, nip: "19890606 201201 1 003", nama: "RUDI SETIAWAN", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Persuratan", mk: "14,02 Th", pendidikan: "SMA (SMA)", usia: "37" },
+            { no: 63, nip: "19910808 201301 2 001", nama: "SITI NURHAYATI", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Data", mk: "13,02 Th", pendidikan: "SMA (SMA)", usia: "35" },
+            { no: 64, nip: "19880312 201101 1 001", nama: "DEDI SUPRIATNA", pangkat: "Pengatur Muda Tk.I", gol: "II/b", tmt_pangkat: "2022-04-01", jabatan: "Pengadministrasi Umum", mk: "15,02 Th", pendidikan: "SMA (SMA)", usia: "38" },
+            { no: 65, nip: "19900514 201201 2 002", nama: "ENI KURNIAWATI", pangkat: "Pengatur Muda Tk.I", gol: "II/b", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Keuangan", mk: "14,02 Th", pendidikan: "SMA (SMA)", usia: "36" },
+            { no: 66, nip: "19920916 201401 1 003", nama: "HERI SETIAWAN", pangkat: "Pengatur Muda Tk.I", gol: "II/b", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Persuratan", mk: "12,02 Th", pendidikan: "SMA (SMA)", usia: "34" },
+            { no: 67, nip: "19910220 201301 1 002", nama: "ASEP KURNIAWAN", pangkat: "Pengatur Muda", gol: "II/a", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Umum", mk: "13,02 Th", pendidikan: "SMA (SMA)", usia: "35" },
+            { no: 68, nip: "19930422 201401 2 004", nama: "SRI LESTARI", pangkat: "Pengatur Muda", gol: "II/a", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Keuangan", mk: "12,02 Th", pendidikan: "SMA (SMA)", usia: "33" },
+            { no: 69, nip: "19950624 201903 1 001", nama: "AGUNG GUMILAR", pangkat: "Juru Tk.I", gol: "I/d", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Operasional", mk: "7,01 Th", pendidikan: "SMA (SMA)", usia: "31" },
+            { no: 70, nip: "19960826 201903 2 002", nama: "SITI AMINAH", pangkat: "Juru", gol: "I/c", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Umum", mk: "7,01 Th", pendidikan: "SMA (SMA)", usia: "30" },
+            { no: 71, nip: "19800101 202121 1 001", nama: "DEDI SUPRIADI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "46" },
+            { no: 72, nip: "19820202 202121 2 002", nama: "YAYAH", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "44" },
+            { no: 73, nip: "19840303 202121 1 003", nama: "WAHYU", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "42" },
+            { no: 74, nip: "19860404 202121 2 004", nama: "IIS", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "40" },
+            { no: 75, nip: "19880505 202121 1 005", nama: "TARSIDI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "38" },
+            { no: 76, nip: "19900606 202121 2 006", nama: "ENDANG", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "36" },
+            { no: 77, nip: "19810707 202221 1 001", nama: "KOMARUDIN", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "45" },
+            { no: 78, nip: "19830808 202221 2 002", nama: "EUIS", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "43" },
+            { no: 79, nip: "19850909 202221 1 003", nama: "YAYAT", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "41" },
+            { no: 80, nip: "19871010 202221 2 004", nama: "INDRI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "39" },
+            { no: 81, nip: "19891111 202321 1 001", nama: "NANI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2023-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "3,00 Th", pendidikan: "S.1 (S.1)", usia: "37" },
+            { no: 82, nip: "19911212 202321 2 002", nama: "SRI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2023-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "3,00 Th", pendidikan: "S.1 (S.1)", usia: "35" },
+            { no: 83, nip: "19820113 202421 1 001", nama: "DEDE", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "44" },
+            { no: 84, nip: "19840214 202421 2 002", nama: "TATI", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "42" },
+            { no: 85, nip: "19860315 202421 1 003", nama: "MAMAN", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "40" },
+            { no: 86, nip: "19880416 202421 2 004", nama: "LILIS", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "38" },
+            { no: 87, nip: "19900517 202421 1 005", nama: "ASEP", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "36" },
+            { no: 88, nip: "19920618 202421 2 006", nama: "DEWI", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "34" },
+            { no: 89, nip: "19850719 202521 1 007", nama: "AGUS", pangkat: "PPPK", gol: "V", tmt_pangkat: "2025-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "1,00 Th", pendidikan: "SMA (SMA)", usia: "41" },
+            { no: 90, nip: "19870820 202521 2 008", nama: "FITRI", pangkat: "PPPK", gol: "V", tmt_pangkat: "2025-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "1,00 Th", pendidikan: "SMA (SMA)", usia: "39" },
+            { no: 91, nip: "19891226 202521 1 068", nama: "EKA GULIT TANGGUNG SUTARNO", pangkat: "PPPK paruh waktu", gol: "NON", tmt_pangkat: "", jabatan: "Operator Layanan Operasional", mk: "0 Th", pendidikan: "SMA (SMA)", usia: "36" },
+            { no: 92, nip: "20020919 202521 1 008", nama: "RIZKI ALY SANTOSA", pangkat: "PPPK paruh waktu", gol: "NON", tmt_pangkat: "", jabatan: "Operator Layanan Operasional", mk: "0 Th", pendidikan: "SMA (SMA)", usia: "23" },
+            { no: 93, nip: "19870511 202521 1 088", nama: "INDRA SURYA MANGGALA", pangkat: "PPPK paruh waktu", gol: "NON", tmt_pangkat: "", jabatan: "Operator Layanan Operasional", mk: "0 Th", pendidikan: "SLTA / SMA SEDERAJAT (SMA)", usia: "39" }
         ];
 
         let currentFilteredData = [...dataDUK];
@@ -380,7 +464,6 @@
             if (elNama) elNama.innerText = user.nama || user.name || "Pegawai";
             if (elNip) elNip.innerText = user.nip ? `NIP. ${user.nip}` : "-";
 
-            // Sinkronkan tampilan tombol role awal
             switchRole(isAdmin ? 'admin' : 'pegawai');
 
             if (elAvatar) {
@@ -463,14 +546,15 @@
             if (gol.startsWith("IV")) return "bg-blue-100 text-blue-800 border border-blue-200";
             if (gol.startsWith("III")) return "bg-emerald-100 text-emerald-800 border border-emerald-200";
             if (gol.startsWith("II")) return "bg-amber-100 text-amber-800 border border-amber-200";
-            return "bg-gray-100 text-gray-800 border border-gray-200";
+            if (gol.startsWith("I")) return "bg-purple-100 text-purple-800 border border-purple-200";
+            return "bg-slate-100 text-slate-800 border border-slate-200";
         }
 
         function updateStats() {
             document.getElementById("statTotal").innerText = dataDUK.length;
             document.getElementById("statGol4").innerText = dataDUK.filter(d => d.gol.startsWith("IV")).length;
             document.getElementById("statGol3").innerText = dataDUK.filter(d => d.gol.startsWith("III")).length;
-            document.getElementById("statGol2").innerText = dataDUK.filter(d => d.gol.startsWith("II") || d.gol.startsWith("I")).length;
+            document.getElementById("statGol2").innerText = dataDUK.filter(d => d.gol.startsWith("II") || d.gol.startsWith("I") || d.gol === "IX" || d.gol === "V" || d.gol === "NON").length;
         }
 
         function openEditModal(index) {
@@ -521,7 +605,14 @@
                                     item.gol.toLowerCase().includes(searchValue) ||
                                     item.jabatan.toLowerCase().includes(searchValue);
                 
-                const matchGol = golValue === "all" || item.gol.startsWith(golValue);
+                let matchGol = true;
+                if (golValue !== "all") {
+                    if (golValue === "NON") {
+                        matchGol = (item.gol === "NON" || item.gol === "IX" || item.gol === "V");
+                    } else {
+                        matchGol = item.gol.startsWith(golValue);
+                    }
+                }
 
                 return matchSearch && matchGol;
             });
@@ -550,14 +641,14 @@
             const worksheet = XLSX.utils.json_to_sheet(excelData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Data DUK");
-            XLSX.writeFile(workbook, "Data_DUK_DPPKBP3A.xlsx");
+            XLSX.writeFile(workbook, "DUK_DPPKBP3A_2026.xlsx");
         }
 
-        // Inisialisasi Saat Halaman Dimuat
+        // Inisialisasi saat halaman dimuat
         window.onload = function() {
             loadLoggedInUser();
             updateStats();
-            filterData();
+            renderTable(dataDUK);
         };
     </script>
 </body>
