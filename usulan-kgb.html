@@ -20,7 +20,6 @@
                 size: A4 landscape;
                 margin: 10mm;
             }
-            /* Sembunyikan semua elemen selain tabel saat print */
             aside, header, footer, .no-print, .stat-cards, .filter-bar, .page-header {
                 display: none !important;
             }
@@ -387,7 +386,7 @@
             return JSON.parse(disimpan);
         }
 
-        // Ambil & Simpan Role User Currently Logged In
+        // Ambil & Simpan Role User
         function getActiveRole() {
             return localStorage.getItem('sigap_user_role') || 'admin';
         }
@@ -402,7 +401,6 @@
             const roleSelectorEl = document.getElementById('roleSelector');
             if (roleSelectorEl) roleSelectorEl.value = role;
 
-            // Element khusus admin
             const elemenAdmin = document.querySelectorAll('.khusus-admin');
             
             if (role === 'admin') {
@@ -418,79 +416,117 @@
             }
         }
 
-        // Render Tabel Usulan KGB
-        function renderTabelKgb() {
-            const listKgb = ambilDataKgb();
+        // Render Tabel KGB
+        function renderTabelKgb(data = null) {
+            const listData = data || ambilDataKgb();
             const tbody = document.getElementById('kgbTableBody');
-            if (!tbody) return;
-
+            const totalEl = document.getElementById('totalUsulanCount');
+            
+            if (totalEl) totalEl.innerText = `${listData.length} Pegawai`;
             tbody.innerHTML = '';
-            document.getElementById('totalUsulanCount').innerText = listKgb.length + " Pegawai";
 
-            listKgb.forEach((item, index) => {
+            if (listData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-400">Tidak ada data usulan KGB yang ditemukan.</td></tr>`;
+                return;
+            }
+
+            listData.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
-
                 tr.innerHTML = `
-                    <td class="py-3.5 px-4 text-center font-medium text-gray-400">${index + 1}</td>
-                    <td class="py-3.5 px-6">
-                        <p class="font-bold text-gray-800">${item.nama}</p>
-                        <p class="text-xs text-gray-500 font-mono">NIP. ${item.nip}</p>
+                    <td class="py-3 px-4 text-center font-medium text-gray-500">${index + 1}</td>
+                    <td class="py-3 px-6">
+                        <div class="font-bold text-gray-900">${item.nama}</div>
+                        <div class="text-xs text-gray-500 font-mono">NIP. ${item.nip}</div>
                     </td>
-                    <td class="py-3.5 px-6">
-                        <p class="font-medium text-gray-700">${item.jabatan}</p>
-                        <span class="inline-block bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded border border-slate-200 mt-0.5 font-semibold">${item.gol}</span>
+                    <td class="py-3 px-6">
+                        <div class="text-gray-800 font-medium">${item.jabatan}</div>
+                        <div class="text-xs text-blue-600 font-semibold">${item.gol}</div>
                     </td>
-                    <td class="py-3.5 px-4 text-center text-gray-600">${formatTglIndo(item.kgbTerakhir)}</td>
-                    <td class="py-3.5 px-4 text-center font-semibold text-blue-700 bg-blue-50/50">${formatTglIndo(item.usulan2026)}</td>
-                    <td class="py-3.5 px-4 text-center text-emerald-700 font-medium">${formatTglIndo(item.kgbBerikutnya)}</td>
-                    <td class="py-3.5 px-6 text-center space-x-2 khusus-admin">
-                        <button onclick="editKgb(${index})" class="text-blue-600 hover:text-blue-800 font-semibold text-xs transition">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit
-                        </button>
-                        <button onclick="hapusKgb(${index})" class="text-red-500 hover:text-red-700 font-semibold text-xs transition">
-                            <i class="fa-solid fa-trash"></i> Hapus
-                        </button>
+                    <td class="py-3 px-4 text-center text-gray-600">${formatTglIndo(item.kgbTerakhir)}</td>
+                    <td class="py-3 px-4 text-center font-bold text-blue-600">${formatTglIndo(item.usulan2026)}</td>
+                    <td class="py-3 px-4 text-center text-emerald-600 font-semibold">${formatTglIndo(item.kgbBerikutnya)}</td>
+                    <td class="py-3 px-6 text-center khusus-admin">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="editKgb(${item.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 p-1.5 rounded-lg text-xs transition" title="Edit">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                            <button onclick="hapusKgb(${item.id})" class="bg-red-50 text-red-600 hover:bg-red-100 p-1.5 rounded-lg text-xs transition" title="Hapus">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-
             terapkanHakAkses();
         }
 
-        function simpanKgb(e) {
-            e.preventDefault();
-
-            const editIndex = parseInt(document.getElementById('editIndex').value);
-            const newItem = {
-                id: editIndex >= 0 ? ambilDataKgb()[editIndex].id : Date.now(),
-                nip: document.getElementById('inputNip').value,
-                nama: document.getElementById('inputNama').value,
-                jabatan: document.getElementById('inputJabatan').value,
-                gol: document.getElementById('inputGol').value,
-                kgbTerakhir: document.getElementById('inputKgbTerakhir').value,
-                usulan2026: document.getElementById('inputUsulan2026').value,
-                kgbBerikutnya: document.getElementById('inputKgbBerikutnya').value
-            };
-
-            const data = ambilDataKgb();
-            if (editIndex >= 0) {
-                data[editIndex] = newItem;
-            } else {
-                data.unshift(newItem);
-            }
-
-            localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
-            renderTabelKgb();
-            tutupModalKgb();
+        // Fitur Pencarian Tabel
+        function filterKgbTable() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const allData = ambilDataKgb();
+            const filtered = allData.filter(item => 
+                item.nama.toLowerCase().includes(keyword) || 
+                item.nip.toLowerCase().includes(keyword) || 
+                item.gol.toLowerCase().includes(keyword) ||
+                item.jabatan.toLowerCase().includes(keyword)
+            );
+            renderTabelKgb(filtered);
         }
 
-        function editKgb(index) {
-            const item = ambilDataKgb()[index];
-            
-            document.getElementById('editIndex').value = index;
+        // Modal Control
+        function bukaModalKgb() {
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
+            document.getElementById('formKgb').reset();
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('modalTambahKgb').classList.remove('hidden');
+        }
+
+        function tutupModalKgb() {
+            document.getElementById('modalTambahKgb').classList.add('hidden');
+        }
+
+        // Simpan / Tambah / Edit Data
+        function simpanKgb(event) {
+            event.preventDefault();
+            const idEdit = document.getElementById('editIndex').value;
+            const nip = document.getElementById('inputNip').value;
+            const nama = document.getElementById('inputNama').value;
+            const jabatan = document.getElementById('inputJabatan').value;
+            const gol = document.getElementById('inputGol').value;
+            const kgbTerakhir = document.getElementById('inputKgbTerakhir').value;
+            const usulan2026 = document.getElementById('inputUsulan2026').value;
+            const kgbBerikutnya = document.getElementById('inputKgbBerikutnya').value;
+
+            let dataList = ambilDataKgb();
+
+            if (idEdit === "-1") {
+                // Tambah Baru
+                const newId = dataList.length > 0 ? Math.max(...dataList.map(d => d.id)) + 1 : 1;
+                const newData = { id: newId, no: dataList.length + 1, nip, nama, jabatan, gol, kgbTerakhir, usulan2026, kgbBerikutnya };
+                dataList.push(newData);
+            } else {
+                // Edit Data
+                const index = dataList.findIndex(d => d.id == idEdit);
+                if (index !== -1) {
+                    dataList[index] = { ...dataList[index], nip, nama, jabatan, gol, kgbTerakhir, usulan2026, kgbBerikutnya };
+                }
+            }
+
+            localStorage.setItem('sigap_kgb_list', JSON.stringify(dataList));
+            tutupModalKgb();
+            renderTabelKgb();
+        }
+
+        // Edit Trigger
+        function editKgb(id) {
+            const dataList = ambilDataKgb();
+            const item = dataList.find(d => d.id == id);
+            if (!item) return;
+
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Usulan KGB`;
+            document.getElementById('editIndex').value = item.id;
             document.getElementById('inputNip').value = item.nip;
             document.getElementById('inputNama').value = item.nama;
             document.getElementById('inputJabatan').value = item.jabatan;
@@ -499,71 +535,50 @@
             document.getElementById('inputUsulan2026').value = item.usulan2026;
             document.getElementById('inputKgbBerikutnya').value = item.kgbBerikutnya;
 
-            bukaModalKgb();
+            document.getElementById('modalTambahKgb').classList.remove('hidden');
         }
 
-        function hapusKgb(index) {
+        // Hapus Data
+        function hapusKgb(id) {
             if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
-                const data = ambilDataKgb();
-                data.splice(index, 1);
-                localStorage.setItem('sigap_kgb_list', JSON.stringify(data));
+                let dataList = ambilDataKgb();
+                dataList = dataList.filter(d => d.id != id);
+                // Re-numbering no urut
+                dataList.forEach((d, idx) => d.no = idx + 1);
+                localStorage.setItem('sigap_kgb_list', JSON.stringify(dataList));
                 renderTabelKgb();
             }
         }
 
-        function bukaModalKgb() {
-            const modal = document.getElementById('modalTambahKgb');
-            if (modal) modal.classList.remove('hidden');
-        }
-
-        function tutupModalKgb() {
-            const modal = document.getElementById('modalTambahKgb');
-            if (modal) modal.classList.add('hidden');
-            document.getElementById('formKgb').reset();
-            document.getElementById('editIndex').value = -1;
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
-        }
-
-        function filterKgbTable() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('#kgbTableBody tr');
-
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                if (text.includes(input)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
+        // Export Excel
         function exportToExcel() {
-            const data = ambilDataKgb();
-            const wsData = data.map((item, idx) => ({
-                "No": idx + 1,
-                "NIP": item.nip,
-                "Nama Pegawai": item.nama,
-                "Jabatan": item.jabatan,
-                "Golongan": item.gol,
-                "KGB Terakhir": item.kgbTerakhir,
-                "Usulan KGB 2026": item.usulan2026,
-                "KGB Berikutnya": item.kgbBerikutnya
+            const dataList = ambilDataKgb();
+            const formatted = dataList.map((d, i) => ({
+                "No": i + 1,
+                "NIP Pegawai": d.nip,
+                "Nama Pegawai": d.nama,
+                "Jabatan": d.jabatan,
+                "Golongan": d.gol,
+                "KGB Terakhir": d.kgbTerakhir,
+                "Usulan KGB 2026": d.usulan2026,
+                "KGB Berikutnya": d.kgbBerikutnya
             }));
-            const ws = XLSX.utils.json_to_sheet(wsData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Usulan KGB 2026");
-            XLSX.writeFile(wb, "Data_Usulan_KGB_DPPKBP3A_2026.xlsx");
+            const worksheet = XLSX.utils.json_to_sheet(formatted);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB 2026");
+            XLSX.writeFile(workbook, "Data_Usulan_KGB_DPPKBP3A_2026.xlsx");
         }
 
+        // Export PDF
         function exportToPDF() {
             window.print();
         }
 
         // Inisialisasi saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', () => {
+        window.onload = function() {
+            terapkanHakAkses();
             renderTabelKgb();
-        });
+        };
     </script>
 </body>
 </html>
