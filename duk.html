@@ -16,12 +16,10 @@
     <!-- Style Khusus Cetak / Print -->
     <style>
         @media print {
-            /* Sembunyikan elemen navigasi, filter, dan tombol */
             aside, header, .no-print, #detailModal, .col-aksi {
                 display: none !important;
             }
 
-            /* Reset layout utama agar menggunakan seluruh ukuran halaman cetak */
             body, html {
                 background: #fff !important;
                 color: #000 !important;
@@ -37,7 +35,6 @@
                 margin: 0 !important;
             }
 
-            /* Penyesuaian Tabel untuk Cetak */
             .bg-white, .shadow-sm, .border {
                 border: none !important;
                 box-shadow: none !important;
@@ -55,11 +52,11 @@
             }
 
             thead {
-                display: table-header-group; /* Agar header tabel muncul di setiap awal halaman */
+                display: table-header-group;
             }
 
             tr {
-                page-break-inside: avoid; /* Mencegah baris terpotong di tengah halaman */
+                page-break-inside: avoid;
             }
 
             thead tr {
@@ -69,7 +66,6 @@
                 print-color-adjust: exact;
             }
 
-            /* Judul cetak resmi */
             .print-header {
                 display: block !important;
                 text-align: center;
@@ -77,7 +73,6 @@
             }
         }
 
-        /* Default tampilan layar biasa untuk judul cetak */
         .print-header {
             display: none;
         }
@@ -151,11 +146,11 @@
                     <span class="font-semibold text-gray-700 text-sm md:text-base">Daftar Urut Kepangkatan (DUK) PNS TAHUN 2026</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <!-- Indikator Role Badge (Admin / Pegawai) -->
+                    <!-- Indikator Role Interaktif (Admin / Pegawai) -->
                     <div id="roleBadgeContainer" class="hidden sm:flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg border border-gray-200 text-xs font-semibold">
                         <span class="text-gray-500 px-2">Role:</span>
-                        <span id="roleTextBadge" class="px-2.5 py-1 rounded-md bg-blue-600 text-white shadow-sm">Admin</span>
-                        <span id="roleTextBadge" class="px-2.5 py-1 rounded-md bg-blue-600 text-white shadow-sm">Pegawai/span>
+                        <button onclick="switchRole('admin')" id="btnRoleAdmin" class="px-2.5 py-1 rounded-md transition shadow-sm bg-blue-600 text-white">Admin</button>
+                        <button onclick="switchRole('pegawai')" id="btnRolePegawai" class="px-2.5 py-1 rounded-md transition shadow-sm bg-gray-200 text-gray-700 hover:bg-gray-300">Pegawai</button>
                     </div>
                     <div class="text-right hidden sm:block">
                         <p id="userNama" class="text-sm font-bold text-gray-800">...</p>
@@ -213,9 +208,9 @@
                     <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
                         <div class="relative w-full md:w-80">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                            <input type="text" id="searchInput" placeholder="Cari NIP, Nama, GolRu, atau Jabatan..." class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" id="searchInput" oninput="filterData()" placeholder="Cari NIP, Nama, GolRu, atau Jabatan..." class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
-                        <select id="golonganFilter" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="golonganFilter" onchange="filterData()" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="all">Semua Golongan</option>
                             <option value="IV">Golongan IV</option>
                             <option value="III">Golongan III</option>
@@ -326,14 +321,36 @@
         ];
 
         let currentFilteredData = [...dataDUK];
-        let isAdmin = true; // Status penanda role admin
+        let isAdmin = true; 
 
-        // Memuat profil pengguna & pengecekan role secara dinamis
+        // Fungsi untuk mengganti role secara interaktif saat tombol diklik
+        function switchRole(role) {
+            isAdmin = (role === 'admin');
+            
+            const btnAdmin = document.getElementById("btnRoleAdmin");
+            const btnPegawai = document.getElementById("btnRolePegawai");
+
+            if (isAdmin) {
+                btnAdmin.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-blue-600 text-white";
+                btnPegawai.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-gray-200 text-gray-700 hover:bg-gray-300";
+            } else {
+                btnPegawai.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-blue-600 text-white";
+                btnAdmin.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-gray-200 text-gray-700 hover:bg-gray-300";
+            }
+
+            const thAksi = document.getElementById("thAksi");
+            if (thAksi) {
+                thAksi.style.display = isAdmin ? "" : "none";
+            }
+
+            renderTable(currentFilteredData);
+        }
+
         function loadLoggedInUser() {
             const storedUserRaw = localStorage.getItem("loggedInUser") || 
-                                  localStorage.getItem("user") || 
-                                  localStorage.getItem("currentUser") || 
-                                  sessionStorage.getItem("loggedInUser");
+                                    localStorage.getItem("user") || 
+                                    localStorage.getItem("currentUser") || 
+                                    sessionStorage.getItem("loggedInUser");
 
             let user = null;
             if (storedUserRaw) {
@@ -344,7 +361,6 @@
                 }
             }
 
-            // Fallback default: Kepala Dinas
             if (!user || !user.nama) {
                 user = {
                     nama: dataDUK[0].nama,
@@ -352,8 +368,6 @@
                 };
             }
 
-            // Tentukan status admin berdasarkan nama atau role yang tersimpan (misal: jika ada properti role atau default admin)
-            isAdmin = true; 
             const currentRole = (user.role || localStorage.getItem("userRole") || "admin").toLowerCase();
             if (currentRole.includes("pegawai") && !currentRole.includes("admin")) {
                 isAdmin = false;
@@ -362,21 +376,12 @@
             const elNama = document.getElementById("userNama");
             const elNip = document.getElementById("userNip");
             const elAvatar = document.getElementById("userAvatar");
-            const roleTextBadge = document.getElementById("roleTextBadge");
-            const thAksi = document.getElementById("thAksi");
 
             if (elNama) elNama.innerText = user.nama || user.name || "Pegawai";
             if (elNip) elNip.innerText = user.nip ? `NIP. ${user.nip}` : "-";
 
-            if (roleTextBadge) {
-                roleTextBadge.innerText = isAdmin ? "Admin" : "Pegawai";
-                roleTextBadge.className = isAdmin ? "px-2.5 py-1 rounded-md bg-blue-600 text-white shadow-sm" : "px-2.5 py-1 rounded-md bg-gray-600 text-white shadow-sm";
-            }
-
-            // Sembunyikan kolom Aksi jika bukan admin
-            if (!isAdmin && thAksi) {
-                thAksi.style.display = "none";
-            }
+            // Sinkronkan tampilan tombol role awal
+            switchRole(isAdmin ? 'admin' : 'pegawai');
 
             if (elAvatar) {
                 const textNama = user.nama || user.name || "P";
@@ -414,7 +419,6 @@
             }
 
             data.forEach((item) => {
-                // Cari index asli di array utama dataDUK agar edit tepat sasaran
                 const realIndex = dataDUK.findIndex(d => d.nip === item.nip);
                 
                 const tr = document.createElement("tr");
@@ -438,7 +442,6 @@
                     <td class="py-3 px-4 text-center text-xs font-medium">${item.usia} Th</td>
                 `;
 
-                // Tambahkan kolom tombol Edit khusus jika Admin
                 if (isAdmin) {
                     htmlContent += `
                         <td class="py-3 px-4 text-center col-aksi">
@@ -470,7 +473,6 @@
             document.getElementById("statGol2").innerText = dataDUK.filter(d => d.gol.startsWith("II") || d.gol.startsWith("I")).length;
         }
 
-        // Fungsi Modal Edit
         function openEditModal(index) {
             const item = dataDUK[index];
             document.getElementById("editIndex").value = index;
@@ -527,7 +529,6 @@
             renderTable(currentFilteredData);
         }
 
-        // Fitur Ekspor Excel (.xlsx) Aktif
         function exportExcel() {
             if (typeof XLSX === 'undefined') {
                 alert("Pustaka pengekspor Excel belum termuat. Pastikan koneksi internet aktif.");
@@ -539,47 +540,25 @@
                 "NAMA PEGAWAI": item.nama,
                 "NIP": item.nip,
                 "GOL/RUANG": item.gol,
-                "TMT PANGKAT": formatDate(item.tmt_pangkat),
+                "TMT PANGKAT": item.tmt_pangkat,
                 "JABATAN": item.jabatan,
                 "MASA KERJA": item.mk,
                 "PENDIDIKAN": item.pendidikan,
-                "USIA": item.usia + " Th"
+                "USIA": item.usia
             }));
 
             const worksheet = XLSX.utils.json_to_sheet(excelData);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Data DUK");
-
-            worksheet['!cols'] = [
-                { wch: 5 },  // No
-                { wch: 40 }, // Nama
-                { wch: 22 }, // NIP
-                { wch: 12 }, // Gol
-                { wch: 15 }, // TMT
-                { wch: 35 }, // Jabatan
-                { wch: 12 }, // Masa Kerja
-                { wch: 30 }, // Pendidikan
-                { wch: 10 }  // Usia
-            ];
-
             XLSX.writeFile(workbook, "Data_DUK_DPPKBP3A.xlsx");
         }
 
-        function logout() {
-            localStorage.clear();
-            sessionStorage.clear();
-        }
-
-        document.getElementById("openSidebar")?.addEventListener("click", () => document.getElementById("sidebar").classList.remove("hidden"));
-        document.getElementById("closeSidebar")?.addEventListener("click", () => document.getElementById("sidebar").classList.add("hidden"));
-        document.getElementById("searchInput").addEventListener("input", filterData);
-        document.getElementById("golonganFilter").addEventListener("change", filterData);
-
-        window.addEventListener("DOMContentLoaded", () => {
+        // Inisialisasi Saat Halaman Dimuat
+        window.onload = function() {
             loadLoggedInUser();
             updateStats();
-            renderTable(dataDUK);
-        });
+            filterData();
+        };
     </script>
 </body>
 </html>
