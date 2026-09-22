@@ -178,7 +178,7 @@
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
                         <div>
                             <p class="text-xs text-gray-500 font-medium uppercase">Total Usulan 2026</p>
-                            <h3 id="totalUsulanCount" class="text-2xl font-bold text-gray-800 mt-1">29 Pegawai</h3>
+                            <h3 id="totalUsulanCount" class="text-2xl font-bold text-gray-800 mt-1">53 Pegawai</h3>
                         </div>
                         <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-users"></i>
@@ -313,37 +313,61 @@
 
     <!-- SCRIPT MANAJEMEN DATA & LOCALSTORAGE -->
     <script>
-        // Data Bawaan KGB
+        // Data Bawaan KGB (53 Data Lengkap)
         const dataExcelKgb = [
             { id: 1, no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-02-01", usulan2026: "2026-02-01", kgbBerikutnya: "2028-02-01" },
             { id: 2, no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 3, no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 4, no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 5, no: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 6, no: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 7, no: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 8, no: 12, nip: "19770205 200801 1 007", nama: "DIDIN AWALUDIN, S.Pd..", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 9, no: 13, nip: "19811104 200801 2 009", nama: "DINI NOVIANTI RATNA JUWITA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 10, no: 14, nip: "19780502 200801 2 009", nama: "SITI NURJANAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 11, no: 15, nip: "19730203 201001 1 001", nama: "SAID, SH.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 12, no: 16, nip: "19880718 201411 2 001", nama: "dr. ADHIANI KOESMAN", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-11-01", usulan2026: "2026-11-01", kgbBerikutnya: "2028-11-01" },
-            { id: 13, no: 17, nip: "19720210 200801 1 004", nama: "ERO JUHARA, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 14, no: 19, nip: "19780516 201001 2 001", nama: "YOYOM SITI MARIAM, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 15, no: 20, nip: "19811110 200604 2 007", nama: "NOPA PUJIHASTUTI, SE., M.A.P.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 16, no: 21, nip: "19730619 200801 2 006", nama: "ETI SUARTI, SE., M.Si.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 17, no: 23, nip: "19710831 200003 2 003", nama: "NUNUNG NURZAENAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 18, no: 24, nip: "19760823 200801 1 004", nama: "DIKDIK MEDIAGUSDIANA, SE..", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 19, no: 27, nip: "19750716 200801 1 005", nama: "JAJANG JARKASIH, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 20, no: 28, nip: "19750409 200801 2 007", nama: "EUIS NURMALA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 21, no: 33, nip: "19740823 201001 1 001", nama: "MAS`UD, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 22, no: 36, nip: "19721204 200003 1 004", nama: "RADIMAN, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 23, no: 37, nip: "19851205 201001 2 001", nama: "TATI HERNAWATI, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 24, no: 42, nip: "19710720 200604 1 008", nama: "H. RAHMAN, S.Sos.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 25, no: 45, nip: "19770920 201001 2 003", nama: "IDA SUCIATI, S.IP.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 26, no: 47, nip: "19920524 202203 2 007", nama: "AYU SEKARDINI, S.KM.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 27, no: 49, nip: "19790507 201001 1 003", nama: "DEDE ALIMUDINSYAH, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 28, no: 52, nip: "19730109 201409 1 001", nama: "TOTO SUGIANTO, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-09-01", usulan2026: "2026-09-01", kgbBerikutnya: "2028-09-01" },
-            { id: 29, no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "Pengatur Tk.I", gol: "II/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" }
+            { id: 3, no: 3, nip: "19710323 199303 2 003", nama: "HJ. ENUNG NURAENI, S.Sos.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
+            { id: 4, no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 5, no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 6, no: 6, nip: "19770513 200604 1 012", nama: "WAHYUDIN, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
+            { id: 7, no: 7, nip: "19830825 201001 2 018", nama: "HERA RISMAWATI, S.Sos.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 8, no: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
+            { id: 9, no: 9, nip: "19821217 200604 2 012", nama: "RATNA DEWI PUSPITA SARI, S.Kep., Ners.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
+            { id: 10, no: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
+            { id: 11, no: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
+            { id: 12, no: 12, nip: "19770205 200801 1 007", nama: "DIDIN AWALUDIN, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 13, no: 13, nip: "19811104 200801 2 009", nama: "DINI NOVIANTI RATNA JUWITA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 14, no: 14, nip: "19780502 200801 2 009", nama: "SITI NURJANAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 15, no: 15, nip: "19730203 201001 1 001", nama: "SAID, SH.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 16, no: 16, nip: "19880718 201411 2 001", nama: "dr. ADHIANI KOESMAN", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-11-01", usulan2026: "2026-11-01", kgbBerikutnya: "2028-11-01" },
+            { id: 17, no: 17, nip: "19720210 200801 1 004", nama: "ERO JUHARA, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 18, no: 18, nip: "19741006 200801 1 004", nama: "DEDI ROSADI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 19, no: 19, nip: "19780516 201001 2 001", nama: "YOYOM SITI MARIAM, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 20, no: 20, nip: "19811110 200604 2 007", nama: "NOPA PUJIHASTUTI, SE., M.A.P.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
+            { id: 21, no: 21, nip: "19730619 200801 2 006", nama: "ETI SUARTI, SE., M.Si.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 22, no: 22, nip: "19840228 201001 2 005", nama: "LINA HERLINA, SE.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 23, no: 23, nip: "19710831 200003 2 003", nama: "NUNUNG NURZAENAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
+            { id: 24, no: 24, nip: "19760823 200801 1 004", nama: "DIKDIK MEDIAGUSDIANA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 25, no: 25, nip: "19780826 201001 2 006", nama: "DIAN NURAENI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 26, no: 26, nip: "19840905 201001 2 015", nama: "SRI MULYATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 27, no: 27, nip: "19750716 200801 1 005", nama: "JAJANG JARKASIH, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 28, no: 28, nip: "19750409 200801 2 007", nama: "EUIS NURMALA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 29, no: 29, nip: "19770513 200801 1 012", nama: "NANANG SUTISNA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 30, no: 30, nip: "19830514 201001 2 018", nama: "NURHAYATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 31, no: 31, nip: "19800720 201001 1 004", nama: "SUPRIATNA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 32, no: 32, nip: "19840416 201001 2 009", nama: "NURUL HIDAYAH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 33, no: 33, nip: "19740823 201001 1 001", nama: "MAS`UD, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 34, no: 34, nip: "19810505 201001 2 017", nama: "SRI WAHYUNI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 35, no: 35, nip: "19830412 201001 2 010", nama: "TATI HARTATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 36, no: 36, nip: "19721204 200003 1 004", nama: "RADIMAN, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
+            { id: 37, no: 37, nip: "19851205 201001 2 001", nama: "TATI HERNAWATI, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 38, no: 38, nip: "19820715 201001 2 012", nama: "ENI MULYANINGSIH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 39, no: 39, nip: "19810904 201001 2 011", nama: "YAYAH KODARIAH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 40, no: 40, nip: "19801012 201001 2 015", nama: "YETI ROKHAYATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 41, no: 41, nip: "19840615 201001 2 008", nama: "IIS ISNAENI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 42, no: 42, nip: "19710720 200604 1 008", nama: "H. RAHMAN, S.Sos.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
+            { id: 43, no: 43, nip: "19810810 201001 2 016", nama: "SITI ROCHMAH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 44, no: 44, nip: "19820512 201001 2 014", nama: "SUSI SUSANTI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 45, no: 45, nip: "19770920 201001 2 003", nama: "IDA SUCIATI, S.IP.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 46, no: 46, nip: "19831120 201001 2 011", nama: "EKA PURWANTI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 47, no: 47, nip: "19920524 202203 2 007", nama: "AYU SEKARDINI, S.KM.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
+            { id: 48, no: 48, nip: "19850110 201001 2 005", nama: "LILIS SURYANI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 49, no: 49, nip: "19790507 201001 1 003", nama: "DEDE ALIMUDINSYAH, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 50, no: 50, nip: "19860214 201001 2 004", nama: "DEWI KARTIKA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 51, no: 51, nip: "19840715 201001 2 002", nama: "RINA MARLINA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
+            { id: 52, no: 52, nip: "19730109 201409 1 001", nama: "TOTO SUGIANTO, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-09-01", usulan2026: "2026-09-01", kgbBerikutnya: "2028-09-01" },
+            { id: 53, no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "Pengatur Tk.I", gol: "II/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" }
         ];
 
         // Format Tanggal Indonesia
@@ -494,47 +518,52 @@
 
         function tutupModalKgb() {
             const modal = document.getElementById('modalTambahKgb');
-            if (modal) {
-                modal.classList.add('hidden');
-                const form = document.getElementById('formKgb');
-                if (form) form.reset();
-                document.getElementById('editIndex').value = "-1";
-                document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
-            }
+            if (modal) modal.classList.add('hidden');
+            document.getElementById('formKgb').reset();
+            document.getElementById('editIndex').value = -1;
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
         }
 
         function filterKgbTable() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toLowerCase();
-            const table = document.getElementById('tableKgb');
-            const trs = table.getElementsByTagName('tr');
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#kgbTableBody tr');
 
-            for (let i = 1; i < trs.length; i++) {
-                let tdText = trs[i].textContent || trs[i].innerText;
-                if (tdText.toLowerCase().indexOf(filter) > -1) {
-                    trs[i].style.display = "";
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(input)) {
+                    row.style.display = '';
                 } else {
-                    trs[i].style.display = "none";
+                    row.style.display = 'none';
                 }
-            }
+            });
         }
 
         function exportToExcel() {
             const data = ambilDataKgb();
-            const worksheet = XLSX.utils.json_to_sheet(data);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB");
-            XLSX.writeFile(workbook, "Data_Usulan_KGB_2026.xlsx");
+            const wsData = data.map((item, idx) => ({
+                "No": idx + 1,
+                "NIP": item.nip,
+                "Nama Pegawai": item.nama,
+                "Jabatan": item.jabatan,
+                "Golongan": item.gol,
+                "KGB Terakhir": item.kgbTerakhir,
+                "Usulan KGB 2026": item.usulan2026,
+                "KGB Berikutnya": item.kgbBerikutnya
+            }));
+            const ws = XLSX.utils.json_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Usulan KGB 2026");
+            XLSX.writeFile(wb, "Data_Usulan_KGB_DPPKBP3A_2026.xlsx");
         }
 
         function exportToPDF() {
             window.print();
         }
 
-        // Load awal saat halaman dibuka
-        window.onload = function() {
+        // Inisialisasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
             renderTabelKgb();
-        };
+        });
     </script>
 </body>
 </html>
