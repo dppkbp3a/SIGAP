@@ -20,7 +20,6 @@
                 size: A4 landscape;
                 margin: 10mm;
             }
-            /* Sembunyikan semua elemen selain tabel saat print */
             aside, header, footer, .no-print, .stat-cards, .filter-bar, .page-header {
                 display: none !important;
             }
@@ -147,7 +146,7 @@
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 page-header">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Jadwal Kenaikan Pangkat (KP)</h2>
-                        <p class="text-sm text-gray-500">Monitoring periode TMT Kenaikan Pangkat Terakhir dan Kenaikan Pangkat Berikutnya.</p>
+                        <p class="text-sm text-gray-500">Berdasarkan Peraturan BKN Nomor 4 Tahun 2025, periode kenaikan pangkat PNS menjadi 12 kali dalam setahun.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 no-print">
                         <button onclick="exportToExcel()" class="bg-emerald-600 text-white px-3.5 py-2 rounded-lg font-medium text-sm hover:bg-emerald-700 shadow-sm flex items-center gap-2 transition">
@@ -160,6 +159,63 @@
                             <i class="fa-solid fa-print text-blue-600"></i> Cetak / Print
                         </button>
                     </div>
+                </div>
+
+                <!-- Informasi & Tabel Periode BKN No 4 Tahun 2025 -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 mb-6 no-print">
+                    <h3 class="text-sm font-bold text-gray-800 mb-2"><i class="fa-solid fa-circle-info text-blue-600 mr-2"></i> Ketentuan Periode Kenaikan Pangkat & Submit Usulan (BKN No. 4 Tahun 2025)</h3>
+                    <p class="text-xs text-gray-600 mb-4">Periode kenaikan pangkat PNS berlaku 12 kali dalam setahun, setiap tanggal 1 Januari sampai dengan 1 Desember.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left border border-gray-300">
+                            <thead class="bg-slate-900 text-white">
+                                <tr>
+                                    <th class="py-2 px-3 border border-gray-700">Periode KP</th>
+                                    <th class="py-2 px-3 border border-gray-700">Periode Submit Usulan</th>
+                                    <th class="py-2 px-3 border border-gray-700">Periode KP</th>
+                                    <th class="py-2 px-3 border border-gray-700">Periode Submit Usulan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Januari</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Nov – 15 Des</td>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Juli</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Mei – 15 Jun</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Februari</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Des – 15 Jan</td>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Agustus</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Jun – 15 Jul</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Maret</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Jan – 15 Feb</td>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 September</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Jul – 15 Agustus</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 April</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Feb – 15 Mar</td>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Oktober</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Agustus – 15 September</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Mei</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Mar – 15 Apr</td>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 November</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 September – 15 Oktober</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Juni</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">16 Apr – 15 Mei</td>
+                                    <td class="py-1.5 px-3 border border-gray-300 font-medium">1 Desember</td>
+                                    <td class="py-1.5 px-3 border border-gray-300">1 Oktober – 15 November</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-2 italic">* Target internal: berkas lengkap diterima Subbag Umpeg minimal 5 hari kerja sebelum batas akhir submit.</p>
                 </div>
 
                 <!-- Highlight Stat Cards -->
@@ -185,7 +241,7 @@
                     <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm flex items-center justify-between">
                         <div>
                             <p class="text-xs text-blue-600 font-medium">Masih Cukup Lama (Akan Datang)</p>
-                            <h3 class="text-2xl font-bold text-blue-700 mt-1" id="statUpcoming">83</h3>
+                            <h3 class="text-2xl font-bold text-blue-700 mt-1" id="statUpcoming">93</h3>
                         </div>
                         <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
                             <i class="fa-solid fa-calendar-days"></i>
@@ -200,7 +256,7 @@
                         <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Cari NIP, Nama, GolRu, atau Jabatan..." class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="text-xs text-gray-500 font-medium w-full md:w-auto text-right">
-                        Menampilkan <strong id="kpCount" class="text-gray-800">83</strong> Pegawai
+                        Menampilkan <strong id="kpCount" class="text-gray-800">93</strong> Pegawai
                     </div>
                 </div>
 
@@ -234,7 +290,7 @@
             { nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", nip: "19700810 199002 1 001", gol: "IV/b", jabatan: "Kepala Dinas", unit: "Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak", kpTerakhir: "01 Feb 2026", kpBerikutnya: "01 Feb 2030", status: "Belum Waktunya" },
             { nama: "dr. EDDY SYARIEF, MM., MM.RS.", nip: "19720301 200604 1 011", gol: "IV/b", jabatan: "Sekretaris Dinas", unit: "Sekretariat", kpTerakhir: "01 Apr 2026", kpBerikutnya: "01 Apr 2030", status: "Belum Waktunya" },
             { nama: "ANWAR NASIHIN, S.Kom., M.Si.", nip: "19791029 200501 1 003", gol: "IV/a", jabatan: "Kepala Bidang Keluarga Sejahtera", unit: "Bidang Keluarga Sejahtera", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
-            { nama: "ANTON SUPRAPTO, S.Kep.Ners., M.K.M.", nip: "19810602 200801 1 006", gol: "IV/a", jabatan: "Kepala Bidang Pengendalian Penduduk", unit: "Bidang Pengendalian Penduduk", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
+            { nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", nip: "19810602 200801 1 006", gol: "IV/a", jabatan: "Kepala Bidang Pengendalian Penduduk", unit: "Bidang Pengendalian Penduduk", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "H. NOVI PRIHAWAN, A.KS.", nip: "19741110 200801 1 018", gol: "III/d", jabatan: "Kepala Bidang Keluarga Berencana", unit: "Bidang Keluarga Berencana", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "IJAH HODIJAH, SE.", nip: "19760504 199901 2 001", gol: "III/d", jabatan: "Kepala Bidang Pemberdayaan Perempuan dan Perlindungan Anak", unit: "Bidang Pemberdayaan Perempuan dan Perlindungan Anak", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "Drs. NANANG JUHANA", nip: "19680823 199312 1 001", gol: "IV/a", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Garawangi", kpTerakhir: "01 Des 2025", kpBerikutnya: "01 Des 2029", status: "Belum Waktunya" },
@@ -242,165 +298,164 @@
             { nama: "EUIS KOMARIAH, S.Pd., M.M.", nip: "19780416 200901 2 003", gol: "IV/a", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Luragung", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
             { nama: "YAYAT SUDRAJAT, S.Pd.", nip: "19690215 199003 1 003", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Ciawigebang", kpTerakhir: "01 Mar 2026", kpBerikutnya: "01 Mar 2030", status: "Belum Waktunya" },
             { nama: "INDRIASARI, S.Kep., Ners.", nip: "19780627 200604 2 017", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Kadugede", kpTerakhir: "01 Apr 2026", kpBerikutnya: "01 Apr 2030", status: "Belum Waktunya" },
-            { nama: "DIDIN AWALUDIN, S.Pd.", nip: "19770205 200801 1 007", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Cilimus", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
+            { nama: "DIDIN AWALUDIN, S.Pd..", nip: "19770205 200801 1 007", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Cilimus", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "DINI NOVIANTI RATNA JUWITA, SE.", nip: "19811104 200801 2 009", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Lebakwangi", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "SITI NURJANAH, SE.", nip: "19780502 200801 2 009", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Darma", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "SAID, SH.", nip: "19730203 201001 1 001", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Mandirancan", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "dr. ADHIANI KOESMAN", nip: "19880718 201411 2 001", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Perlindungan Perempuan dan Anak", kpTerakhir: "01 Nov 2026", kpBerikutnya: "01 Nov 2030", status: "Belum Waktunya" },
             { nama: "ERO JUHARA, S.AP.", nip: "19720210 200801 1 004", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Cidahu", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
-            { nama: "DENI WAHYUDI PRIADI, SKM., M.A.P.", nip: "19811025 200501 1 006", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Cibingbin", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
+            { nama: "DENI WAHYUDI PRIADI, SKM., M.A.P..", nip: "19811025 200501 1 006", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Cibingbin", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
             { nama: "YOYOM SITI MARIAM, S.IP.", nip: "19780516 201001 2 001", gol: "III/d", jabatan: "Kepala UPTD", unit: "UPTD Pengendalian Penduduk Kuningan", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "NOPA PUJIHASTUTI, SE., M.A.P.", nip: "19811110 200604 2 007", gol: "III/d", jabatan: "Kepala Sub Bagian Umum dan Kepegawaian", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Apr 2026", kpBerikutnya: "01 Apr 2030", status: "Belum Waktunya" },
-            { nama: "ETI SUARTI, SE., M.Si.", nip: "19730619 200801 2 006", gol: "IV/a", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Jalaksana", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
+            { nama: "ETI SUARTI, SE., M.Si.", nip: "19730619 200801 2 006", gol: "IV/a", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Jalaksana - UPTD Pengendalian Penduduk Jalaksana", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "Dra. NARUL HAYATI", nip: "19700127 199503 2 002", gol: "III/d", jabatan: "Kepala UPTD Pengendalian Penduduk Cigugur", unit: "UPTD Pengendalian Penduduk Cigugur", kpTerakhir: "01 Mar 2023", kpBerikutnya: "01 Mar 2027", status: "Belum Waktunya" },
-            { nama: "NUNUNG NURZAENAH, SE.", nip: "19710831 200003 2 003", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Kuningan", kpTerakhir: "01 Mar 2024", kpBerikutnya: "01 Mar 2028", status: "Belum Waktunya" },
-            { nama: "DIKDIK MEDIAGUSDIANA, SE.", nip: "19760823 200801 1 004", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Mandirancan", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
-            { nama: "SRI YATI, SE.", nip: "19831209 200901 2 002", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Ciawigebang", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
-            { nama: "HENDRA SUHENDRA, S.Sos.", nip: "19821211 201101 1 001", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Cibingbin", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
-            { nama: "JAJANG JARKASIH, S.AP.", nip: "19750716 200801 1 005", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Cidahu", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
-            { nama: "EUIS NURMALA, SE.", nip: "19750409 200801 2 007", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Sub Bagian Tata Usaha UPTD Perlindungan Perempuan dan Anak", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
-            { nama: "UDIN MAHRUDIN, S.Sos.", nip: "19720720 200701 1 013", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Luragung", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
+            { nama: "NUNUNG NURZAENAH, SE.", nip: "19710831 200003 2 003", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Kuningan - UPTD Pengendalian Penduduk Kuningan", kpTerakhir: "01 Mar 2024", kpBerikutnya: "01 Mar 2028", status: "Belum Waktunya" },
+            { nama: "DIKDIK MEDIAGUSDIANA, SE..", nip: "19760823 200801 1 004", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Mandirancan - UPTD Pengendalian Penduduk Mandirancan", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
+            { nama: "SRI YATI, SE.", nip: "19831209 200901 2 002", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Ciawigebang - UPTD Pengendalian Penduduk Ciawigebang", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
+            { nama: "HENDRA SUHENDRA, S.Sos.", nip: "19821211 201101 1 001", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Cibingbin - UPTD Pengendalian Penduduk Cibingbin", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
+            { nama: "JAJANG JARKASIH, S.AP.", nip: "19750716 200801 1 005", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Cidahu - UPTD Pengendalian Penduduk Cidahu", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
+            { nama: "EUIS NURMALA, SE.", nip: "19750409 200801 2 007", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Sub Bagian Tata Usaha UPTD Perlindungan Perempuan dan Anak - UPTD Perlindungan Perempuan dan Anak", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
+            { nama: "UDIN MAHRUDIN, S.Sos.", nip: "19720720 200701 1 013", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Luragung - UPTD Pengendalian Penduduk Luragung", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "NINA NURAFNI, S.Pd.", nip: "19830620 200901 2 006", gol: "III/d", jabatan: "Kepala UPTD Pengendalian Penduduk Ciwaru", unit: "UPTD Pengendalian Penduduk Ciwaru", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
-            { nama: "ELIS KARMANAH, S.Pd.", nip: "19800802 200901 2 002", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Darma", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
-            { nama: "YENI MULYATI, SE.", nip: "19741228 200701 2 009", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Garawangi", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
-            { nama: "MAS'UD, SE.", nip: "19740823 201001 1 001", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Lebakwangi", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "MAMAN SULAEMAN, S.IP., M.A.P.", nip: "19760404 200701 1 013", gol: "III/d", jabatan: "Kepala UPTD Pengendalian Penduduk Kramatmulya", unit: "UPTD Pengendalian Penduduk Kramatmulya", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
+            { nama: "ELIS KARMANAH, S.Pd.", nip: "19800802 200901 2 002", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Darma - UPTD Pengendalian Penduduk Darma", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
+            { nama: "YENI MULYATI, SE.", nip: "19741228 200701 2 009", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Garawangi - UPTD Pengendalian Penduduk Garawangi", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
+            { nama: "MAS`UD, SE.", nip: "19740823 201001 1 001", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Lebakwangi - UPTD Pengendalian Penduduk Lebakwangi", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "MAMAN SULAEMAN, S.IP., M.A.P..", nip: "19760404 200701 1 013", gol: "III/d", jabatan: "Kepala UPTD Pengendalian Penduduk Kramatmulya", unit: "UPTD Pengendalian Penduduk Kramatmulya", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "NANAN HERDIAMAN, S.IP.", nip: "19830213 200901 1 001", gol: "III/d", jabatan: "Kepala UPTD Pengendalian Penduduk Ciniru", unit: "UPTD Pengendalian Penduduk Ciniru", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
-            { nama: "RADIMAN, S.IP.", nip: "19721204 200003 1 004", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Cilimus", kpTerakhir: "01 Mar 2024", kpBerikutnya: "01 Mar 2028", status: "Belum Waktunya" },
-            { nama: "TATI HERNAWATI, S.IP.", nip: "19851205 201001 2 001", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Kadugede", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
+            { nama: "RADIMAN, S.IP.", nip: "19721204 200003 1 004", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Cilimus - UPTD Pengendalian Penduduk Cilimus", kpTerakhir: "01 Mar 2024", kpBerikutnya: "01 Mar 2028", status: "Belum Waktunya" },
+            { nama: "TATI HERNAWATI, S.IP.", nip: "19851205 201001 2 001", gol: "III/d", jabatan: "Kepala Sub Bagian Tata Usaha", unit: "Subag TU UPTD Pengendalian Penduduk Kadugede - UPTD Pengendalian Penduduk Kadugede", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "Drs. WAWAN IKHWANUDIN", nip: "19690228 199503 1 001", gol: "IV/a", jabatan: "Perencana Ahli Muda", unit: "Sekretariat", kpTerakhir: "01 Mar 2025", kpBerikutnya: "01 Mar 2029", status: "Belum Waktunya" },
-            { nama: "UDI RUDI, S.Pd., MM.", nip: "19700706 200501 1 011", gol: "IV/a", jabatan: "Penelaah Teknis Kebijakan", unit: "Bidang Keluarga Berencana", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
+            { nama: "UDI RUDI, S.Pd.,MM.", nip: "19700706 200501 1 011", gol: "IV/a", jabatan: "Penelaah Teknis Kebijakan", unit: "Bidang Keluarga Berencana", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
             { nama: "GINA MERANI SARIFIANTI, S.Sos.", nip: "19810216 200501 2 011", gol: "III/d", jabatan: "Analis Kebijakan Ahli Muda", unit: "Bidang Pemberdayaan Perempuan dan Perlindungan Anak", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
             { nama: "KUSTINI, SE., MM.", nip: "19700101 200701 2 030", gol: "III/d", jabatan: "Analis Keuangan Pusat dan Daerah Ahli Muda", unit: "Sekretariat", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "H. RAHMAN, S.Sos.", nip: "19710720 200604 1 008", gol: "III/d", jabatan: "Pengolah Data dan Informasi", unit: "Sekretariat", kpTerakhir: "01 Apr 2026", kpBerikutnya: "01 Apr 2030", status: "Belum Waktunya" },
-            { nama: "LINA HERLINA, SE.", nip: "19810715 200901 2 008", gol: "III/d", jabatan: "Penelaah Teknis Kebijakan", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
+            { nama: "LINA HERLINA, SE.", nip: "19810715 200901 2 008", gol: "III/d", jabatan: "Penelaah Teknis Kebijakan", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
             { nama: "ENOK SUNDARSIH, SE.", nip: "19710515 200701 2 013", gol: "III/c", jabatan: "Penelaah Teknis Kebijakan", unit: "Sekretariat", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "IDA SUCIATI, S.IP.", nip: "19770920 201001 2 003", gol: "III/b", jabatan: "Penelaah Teknis Kebijakan", unit: "Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "UCI SANUSI, S.IP.", nip: "19750128 200701 1 001", gol: "III/b", jabatan: "Penelaah Teknis Kebijakan", unit: "Bidang Keluarga Berencana", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
             { nama: "AYU SEKARDINI, S.KM.", nip: "19920524 202203 2 007", gol: "III/b", jabatan: "Penelaah Teknis Kebijakan", unit: "Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "TIA NURWULAN, S.E.", nip: "19941116 202521 2 005", gol: "IX", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "TIA NURWULAN, S.E.", nip: "19941116 202521 2 005", gol: "IX", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "DEDE ALIMUDINSYAH, S.IP.", nip: "19790507 201001 1 003", gol: "III/a", jabatan: "Pengolah Data dan Informasi", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "YANI SUPRIYANI", nip: "19810427 200701 2 006", gol: "III/a", jabatan: "Pengadministrasi Perkantoran", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
-            { nama: "KOMARUDIN, SE.", nip: "19881005 202321 1 029", gol: "IX", jabatan: "Ahli Pertama Perencana", unit: "Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "YANI SUPRIYANI", nip: "19810427 200701 2 006", gol: "III/a", jabatan: "Pengadministrasi Perkantoran", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2023", kpBerikutnya: "01 Jan 2027", status: "Belum Waktunya" },
+            { nama: "KOMARUDIN, SE.", nip: "19881005 202321 1 029", gol: "IX", jabatan: "Ahli Pertama - Perencana", unit: "Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "TOTO SUGIANTO, S.IP.", nip: "19730109 201409 1 001", gol: "III/a", jabatan: "Pengadministrasi Perkantoran", unit: "Sekretariat", kpTerakhir: "01 Sep 2026", kpBerikutnya: "01 Sep 2030", status: "Belum Waktunya" },
             { nama: "AENI NURAENI", nip: "19710713 200801 2 002", gol: "II/d", jabatan: "Pengadministrasi Perkantoran", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2024", kpBerikutnya: "01 Jan 2028", status: "Belum Waktunya" },
             { nama: "HERY HERYANTO", nip: "19691127 200906 1 003", gol: "II/d", jabatan: "Pranata Komputer Terampil", unit: "Sekretariat", kpTerakhir: "01 Jun 2025", kpBerikutnya: "01 Jun 2029", status: "Belum Waktunya" },
-            { nama: "INDRA HARTONO", nip: "19921028 202521 1 011", gol: "V", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "INDRA HARTONO", nip: "19921028 202521 1 011", gol: "V", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "MELY MELIAWATI", nip: "19810503 202521 2 004", gol: "V", jabatan: "Pengadministrasi Perkantoran", unit: "Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "SULAEMAN", nip: "19910915 202521 1 095", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Ciawigebang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "SARYOMAN", nip: "19870606 202521 1 132", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Subang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "DANI KURNIAWAN", nip: "19940720 202521 1 078", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "DANI KURNIAWAN", nip: "19940720 202521 1 078", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "INDRA CAHYA, S.Pd.", nip: "19930228 202521 1 087", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Cibingbin", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "SISKA ANJAR LESTARY, S.KM.", nip: "19950217 202521 2 066", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "OBY RIZKI BASKARA, S.E.", nip: "19941014 202521 1 051", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Lebakwangi", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "DIANA SRI WAHYUNI, S.Ak.", nip: "19970307 202521 2 076", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Lebakwangi", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "NISA NADILA FAJARINI, S.H.", nip: "19970506 202521 2 057", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "NISA NADILA FAJARINI, S.H.", nip: "19970506 202521 2 057", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "SAPTINAH, S.Pd.", nip: "19740707 202521 2 039", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Subang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "INDAH WULANSARI PURNAMANINGRUM, S.Pd.", nip: "19820507 202521 2 051", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "FENY SUKMA ASIH, S.P.", nip: "19820917 202521 2 042", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "DICKA FAHRUL ILMI", nip: "19851219 202521 1 060", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "FENY SUKMA ASIH, S.P.", nip: "19820917 202521 2 042", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "DICKA FAHRUL ILMI", nip: "19851219 202521 1 060", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "GIAN NURADITIYA, S.Pd.", nip: "19921016 202521 1 076", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Luragung", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "DEDE SOPIYAN, SE.", nip: "19960404 202521 1 073", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "RENANDRA ADLICA JUHITMAH, S.P.", nip: "19931217 202521 1 080", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Mandirancan", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "TETEN NUGRAHA", nip: "19900523 202521 1 079", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "MOCHAMAD RIDZAL FEBRYANA", nip: "19940209 202521 1 064", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "IRMA SRIYANI, S.KM.", nip: "19930930 202521 2 084", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "HELLI SUSANTI, S.I.Kom.", nip: "19830215 202521 2 056", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Garawangi", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "AGUS SUSANTO", nip: "19930816 202521 1 087", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "MELA AMELIAWATI, S. Pd.", nip: "19860320 202521 2 049", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "DESI INDRIANI", nip: "19881222 202521 2 059", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Cidahu", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "TAUFIK RACHMANDANI, S.AP.", nip: "19900328 202521 1 066", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "RIZTNYA PAQUEENA ANANDYA, S.H.", nip: "19951128 202521 2 073", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "TETEN NUGRAHA", nip: "19900523 202521 1 079", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "MOCHAMAD RIDZAL FEBRYANA", nip: "19940209 202521 1 064", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "IRMA SRIYANI, S.KM.", nip: "19930930 202521 2 050", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "NURUL QOMARIAH, S.Sos.", nip: "19830509 202521 2 038", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Cidahu", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "RIZAL FAUZI", nip: "19950711 202521 1 056", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Darma", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "SITI NURJANAH, S.Ak.", nip: "19961012 202521 2 067", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Ciawigebang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "CICIH SRI SULASTRI, S.Pd.", nip: "19910515 202521 2 092", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Cilimus", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "DIAN NURAENI, A.Md.Keb.", nip: "19930925 202521 2 071", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Kramatmulya", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "SRI MULYATI, S.Pd.", nip: "19910904 202521 2 074", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Kadugede", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "IIS ISNAENI", nip: "19890615 202521 2 045", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Garawangi", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "NURUL HIDAYAH", nip: "19931212 202521 2 073", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Ciwaru", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "RINA MARLINA", nip: "19900315 202521 2 067", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Ciniru", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "YETI ROKHAYATI", nip: "19881112 202521 2 042", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Jalaksana", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "YAYAH KODARIAH", nip: "19891214 202521 2 052", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Kuningan", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "TAUFIK RACHMANDANI, S.AP.", nip: "19900328 202521 1 066", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "RIZTNYA PAQUEENA ANANDYA, S.H.", nip: "19951128 202521 2 073", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "TIKA APRILIYANI, S.Pd.", nip: "19950415 202521 2 110", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Mandirancan", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
             { nama: "YANTHI YULIANTHI", nip: "19820726 202521 2 033", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Jalaksana", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
-            { nama: "DIDIN ROSIDIN, S.IP.", nip: "19860825 202521 1 066", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Cigugur", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" }
+            { nama: "DIDIN ROSIDIN, S.IP.", nip: "19860825 202521 1 066", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Mandirancan", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "ANGGI TRIANSYAH, S.E.", nip: "19910304 202521 1 095", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "YAN ROBIANSYAH", nip: "19870601 202521 1 096", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "ARIS SUHERMAN", nip: "19850414 202521 1 095", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "RICKY MAHARDIKA, S.E.", nip: "19900918 202521 1 065", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "E. SITI NURLAELA", nip: "19850113 202521 2 040", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Ciawigebang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "DWIKA BANON, S.Pd.", nip: "19870812 202521 1 136", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "Sub Bagian Umum dan Kepegawaian - Sekretariat", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "TITO RAHAYU BACHTIAR, S.Kom.", nip: "19930811 202521 1 077", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Subang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "EKA GULIT TANGGUNG SUTARNO", nip: "19891226 202521 1 068", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Luragung", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "RIZKI ALY SANTOSA", nip: "20020919 202521 1 008", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Subang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" },
+            { nama: "INDRA SURYA MANGGALA", nip: "19870511 202521 1 088", gol: "NON", jabatan: "Operator Layanan Operasional", unit: "UPTD Pengendalian Penduduk Subang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" }
         ];
 
         function renderTable(data) {
             const tbody = document.getElementById("kpTableBody");
             tbody.innerHTML = "";
-            data.forEach((item, index) => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50">
+            data.forEach((peg, index) => {
+                let row = `
+                    <tr class="hover:bg-gray-50 transition">
                         <td class="py-3 px-4 text-center font-medium">${index + 1}</td>
                         <td class="py-3 px-4">
-                            <div class="font-bold text-gray-900">${item.nama}</div>
-                            <div class="text-xs text-gray-500">NIP. ${item.nip}</div>
+                            <div class="font-bold text-gray-900">${peg.nama}</div>
+                            <div class="text-xs text-gray-500 font-mono">NIP. ${peg.nip}</div>
                         </td>
-                        <td class="py-3 px-4 text-center font-semibold">${item.gol}</td>
+                        <td class="py-3 px-4 text-center font-semibold">${peg.gol}</td>
                         <td class="py-3 px-4">
-                            <div class="font-medium">${item.jabatan}</div>
-                            <div class="text-xs text-gray-500">${item.unit}</div>
+                            <div class="text-gray-900 font-medium">${peg.jabatan}</div>
+                            <div class="text-xs text-gray-500">${peg.unit}</div>
                         </td>
-                        <td class="py-3 px-4 text-center">${item.kpTerakhir}</td>
-                        <td class="py-3 px-4 text-center font-bold text-gray-900">${item.kpBerikutnya}</td>
+                        <td class="py-3 px-4 text-center text-gray-600">${peg.kpTerakhir}</td>
+                        <td class="py-3 px-4 text-center text-gray-600">${peg.kpBerikutnya}</td>
                         <td class="py-3 px-4 text-center">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">${item.status}</span>
+                            <span class="px-2.5 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">${peg.status}</span>
                         </td>
                     </tr>
                 `;
+                tbody.innerHTML += row;
             });
             document.getElementById("kpCount").innerText = data.length;
+            document.getElementById("statUpcoming").innerText = data.length;
         }
 
         function filterTable() {
-            const input = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = pegawaiList.filter(p => 
-                p.nama.toLowerCase().includes(input) || 
-                p.nip.toLowerCase().includes(input) || 
-                p.gol.toLowerCase().includes(input) ||
-                p.jabatan.toLowerCase().includes(input) ||
-                p.unit.toLowerCase().includes(input)
+            const keyword = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = pegawaiList.filter(peg => 
+                peg.nama.toLowerCase().includes(keyword) ||
+                peg.nip.toLowerCase().includes(keyword) ||
+                peg.gol.toLowerCase().includes(keyword) ||
+                peg.jabatan.toLowerCase().includes(keyword) ||
+                peg.unit.toLowerCase().includes(keyword)
             );
             renderTable(filtered);
         }
 
-        // Fungsi Export ke Excel (.xlsx)
         function exportToExcel() {
-            const dataToExport = pegawaiList.map((p, idx) => ({
-                "NO": idx + 1,
-                "NAMA PEGAWAI": p.nama,
-                "NIP": p.nip,
-                "GOL/RUANG": p.gol,
-                "JABATAN": p.jabatan,
-                "UNIT KERJA": p.unit,
-                "KP TERAKHIR": p.kpTerakhir,
-                "KP BERIKUTNYA": p.kpBerikutnya,
-                "STATUS KP": p.status
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Kenaikan Pangkat");
-            XLSX.writeFile(workbook, "Data_Kenaikan_Pangkat_DPPKBP3A.xlsx");
+            let wb = XLSX.utils.book_new();
+            let wsData = [["NO", "NAMA PEGAWAI", "NIP", "GOL/RUANG", "JABATAN", "UNIT KERJA", "KP TERAKHIR", "KP BERIKUTNYA", "STATUS KP"]];
+            pegawaiList.forEach((peg, idx) => {
+                wsData.push([idx + 1, peg.nama, peg.nip, peg.gol, peg.jabatan, peg.unit, peg.kpTerakhir, peg.kpBerikutnya, peg.status]);
+            });
+            let ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, "Kenaikan Pangkat");
+            XLSX.writeFile(wb, "Data_Kenaikan_Pangkat_DPPKBP3A.xlsx");
         }
 
-        // Fungsi Export ke PDF menggunakan jsPDF & AutoTable
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('landscape', 'mm', 'a4');
-
-            doc.setFontSize(14);
-            doc.text("DAFTAR KENAIKAN PANGKAT PEGAWAI DPPKBP3A", 14, 15);
-
-            const tableRows = pegawaiList.map((p, idx) => [
-                idx + 1,
-                `${p.nama}\nNIP. ${p.nip}`,
-                p.gol,
-                `${p.jabatan}\n${p.unit}`,
-                p.kpTerakhir,
-                p.kpBerikutnya,
-                p.status
+            const doc = new jsPDF('l', 'mm', 'a4');
+            doc.text("Jadwal Kenaikan Pangkat (KP) - DPPKBP3A Kabupaten Kuningan", 14, 15);
+            
+            let tableData = pegawaiList.map((peg, idx) => [
+                idx + 1, peg.nama + "\nNIP. " + peg.nip, peg.gol, peg.jabatan + "\n" + peg.unit, peg.kpTerakhir, peg.kpBerikutnya, peg.status
             ]);
 
             doc.autoTable({
-                head: [['NO', 'NIP & NAMA PEGAWAI', 'GOL/RUANG', 'JABATAN & UNIT KERJA', 'KP TERAKHIR', 'KP BERIKUTNYA', 'STATUS KP']],
-                body: tableRows,
                 startY: 22,
-                styles: { fontSize: 8, cellPadding: 2 },
-                headStyles: { fillColor: [15, 23, 42] }
+                head: [['NO', 'NAMA & NIP', 'GOL', 'JABATAN & UNIT KERJA', 'KP TERAKHIR', 'KP BERIKUTNYA', 'STATUS']],
+                body: tableData,
+                styles: { fontSize: 8 }
             });
-
             doc.save("Data_Kenaikan_Pangkat_DPPKBP3A.pdf");
         }
 
