@@ -129,7 +129,7 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar (Mengikuti Akun Login secara Otomatis) -->
+            <!-- Top Navbar -->
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
@@ -158,7 +158,7 @@
                         <p class="text-sm text-blue-100">Monitoring dan pengelolaan berkas usulan KGB Pegawai Negeri Sipil DPPKBP3A Kuningan.</p>
                     </div>
                     <!-- Tombol Tambah Usulan KGB (Khusus Admin) -->
-                    <button id="btnTambahKgb" onclick="bukaModalKgb()" class="khusus-admin bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
+                    <button id="btnTambahKgb" onclick="bukaModalKgb()" class="khusus-admin bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2 hidden">
                         <i class="fa-solid fa-plus"></i> Tambah Usulan KGB
                     </button>
                 </div>
@@ -230,7 +230,7 @@
                                     <th class="py-3.5 px-4 text-center">KGB Terakhir</th>
                                     <th class="py-3.5 px-4 text-center">Usulan KGB 2026</th>
                                     <th class="py-3.5 px-4 text-center">KGB Berikutnya</th>
-                                    <th class="py-3.5 px-6 text-center khusus-admin">Aksi</th>
+                                    <th class="py-3.5 px-6 text-center khusus-admin hidden">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="kgbTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
