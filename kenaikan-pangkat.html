@@ -130,10 +130,10 @@
                 </div>
                 <div class="flex items-center gap-3" id="userProfileHeader">
                     <div class="text-right">
-                        <p class="text-sm font-bold text-gray-800">Pegawai DPPKBP3A</p>
-                        <p class="text-xs text-gray-500">Sistem Informasi Pegawai</p>
+                        <p class="text-sm font-bold text-gray-800" id="profileName">Pegawai DPPKBP3A</p>
+                        <p class="text-xs text-gray-500" id="profileSub">Sistem Informasi Pegawai</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" id="profileAvatar">
                         P
                     </div>
                 </div>
@@ -149,6 +149,10 @@
                         <p class="text-sm text-gray-500">Berdasarkan Peraturan BKN Nomor 4 Tahun 2025, periode kenaikan pangkat PNS menjadi 12 kali dalam setahun.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 no-print">
+                        <!-- Tombol Tambah (Khusus Admin) -->
+                        <button id="btnTambahKp" onclick="openAddModal()" class="khusus-admin bg-blue-600 text-white px-3.5 py-2 rounded-lg font-medium text-sm hover:bg-blue-700 shadow-sm flex items-center gap-2 transition hidden">
+                            <i class="fa-solid fa-plus"></i> Tambah Usulan KP
+                        </button>
                         <button onclick="exportToExcel()" class="bg-emerald-600 text-white px-3.5 py-2 rounded-lg font-medium text-sm hover:bg-emerald-700 shadow-sm flex items-center gap-2 transition">
                             <i class="fa-solid fa-file-excel"></i> Export Excel
                         </button>
@@ -241,7 +245,7 @@
                     <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm flex items-center justify-between">
                         <div>
                             <p class="text-xs text-blue-600 font-medium">Masih Cukup Lama (Akan Datang)</p>
-                            <h3 class="text-2xl font-bold text-blue-700 mt-1" id="statUpcoming">93</h3>
+                            <h3 class="text-2xl font-bold text-blue-700 mt-1" id="statUpcoming">0</h3>
                         </div>
                         <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
                             <i class="fa-solid fa-calendar-days"></i>
@@ -256,7 +260,7 @@
                         <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Cari NIP, Nama, GolRu, atau Jabatan..." class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="text-xs text-gray-500 font-medium w-full md:w-auto text-right">
-                        Menampilkan <strong id="kpCount" class="text-gray-800">93</strong> Pegawai
+                        Menampilkan <strong id="kpCount" class="text-gray-800">0</strong> Pegawai
                     </div>
                 </div>
 
@@ -273,6 +277,7 @@
                                     <th class="py-3.5 px-4 text-center">KP TERAKHIR</th>
                                     <th class="py-3.5 px-4 text-center">KP BERIKUTNYA</th>
                                     <th class="py-3.5 px-4 text-center">STATUS KP</th>
+                                    <th class="py-3.5 px-4 text-center admin-only-col hidden no-print">AKSI ADMIN</th>
                                 </tr>
                             </thead>
                             <tbody id="kpTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -285,8 +290,137 @@
         </div>
     </div>
 
+    <!-- MODAL TAMBAH USULAN KP (KHUSUS ADMIN) -->
+    <div id="addModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-xl max-w-lg w-full p-6 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-gray-800">Tambah Usulan Kenaikan Pangkat Baru</h3>
+                <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="formAddKp" onsubmit="saveNewKp(event)" class="space-y-3 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nama Pegawai & Gelar</label>
+                    <input type="text" id="addNama" placeholder="Contoh: NAMA PEGAWAI, S.Sos." required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">NIP Pegawai</label>
+                        <input type="text" id="addNip" placeholder="19700810 199002 1 001" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Gol / Ruang</label>
+                        <input type="text" id="addGol" placeholder="IV/b, III/d, dll." required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Jabatan</label>
+                    <input type="text" id="addJabatan" placeholder="Contoh: Kepala Dinas" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Unit Kerja</label>
+                    <input type="text" id="addUnit" placeholder="Contoh: Sekretariat" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">KP Terakhir</label>
+                        <input type="text" id="addKpTerakhir" placeholder="01 Feb 2026" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">KP Berikutnya</label>
+                        <input type="text" id="addKpBerikutnya" placeholder="01 Feb 2030" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Status KP</label>
+                        <input type="text" id="addStatus" placeholder="Belum Waktunya" value="Belum Waktunya" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT / HAPUS USULAN KP (KHUSUS ADMIN) -->
+    <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-xl max-w-lg w-full p-6 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-gray-800">Edit Data Kenaikan Pangkat</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <input type="hidden" id="editIndexTarget">
+            <form id="formEditKp" onsubmit="saveEditKp(event)" class="space-y-3 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Nama Pegawai & Gelar</label>
+                    <input type="text" id="editNama" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">NIP Pegawai</label>
+                        <input type="text" id="editNip" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Gol / Ruang</label>
+                        <input type="text" id="editGol" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Jabatan</label>
+                    <input type="text" id="editJabatan" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Unit Kerja</label>
+                    <input type="text" id="editUnit" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">KP Terakhir</label>
+                        <input type="text" id="editKpTerakhir" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">KP Berikutnya</label>
+                        <input type="text" id="editKpBerikutnya" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Status KP</label>
+                        <input type="text" id="editStatus" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs">
+                    </div>
+                </div>
+                <div class="flex justify-between items-center pt-2 border-t">
+                    <button type="button" onclick="deleteKpItem()" class="px-3 py-2 bg-red-50 text-red-600 text-sm font-semibold rounded-lg hover:bg-red-100 flex items-center gap-1.5">
+                        <i class="fa-solid fa-trash"></i> Hapus Data
+                    </button>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="closeEditModal()" class="px-3 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">Batal</button>
+                        <button type="submit" class="px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">Simpan Perubahan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        const pegawaiList = [
+        // Cek Role Login di localStorage
+        let currentUserRole = localStorage.getItem("userRole") || 'pegawai';
+        const storedName = localStorage.getItem("user_nama");
+        const storedNip = localStorage.getItem("userNip") || localStorage.getItem("user_nip");
+
+        const profName = document.getElementById('profileName');
+        const profSub = document.getElementById('profileSub');
+        const avatar = document.getElementById('profileAvatar');
+
+        if (currentUserRole === 'admin') {
+            if(profName) profName.textContent = storedName || "NOPA PUJIHASTUTI, SE., M.A.P.";
+            if(profSub) profSub.textContent = storedNip ? `NIP. ${storedNip} (Admin)` : "Admin DPPKBP3A";
+            if(avatar) avatar.textContent = "A";
+        } else {
+            if(profName) profName.textContent = storedName || "Pegawai DPPKBP3A";
+            if(profSub) profSub.textContent = storedNip ? `NIP. ${storedNip}` : "Akses Mandiri";
+            if(avatar) avatar.textContent = "P";
+        }
+
+        const defaultPegawaiList = [
             { nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", nip: "19700810 199002 1 001", gol: "IV/b", jabatan: "Kepala Dinas", unit: "Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak", kpTerakhir: "01 Feb 2026", kpBerikutnya: "01 Feb 2030", status: "Belum Waktunya" },
             { nama: "dr. EDDY SYARIEF, MM., MM.RS.", nip: "19720301 200604 1 011", gol: "IV/b", jabatan: "Sekretaris Dinas", unit: "Sekretariat", kpTerakhir: "01 Apr 2026", kpBerikutnya: "01 Apr 2030", status: "Belum Waktunya" },
             { nama: "ANWAR NASIHIN, S.Kom., M.Si.", nip: "19791029 200501 1 003", gol: "IV/a", jabatan: "Kepala Bidang Keluarga Sejahtera", unit: "Bidang Keluarga Sejahtera", kpTerakhir: "01 Jan 2025", kpBerikutnya: "01 Jan 2029", status: "Belum Waktunya" },
@@ -381,10 +515,48 @@
             { nama: "INDRA SURYA MANGGALA", nip: "19870511 202521 1 088", gol: "NON", jabatan: "Penata Layanan Operasional", unit: "UPTD Pengendalian Penduduk Subang", kpTerakhir: "01 Jan 2026", kpBerikutnya: "01 Jan 2030", status: "Belum Waktunya" }
         ];
 
+        // Muat dari localStorage jika ada
+        let pegawaiList = JSON.parse(localStorage.getItem('sigap_kp_list')) || defaultPegawaiList;
+
+        function saveToLocalStorage() {
+            localStorage.setItem('sigap_kp_list', JSON.stringify(pegawaiList));
+        }
+
         function renderTable(data) {
             const tbody = document.getElementById("kpTableBody");
             tbody.innerHTML = "";
+
+            // Atur Visibilitas Kolom & Tombol Admin
+            const adminCols = document.querySelectorAll('.admin-only-col');
+            const btnTambah = document.getElementById('btnTambahKp');
+
+            adminCols.forEach(el => {
+                if (currentUserRole === 'admin') el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+
+            if (currentUserRole === 'admin') {
+                if(btnTambah) btnTambah.classList.remove('hidden');
+            } else {
+                if(btnTambah) btnTambah.classList.add('hidden');
+            }
+
             data.forEach((peg, index) => {
+                let originalIndex = pegawaiList.findIndex(p => p.nip === peg.nip);
+
+                let adminActionCell = '';
+                if (currentUserRole === 'admin') {
+                    adminActionCell = `
+                        <td class="py-3 px-4 text-center admin-only-col no-print">
+                            <button onclick="openEditModal(${originalIndex})" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white px-2.5 py-1 rounded text-xs font-semibold transition flex items-center gap-1 mx-auto">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                        </td>
+                    `;
+                } else {
+                    adminActionCell = `<td class="py-3 px-4 text-center admin-only-col hidden no-print"></td>`;
+                }
+
                 let row = `
                     <tr class="hover:bg-gray-50 transition">
                         <td class="py-3 px-4 text-center font-medium">${index + 1}</td>
@@ -402,12 +574,108 @@
                         <td class="py-3 px-4 text-center">
                             <span class="px-2.5 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">${peg.status}</span>
                         </td>
+                        ${adminActionCell}
                     </tr>
                 `;
                 tbody.innerHTML += row;
             });
             document.getElementById("kpCount").innerText = data.length;
             document.getElementById("statUpcoming").innerText = data.length;
+        }
+
+        // Kontrol Modal Tambah
+        function openAddModal() {
+            if (currentUserRole !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat menambah data.');
+                return;
+            }
+            document.getElementById('formAddKp').reset();
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+        }
+
+        function saveNewKp(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'admin') return;
+
+            const newObj = {
+                nama: document.getElementById('addNama').value,
+                nip: document.getElementById('addNip').value,
+                gol: document.getElementById('addGol').value,
+                jabatan: document.getElementById('addJabatan').value,
+                unit: document.getElementById('addUnit').value,
+                kpTerakhir: document.getElementById('addKpTerakhir').value,
+                kpBerikutnya: document.getElementById('addKpBerikutnya').value,
+                status: document.getElementById('addStatus').value
+            };
+
+            pegawaiList.push(newObj);
+            saveToLocalStorage();
+            closeAddModal();
+            filterTable();
+        }
+
+        // Kontrol Modal Edit / Hapus
+        function openEditModal(index) {
+            if (currentUserRole !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat mengedit data.');
+                return;
+            }
+            const item = pegawaiList[index];
+            document.getElementById('editIndexTarget').value = index;
+            document.getElementById('editNama').value = item.nama;
+            document.getElementById('editNip').value = item.nip;
+            document.getElementById('editGol').value = item.gol;
+            document.getElementById('editJabatan').value = item.jabatan;
+            document.getElementById('editUnit').value = item.unit;
+            document.getElementById('editKpTerakhir').value = item.kpTerakhir;
+            document.getElementById('editKpBerikutnya').value = item.kpBerikutnya;
+            document.getElementById('editStatus').value = item.status;
+
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        function saveEditKp(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'admin') return;
+
+            const idx = parseInt(document.getElementById('editIndexTarget').value);
+            if (!isNaN(idx) && pegawaiList[idx]) {
+                pegawaiList[idx] = {
+                    ...pegawaiList[idx],
+                    nama: document.getElementById('editNama').value,
+                    nip: document.getElementById('editNip').value,
+                    gol: document.getElementById('editGol').value,
+                    jabatan: document.getElementById('editJabatan').value,
+                    unit: document.getElementById('editUnit').value,
+                    kpTerakhir: document.getElementById('editKpTerakhir').value,
+                    kpBerikutnya: document.getElementById('editKpBerikutnya').value,
+                    status: document.getElementById('editStatus').value
+                };
+
+                saveToLocalStorage();
+                closeEditModal();
+                filterTable();
+            }
+        }
+
+        function deleteKpItem() {
+            const idx = parseInt(document.getElementById('editIndexTarget').value);
+            if (!isNaN(idx) && pegawaiList[idx]) {
+                if (confirm("Apakah Anda yakin ingin menghapus data kenaikan pangkat pegawai ini?")) {
+                    pegawaiList.splice(idx, 1);
+                    saveToLocalStorage();
+                    closeEditModal();
+                    filterTable();
+                }
+            }
         }
 
         function filterTable() {
