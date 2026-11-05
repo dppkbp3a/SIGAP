@@ -16,7 +16,7 @@
     <!-- Style Khusus Cetak / Print -->
     <style>
         @media print {
-            aside, header, .no-print, #detailModal, .col-aksi {
+            aside, header, .no-print, #editModal, #addModal, .col-aksi {
                 display: none !important;
             }
 
@@ -83,7 +83,7 @@
     <div class="flex h-screen overflow-hidden">
         
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between fixed md:relative z-20 h-full transition-all duration-300">
+        <aside id="sidebar" class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between fixed md:relative z-20 h-full transition-all duration-300 no-print">
             <div>
                 <!-- Brand -->
                 <div class="h-16 flex items-center justify-between px-6 bg-slate-950 text-white font-bold text-lg">
@@ -128,7 +128,7 @@
                 <a href="pengaturan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 transition text-sm">
                     <i class="fa-solid fa-gear w-5"></i> Pengaturan
                 </a>
-                <a href="index.html" onclick="logout()" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-red-400 hover:bg-slate-800 transition text-sm">
+                <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-red-400 hover:bg-slate-800 transition text-sm">
                     <i class="fa-solid fa-right-from-bracket w-5"></i> Keluar
                 </a>
             </div>
@@ -138,26 +138,20 @@
         <div class="flex-1 flex flex-col overflow-y-auto main-content">
             
             <!-- Top Navbar - Profil Dinamis -->
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0 no-print">
                 <div class="flex items-center gap-4">
                     <button id="openSidebar" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                     <span class="font-semibold text-gray-700 text-sm md:text-base">Daftar Urut Kepangkatan (DUK) PNS TAHUN 2026</span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <!-- Indikator Role Interaktif (Admin / Pegawai) -->
-                    <div id="roleBadgeContainer" class="hidden sm:flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg border border-gray-200 text-xs font-semibold">
-                        <span class="text-gray-500 px-2">Role:</span>
-                        <button onclick="switchRole('admin')" id="btnRoleAdmin" class="px-2.5 py-1 rounded-md transition shadow-sm bg-blue-600 text-white">Admin</button>
-                        <button onclick="switchRole('pegawai')" id="btnRolePegawai" class="px-2.5 py-1 rounded-md transition shadow-sm bg-gray-200 text-gray-700 hover:bg-gray-300">Pegawai</button>
-                    </div>
+                <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
-                        <p id="userNama" class="text-sm font-bold text-gray-800">...</p>
-                        <p id="userNip" class="text-xs text-gray-500">...</p>
+                        <p id="userNama" class="text-sm font-bold text-gray-800">Pegawai DPPKBP3A</p>
+                        <p id="userNip" class="text-xs text-gray-500">Sistem Informasi Pegawai</p>
                     </div>
                     <div id="userAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shadow-sm uppercase">
-                        -
+                        A
                     </div>
                 </div>
             </header>
@@ -171,7 +165,11 @@
                         <p class="text-sm text-gray-500">Master data urutan hierarki Aparatur Sipil Negara di lingkungan DPPKBP3A.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2 no-print">
-                        <button onclick="window.print()" class="bg-red-600 hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-medium text-xs md:text-sm shadow-sm flex items-center gap-2 transition">
+                        <!-- Tombol Tambah DUK (Khusus Admin) -->
+                        <button id="btnTambahDuk" onclick="openAddModal()" class="khusus-admin bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg font-medium text-xs md:text-sm shadow-sm flex items-center gap-2 transition hidden">
+                            <i class="fa-solid fa-plus"></i> Tambah Pegawai
+                        </button>
+                        <button onclick="exportToPDF()" class="bg-red-600 hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-medium text-xs md:text-sm shadow-sm flex items-center gap-2 transition">
                             <i class="fa-solid fa-file-pdf"></i> PDF
                         </button>
                         <button onclick="exportExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-lg font-medium text-xs md:text-sm shadow-sm flex items-center gap-2 transition">
@@ -204,7 +202,7 @@
                 </div>
 
                 <!-- Filter & Search Bar -->
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center filter-container">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center filter-container no-print">
                     <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
                         <div class="relative w-full md:w-80">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
@@ -239,7 +237,7 @@
                                     <th class="py-3.5 px-4 text-center">PENDIDIKAN</th>
                                     <th class="py-3.5 px-4 text-center">USIA</th>
                                     <!-- Kolom Aksi khusus Admin -->
-                                    <th id="thAksi" class="py-3.5 px-4 text-center col-aksi">AKSI ADMIN</th>
+                                    <th id="thAksi" class="py-3.5 px-4 text-center col-aksi khusus-admin hidden">AKSI ADMIN</th>
                                 </tr>
                             </thead>
                             <tbody id="dukTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -251,117 +249,137 @@
         </div>
     </div>
 
-    <!-- Modal Edit Data DUK (Khusus Admin) -->
-    <div id="editModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <!-- Modal Tambah Data DUK (Khusus Admin) -->
+    <div id="addModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-pen-to-square mr-2"></i> Edit Data DUK Pegawai</h3>
-                <button onclick="closeEditModal()" class="text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
+                <h3 class="font-bold text-lg"><i class="fa-solid fa-user-plus mr-2"></i> Tambah Pegawai DUK Baru</h3>
+                <button onclick="closeAddModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                <input type="hidden" id="editIndex">
+            <form id="formAddDuk" onsubmit="saveNewData(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto text-sm">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Pegawai</label>
-                    <input type="text" id="editNama" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Pegawai & Gelar</label>
+                    <input type="text" id="addNama" placeholder="Contoh: NAMA PEGAWAI, S.Sos." required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">NIP</label>
-                    <input type="text" id="editNip" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="addNip" placeholder="19700810 199002 1 001" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Golongan / Ruang</label>
-                        <input type="text" id="editGol" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Contoh: IV/b">
+                        <input type="text" id="addGol" placeholder="IV/b, III/d, dll." required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">TMT Pangkat</label>
-                        <input type="date" id="editTmt" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="date" id="addTmt" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Jabatan</label>
-                    <input type="text" id="editJabatan" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="addJabatan" placeholder="Contoh: Kepala Dinas" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Masa Kerja</label>
-                        <input type="text" id="editMk" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="addMk" placeholder="20,04 Th" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Pendidikan</label>
-                        <input type="text" id="editPendidikan" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="addPendidikan" placeholder="S.1 / S.2" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Usia</label>
-                        <input type="text" id="editUsia" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="addUsia" placeholder="45" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                 </div>
-            </div>
-            <div class="bg-gray-50 px-6 py-3 flex justify-end gap-2 border-t border-gray-200">
-                <button onclick="closeEditModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">Batal</button>
-                <button onclick="saveEditedData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Simpan Perubahan</button>
-            </div>
+                <div class="bg-gray-50 -mx-6 -mb-6 px-6 py-3 flex justify-end gap-2 border-t border-gray-200 mt-4">
+                    <button type="button" onclick="closeAddModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">Batal</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Simpan Data</button>
+                </div>
+            </form>
         </div>
     </div>
-<!-- Modal Edit Data DUK (Khusus Admin) -->
-    <div id="editModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+
+    <!-- Modal Edit / Hapus Data DUK (Khusus Admin) -->
+    <div id="editModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 no-print">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
                 <h3 class="font-bold text-lg"><i class="fa-solid fa-pen-to-square mr-2"></i> Edit Data DUK Pegawai</h3>
-                <button onclick="closeEditModal()" class="text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+            <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto text-sm">
                 <input type="hidden" id="editIndex">
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Pegawai</label>
-                    <input type="text" id="editNama" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="editNama" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">NIP</label>
-                    <input type="text" id="editNip" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="editNip" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Golongan / Ruang</label>
-                        <input type="text" id="editGol" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Contoh: IV/b">
+                        <input type="text" id="editGol" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">TMT Pangkat</label>
-                        <input type="date" id="editTmt" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="date" id="editTmt" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Jabatan</label>
-                    <input type="text" id="editJabatan" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="editJabatan" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Masa Kerja</label>
-                        <input type="text" id="editMk" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="editMk" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Pendidikan</label>
-                        <input type="text" id="editPendidikan" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="editPendidikan" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Usia</label>
-                        <input type="text" id="editUsia" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="editUsia" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2">
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-50 px-6 py-3 flex justify-end gap-2 border-t border-gray-200">
-                <button onclick="closeEditModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">Batal</button>
-                <button onclick="saveEditedData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Simpan Perubahan</button>
+            <div class="bg-gray-50 px-6 py-3 flex justify-between items-center border-t border-gray-200">
+                <button onclick="deleteDataDuk()" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-trash"></i> Hapus Data
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="closeEditModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">Batal</button>
+                    <button onclick="saveEditedData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Simpan Perubahan</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Data DUK Pegawai lengkap 93 orang dari Master Data DPPKBP3A (Mengambil dari localStorage jika ada, atau gunakan default)
+        // Ambil role dari localStorage (mengikuti akun login)
+        let currentUserRole = localStorage.getItem("userRole") || 'admin';
+        const storedName = localStorage.getItem("user_nama");
+        const storedNip = localStorage.getItem("userNip") || localStorage.getItem("user_nip");
+
+        const elNama = document.getElementById("userNama");
+        const elNip = document.getElementById("userNip");
+        const elAvatar = document.getElementById("userAvatar");
+
+        if (currentUserRole === 'admin') {
+            if(elNama) elNama.innerText = storedName || "Admin DPPKBP3A";
+            if(elNip) elNip.innerText = storedNip ? `NIP. ${storedNip}` : "Sistem Informasi Pegawai";
+            if(elAvatar) elAvatar.innerText = "A";
+        } else {
+            if(elNama) elNama.innerText = storedName || "Pegawai DPPKBP3A";
+            if(elNip) elNip.innerText = storedNip ? `NIP. ${storedNip}` : "Akses Mandiri";
+            if(elAvatar) elAvatar.innerText = "P";
+        }
+
+        // Data DUK Pegawai lengkap dari Master Data DPPKBP3A
         let dataDUK = JSON.parse(localStorage.getItem('dukPegawaiList')) || [
             { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2026-03-01", jabatan: "Kepala Dinas", mk: "36,06 th", pendidikan: "Magister Kesehatan (S.2)", usia: "56" },
             { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2024-02-01", jabatan: "Sekretaris Dinas", mk: "20,04 Th", pendidikan: "Magister Manajemen Sumber Daya Manusia (S.2)", usia: "54" },
@@ -382,155 +400,13 @@
             { no: 17, nip: "19740612 200701 2 015", nama: "TATI HARTATI, S.AP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Administrasi Publik (S.1)", usia: "52" },
             { no: 18, nip: "19770110 200701 1 008", nama: "DEDI SUPRIATNA, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "49" },
             { no: 19, nip: "19840505 200902 2 006", nama: "SITI ROMLAH, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "42" },
-            { no: 20, nip: "19790212 200902 1 002", nama: "TARSIDI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" },
-            { no: 21, nip: "19760411 200902 1 003", nama: "ENDANG SUPRIATNA, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "50" },
-            { no: 22, nip: "19810815 200902 2 005", nama: "IIS ISNAWATI, S.E.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "45" },
-            { no: 23, nip: "19780903 200902 2 003", nama: "SRI MULYATI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "48" },
-            { no: 24, nip: "19801211 200902 2 004", nama: "ENDAH NURHAYATI, S.E.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "46" },
-            { no: 25, nip: "19750402 200701 1 009", nama: "HERI KURNIAWAN, S.IP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "51" },
-            { no: 26, nip: "19781212 200701 2 015", nama: "ENI MULYANI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "48" },
-            { no: 27, nip: "19760315 200701 1 007", nama: "WAHYU HIDAYAT, S.AP.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "19,02 Th", pendidikan: "Administrasi Publik (S.1)", usia: "50" },
-            { no: 28, nip: "19790618 200902 1 002", nama: "DEDE KURNIAWAN, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" },
-            { no: 29, nip: "19820109 200902 2 004", nama: "SITI NURAENI, S.E.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "44" },
-            { no: 30, nip: "19751012 200701 2 011", nama: "IIS ROCHAYATI, S.IP.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2020-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "51" },
-            { no: 31, nip: "19800411 200902 2 003", nama: "NINING SULASTRI, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2020-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "46" },
-            { no: 32, nip: "19780302 200902 1 004", nama: "UUN UNANG, S.E.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "48" },
-            { no: 33, nip: "19830514 200902 2 005", nama: "LILIS LISNAWATI, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "43" },
-            { no: 34, nip: "19770912 200701 1 008", nama: "MAMAN SURAHMAN, S.IP.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "49" },
-            { no: 35, nip: "19810215 200902 2 002", nama: "TATI KURNIASIH, S.E.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "45" },
-            { no: 36, nip: "19791120 200902 1 003", nama: "JAKA SUPRIATNA, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" },
-            { no: 37, nip: "19820719 200902 2 006", nama: "SRI HARTATI, S.E.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "44" },
-            { no: 38, nip: "19780115 200701 1 005", nama: "DEDI MULYADI, S.IP.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "19,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "48" },
-            { no: 39, nip: "19800909 200902 2 001", nama: "NENENG SRI, S.Sos.", pangkat: "Penata", gol: "III/c", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Pertama", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "46" },
-            { no: 40, nip: "19831212 201001 2 003", nama: "ETI KURNIATI, S.E.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "43" },
-            { no: 41, nip: "19850311 201001 1 004", nama: "ROHMAN, S.Sos.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2021-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "41" },
-            { no: 42, nip: "19820614 201001 2 005", nama: "SITI FATIMAH, S.E.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "44" },
-            { no: 43, nip: "19840228 201001 1 002", nama: "ASEP SUPRIATNA, S.IP.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2022-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "42" },
-            { no: 44, nip: "19811105 201001 2 003", nama: "DEWI RATNASARI, S.Sos.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "45" },
-            { no: 45, nip: "19860719 201101 2 004", nama: "SRI WAHYUNI, S.E.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "15,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "40" },
-            { no: 46, nip: "19830402 201001 1 001", nama: "DODIH, S.IP.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "16,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "43" },
-            { no: 47, nip: "19850915 201101 2 002", nama: "YULI YULIASTUTI, S.Sos.", pangkat: "Penata Muda Tk.I", gol: "III/b", tmt_pangkat: "2024-04-01", jabatan: "Penyuluh Keluarga Berencana Terampil", mk: "15,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "41" },
-            { no: 48, nip: "19871212 201201 1 003", nama: "AGUS SETIAWAN, S.E.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2021-04-01", jabatan: "Pengelola Keuangan", mk: "14,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "39" },
-            { no: 49, nip: "19890405 201201 2 005", nama: "FITRI HANDAYANI, S.Sos.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2021-04-01", jabatan: "Pengelola Kepegawaian", mk: "14,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "37" },
-            { no: 50, nip: "19861010 201201 1 002", nama: "RUDI HARTONO, S.IP.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2022-04-01", jabatan: "Pengelola Program", mk: "14,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "40" },
-            { no: 51, nip: "19880220 201201 2 001", nama: "SITI AMINAH, S.E.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2022-04-01", jabatan: "Pengelola Data", mk: "14,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "38" },
-            { no: 52, nip: "19850505 201201 1 004", nama: "WAWAN KURNIAWAN, S.Sos.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Umum", mk: "14,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "41" },
-            { no: 53, nip: "19900111 201301 2 003", nama: "DEWI SARTIKA, S.E.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2023-04-01", jabatan: "Pengelola Keuangan", mk: "13,02 Th", pendidikan: "Ekonomi Manajemen (S.1)", usia: "36" },
-            { no: 54, nip: "19870814 201201 1 002", nama: "YAYAT HIDAYAT, S.IP.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Program", mk: "14,02 Th", pendidikan: "Ilmu Pemerintahan (S.1)", usia: "39" },
-            { no: 55, nip: "19890909 201301 2 001", nama: "RINA MARLINA, S.Sos.", pangkat: "Penata Muda", gol: "III/a", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Kepegawaian", mk: "13,02 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "37" },
-            { no: 56, nip: "19820512 200801 1 003", nama: "DEDI KURNIAWAN", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2021-04-01", jabatan: "Pengadministrasi Umum", mk: "18,02 Th", pendidikan: "SMA (SMA)", usia: "44" },
-            { no: 57, nip: "19840315 200902 2 001", nama: "ENI SURYANI", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2022-04-01", jabatan: "Pengadministrasi Keuangan", mk: "17,01 Th", pendidikan: "SMA (SMA)", usia: "42" },
-            { no: 58, nip: "19861111 201001 1 002", nama: "HERI SUSANTO", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Persuratan", mk: "16,02 Th", pendidikan: "SMA (SMA)", usia: "40" },
-            { no: 59, nip: "19880720 201101 2 003", nama: "SRI WAHYUNI", pangkat: "Pengatur Tk.I", gol: "II/d", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Data", mk: "15,02 Th", pendidikan: "SMA (SMA)", usia: "38" },
-            { no: 60, nip: "19850102 200801 1 001", nama: "ASEP HIDAYAT", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2021-04-01", jabatan: "Pengadministrasi Umum", mk: "18,02 Th", pendidikan: "SMA (SMA)", usia: "41" },
-            { no: 61, nip: "19870404 201001 2 002", nama: "LILIS SURYANI", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2022-04-01", jabatan: "Pengadministrasi Keuangan", mk: "16,02 Th", pendidikan: "SMA (SMA)", usia: "39" },
-            { no: 62, nip: "19890606 201201 1 003", nama: "RUDI SETIAWAN", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Persuratan", mk: "14,02 Th", pendidikan: "SMA (SMA)", usia: "37" },
-            { no: 63, nip: "19910808 201301 2 001", nama: "SITI NURHAYATI", pangkat: "Pengatur", gol: "II/c", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Data", mk: "13,02 Th", pendidikan: "SMA (SMA)", usia: "35" },
-            { no: 64, nip: "19880312 201101 1 001", nama: "DEDI SUPRIATNA", pangkat: "Pengatur Muda Tk.I", gol: "II/b", tmt_pangkat: "2022-04-01", jabatan: "Pengadministrasi Umum", mk: "15,02 Th", pendidikan: "SMA (SMA)", usia: "38" },
-            { no: 65, nip: "19900514 201201 2 002", nama: "ENI KURNIAWATI", pangkat: "Pengatur Muda Tk.I", gol: "II/b", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Keuangan", mk: "14,02 Th", pendidikan: "SMA (SMA)", usia: "36" },
-            { no: 66, nip: "19920916 201401 1 003", nama: "HERI SETIAWAN", pangkat: "Pengatur Muda Tk.I", gol: "II/b", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Persuratan", mk: "12,02 Th", pendidikan: "SMA (SMA)", usia: "34" },
-            { no: 67, nip: "19910220 201301 1 002", nama: "ASEP KURNIAWAN", pangkat: "Pengatur Muda", gol: "II/a", tmt_pangkat: "2023-04-01", jabatan: "Pengadministrasi Umum", mk: "13,02 Th", pendidikan: "SMA (SMA)", usia: "35" },
-            { no: 68, nip: "19930422 201401 2 004", nama: "SRI LESTARI", pangkat: "Pengatur Muda", gol: "II/a", tmt_pangkat: "2024-04-01", jabatan: "Pengadministrasi Keuangan", mk: "12,02 Th", pendidikan: "SMA (SMA)", usia: "33" },
-            { no: 69, nip: "19950624 201903 1 001", nama: "AGUNG GUMILAR", pangkat: "Juru Tk.I", gol: "I/d", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Operasional", mk: "7,01 Th", pendidikan: "SMA (SMA)", usia: "31" },
-            { no: 70, nip: "19960826 201903 2 002", nama: "SITI AMINAH", pangkat: "Juru", gol: "I/c", tmt_pangkat: "2024-04-01", jabatan: "Pengelola Umum", mk: "7,01 Th", pendidikan: "SMA (SMA)", usia: "30" },
-            { no: 71, nip: "19800101 202121 1 001", nama: "DEDI SUPRIADI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "46" },
-            { no: 72, nip: "19820202 202121 2 002", nama: "YAYAH", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "44" },
-            { no: 73, nip: "19840303 202121 1 003", nama: "WAHYU", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "42" },
-            { no: 74, nip: "19860404 202121 2 004", nama: "IIS", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "40" },
-            { no: 75, nip: "19880505 202121 1 005", nama: "TARSIDI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "38" },
-            { no: 76, nip: "19900606 202121 2 006", nama: "ENDANG", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2021-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "5,00 Th", pendidikan: "S.1 (S.1)", usia: "36" },
-            { no: 77, nip: "19810707 202221 1 001", nama: "KOMARUDIN", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "45" },
-            { no: 78, nip: "19830808 202221 2 002", nama: "EUIS", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "43" },
-            { no: 79, nip: "19850909 202221 1 003", nama: "YAYAT", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "41" },
-            { no: 80, nip: "19871010 202221 2 004", nama: "INDRI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2022-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "4,00 Th", pendidikan: "S.1 (S.1)", usia: "39" },
-            { no: 81, nip: "19891111 202321 1 001", nama: "NANI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2023-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "3,00 Th", pendidikan: "S.1 (S.1)", usia: "37" },
-            { no: 82, nip: "19911212 202321 2 002", nama: "SRI", pangkat: "PPPK", gol: "IX", tmt_pangkat: "2023-03-01", jabatan: "Ahli Pertama - Penyuluh Keluarga Berencana", mk: "3,00 Th", pendidikan: "S.1 (S.1)", usia: "35" },
-            { no: 83, nip: "19820113 202421 1 001", nama: "DEDE", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "44" },
-            { no: 84, nip: "19840214 202421 2 002", nama: "TATI", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "42" },
-            { no: 85, nip: "19860315 202421 1 003", nama: "MAMAN", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "40" },
-            { no: 86, nip: "19880416 202421 2 004", nama: "LILIS", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "38" },
-            { no: 87, nip: "19900517 202421 1 005", nama: "ASEP", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "36" },
-            { no: 88, nip: "19920618 202421 2 006", nama: "DEWI", pangkat: "PPPK", gol: "V", tmt_pangkat: "2024-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "2,00 Th", pendidikan: "SMA (SMA)", usia: "34" },
-            { no: 89, nip: "19850719 202521 1 007", nama: "AGUS", pangkat: "PPPK", gol: "V", tmt_pangkat: "2025-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "1,00 Th", pendidikan: "SMA (SMA)", usia: "41" },
-            { no: 90, nip: "19870820 202521 2 008", nama: "FITRI", pangkat: "PPPK", gol: "V", tmt_pangkat: "2025-03-01", jabatan: "Pemula - Penyuluh Keluarga Berencana", mk: "1,00 Th", pendidikan: "SMA (SMA)", usia: "39" },
-            { no: 91, nip: "19891226 202521 1 068", nama: "EKA GULIT TANGGUNG SUTARNO", pangkat: "PPPK paruh waktu", gol: "NON", tmt_pangkat: "", jabatan: "Operator Layanan Operasional", mk: "0 Th", pendidikan: "SMA (SMA)", usia: "36" },
-            { no: 92, nip: "20020919 202521 1 008", nama: "RIZKI ALY SANTOSA", pangkat: "PPPK paruh waktu", gol: "NON", tmt_pangkat: "", jabatan: "Operator Layanan Operasional", mk: "0 Th", pendidikan: "SMA (SMA)", usia: "23" },
-            { no: 93, nip: "19870511 202521 1 088", nama: "INDRA SURYA MANGGALA", pangkat: "PPPK paruh waktu", gol: "NON", tmt_pangkat: "", jabatan: "Operator Layanan Operasional", mk: "0 Th", pendidikan: "SLTA / SMA SEDERAJAT (SMA)", usia: "39" }
+            { no: 20, nip: "19790212 200902 1 002", nama: "TARSIDI, S.Sos.", pangkat: "Penata Tk.I", gol: "III/d", tmt_pangkat: "2023-04-01", jabatan: "Penyuluh Keluarga Berencana Ahli Muda", mk: "17,01 Th", pendidikan: "Ilmu Administrasi Negara (S.1)", usia: "47" }
         ];
 
         let currentFilteredData = [...dataDUK];
-        let isAdmin = true; 
 
-        // Fungsi simpan otomatis ke localStorage
         function simpanKeLocal() {
             localStorage.setItem('dukPegawaiList', JSON.stringify(dataDUK));
-        }
-
-        // Fungsi untuk mengganti role secara interaktif saat tombol diklik
-        function switchRole(role) {
-            isAdmin = (role === 'admin');
-            
-            const btnAdmin = document.getElementById("btnRoleAdmin");
-            const btnPegawai = document.getElementById("btnRolePegawai");
-
-            if (isAdmin) {
-                if(btnAdmin) btnAdmin.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-blue-600 text-white";
-                if(btnPegawai) btnPegawai.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-gray-200 text-gray-700 hover:bg-gray-300";
-            } else {
-                if(btnPegawai) btnPegawai.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-blue-600 text-white";
-                if(btnAdmin) btnAdmin.className = "px-2.5 py-1 rounded-md transition shadow-sm bg-gray-200 text-gray-700 hover:bg-gray-300";
-            }
-
-            const thAksi = document.getElementById("thAksi");
-            if (thAksi) {
-                thAksi.style.display = isAdmin ? "" : "none";
-            }
-
-            renderTable(currentFilteredData);
-        }
-
-        function loadLoggedInUser() {
-            const storedUserRaw = localStorage.getItem("loggedInUser") || 
-                                    localStorage.getItem("user") || 
-                                    localStorage.getItem("currentUser") || 
-                                    sessionStorage.getItem("loggedInUser");
-
-            let user = null;
-            if (storedUserRaw) {
-                try {
-                    user = JSON.parse(storedUserRaw);
-                } catch(e) {
-                    user = null;
-                }
-            }
-
-            if (!user || !user.nama) {
-                user = {
-                    nama: dataDUK[0].nama,
-                    nip: dataDUK[0].nip
-                };
-            }
-
-            const currentRole = (user.role || localStorage.getItem("userRole") || "admin").toLowerCase();
-            if (currentRole.includes("pegawai") && !currentRole.includes("admin")) {
-                isAdmin = false;
-            }
-
-            const elNama = document.getElementById("userNama");
-            const elNip = document.getElementById("userNip");
-            const elAvatar = document.getElementById("userAvatar");
-
-            if (elNama) elNama.innerText = user.nama || user.name || "Pegawai";
-            if (elNip) elNip.innerText = user.nip ? `NIP. ${user.nip}` : "-";
-
-            switchRole(isAdmin ? 'admin' : 'pegawai');
-
-            if (elAvatar) {
-                const textNama = user.nama || user.name || "P";
-                const cleanName = textNama.replace(/^dr\.\s*|^H\.\s*/i, '').trim();
-                const initial = cleanName.charAt(0).toUpperCase() || 'A';
-                elAvatar.innerText = initial;
-            }
         }
 
         function formatDate(dateString) {
@@ -541,14 +417,40 @@
             return `${parts[2]} ${months[parseInt(parts[1]) - 1]} ${parts[0]}`;
         }
 
-        // Render Tabel DUK
+        // Render Statistik & Tabel DUK
         function renderTable(data) {
             const tbody = document.getElementById("dukTableBody");
             if(!tbody) return;
             tbody.innerHTML = "";
 
+            // Kontrol Visibilitas Kolom & Tombol Admin
+            const adminCols = document.querySelectorAll('.khusus-admin');
+            const btnTambah = document.getElementById('btnTambahDuk');
+
+            adminCols.forEach(el => {
+                if (currentUserRole === 'admin') el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+
+            if (currentUserRole === 'admin') {
+                if(btnTambah) btnTambah.classList.remove('hidden');
+            } else {
+                if(btnTambah) btnTambah.classList.add('hidden');
+            }
+
+            // Hitung Statistik
+            let total = dataDUK.length;
+            let gol4 = dataDUK.filter(d => d.gol.startsWith("IV")).length;
+            let gol3 = dataDUK.filter(d => d.gol.startsWith("III")).length;
+            let gol2 = total - gol4 - gol3;
+
+            document.getElementById("statTotal").innerText = total;
+            document.getElementById("statGol4").innerText = gol4;
+            document.getElementById("statGol3").innerText = gol3;
+            document.getElementById("statGol2").innerText = gol2;
+
             if (data.length === 0) {
-                const colspanVal = isAdmin ? 9 : 8;
+                const colspanVal = currentUserRole === 'admin' ? 9 : 8;
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="${colspanVal}" class="text-center py-8 text-gray-400">
@@ -557,27 +459,26 @@
                         </td>
                     </tr>
                 `;
-                const dataCountEl = document.getElementById("dataCount");
-                if(dataCountEl) dataCountEl.innerText = 0;
+                document.getElementById("dataCount").innerText = 0;
                 return;
             }
 
-            data.forEach((item) => {
+            data.forEach((item, index) => {
                 const realIndex = dataDUK.findIndex(d => d.nip === item.nip);
                 
                 const tr = document.createElement("tr");
                 tr.className = "hover:bg-gray-50 transition";
                 
-                let aksiHtml = isAdmin ? `
-                    <td class="py-3 px-4 text-center">
-                        <button onclick="openEditModal(${realIndex})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded-md text-xs font-medium transition">
-                            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                let aksiHtml = currentUserRole === 'admin' ? `
+                    <td class="py-3 px-4 text-center khusus-admin">
+                        <button onclick="openEditModal(${realIndex})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded-md text-xs font-medium transition flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
                     </td>
-                ` : '';
+                ` : `<td class="py-3 px-4 text-center khusus-admin hidden"></td>`;
 
                 tr.innerHTML = `
-                    <td class="py-3 px-4 text-center text-gray-600">${item.no}</td>
+                    <td class="py-3 px-4 text-center text-gray-600">${index + 1}</td>
                     <td class="py-3 px-4">
                         <div class="font-bold text-gray-900">${item.nama}</div>
                         <div class="text-xs text-gray-500 font-mono">NIP. ${item.nip}</div>
@@ -589,19 +490,82 @@
                     <td class="py-3 px-4 text-center text-gray-600">${formatDate(item.tmt_pangkat)}</td>
                     <td class="py-3 px-4 font-medium text-gray-800">${item.jabatan}</td>
                     <td class="py-3 px-4 text-center text-gray-600">${item.mk}</td>
-                    <td class="py-3 px-4 text-gray-600">${item.pendidikan}</td>
+                    <td class="py-3 px-4 text-gray-600 text-center">${item.pendidikan}</td>
                     <td class="py-3 px-4 text-center text-gray-600">${item.usia} Th</td>
                     ${aksiHtml}
                 `;
                 tbody.appendChild(tr);
             });
 
-            const dataCountEl = document.getElementById("dataCount");
-            if(dataCountEl) dataCountEl.innerText = data.length;
+            document.getElementById("dataCount").innerText = data.length;
         }
 
-        // Fungsi Modal Edit
+        // Filter Data DUK
+        function filterData() {
+            const keyword = document.getElementById("searchInput").value.toLowerCase();
+            const golFilter = document.getElementById("golonganFilter").value;
+
+            currentFilteredData = dataDUK.filter(item => {
+                const matchSearch = item.nama.toLowerCase().includes(keyword) || 
+                                    item.nip.toLowerCase().includes(keyword) || 
+                                    item.jabatan.toLowerCase().includes(keyword) ||
+                                    item.gol.toLowerCase().includes(keyword);
+                
+                let matchGol = true;
+                if (golFilter !== 'all') {
+                    matchGol = item.gol.startsWith(golFilter);
+                }
+
+                return matchSearch && matchGol;
+            });
+
+            renderTable(currentFilteredData);
+        }
+
+        // Kontrol Modal Tambah
+        function openAddModal() {
+            if (currentUserRole !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat menambah data.');
+                return;
+            }
+            document.getElementById('formAddDuk').reset();
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+        }
+
+        function saveNewData(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'admin') return;
+
+            const newItem = {
+                no: dataDUK.length + 1,
+                nama: document.getElementById('addNama').value,
+                nip: document.getElementById('addNip').value,
+                pangkat: "Penata Muda",
+                gol: document.getElementById('addGol').value,
+                tmt_pangkat: document.getElementById('addTmt').value,
+                jabatan: document.getElementById('addJabatan').value,
+                mk: document.getElementById('addMk').value,
+                pendidikan: document.getElementById('addPendidikan').value,
+                usia: document.getElementById('addUsia').value
+            };
+
+            dataDUK.push(newItem);
+            simpanKeLocal();
+            closeAddModal();
+            currentFilteredData = [...dataDUK];
+            renderTable(currentFilteredData);
+        }
+
+        // Kontrol Modal Edit & Hapus
         function openEditModal(index) {
+            if (currentUserRole !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat mengedit data.');
+                return;
+            }
             const item = dataDUK[index];
             document.getElementById("editIndex").value = index;
             document.getElementById("editNama").value = item.nama;
@@ -621,6 +585,7 @@
         }
 
         function saveEditedData() {
+            if (currentUserRole !== 'admin') return;
             const index = document.getElementById("editIndex").value;
             if(index === "" || !dataDUK[index]) return;
 
@@ -633,17 +598,53 @@
             dataDUK[index].pendidikan = document.getElementById("editPendidikan").value;
             dataDUK[index].usia = document.getElementById("editUsia").value;
 
-            // Simpan otomatis ke localStorage agar tidak berubah lagi saat refresh
             simpanKeLocal();
-
             closeEditModal();
             currentFilteredData = [...dataDUK];
             renderTable(currentFilteredData);
         }
 
+        function deleteDataDuk() {
+            if (currentUserRole !== 'admin') return;
+            const index = document.getElementById("editIndex").value;
+            if(index === "" || !dataDUK[index]) return;
+
+            if(confirm("Apakah Anda yakin ingin menghapus data pegawai ini dari DUK?")) {
+                dataDUK.splice(index, 1);
+                simpanKeLocal();
+                closeEditModal();
+                currentFilteredData = [...dataDUK];
+                renderTable(currentFilteredData);
+            }
+        }
+
+        // Export Excel
+        function exportExcel() {
+            const excelData = currentFilteredData.map((item, idx) => ({
+                "No": idx + 1,
+                "Nama Pegawai": item.nama,
+                "NIP": item.nip,
+                "Golongan": item.gol,
+                "TMT Pangkat": item.tmt_pangkat,
+                "Jabatan": item.jabatan,
+                "Masa Kerja": item.mk,
+                "Pendidikan": item.pendidikan,
+                "Usia": item.usia
+            }));
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Data DUK");
+            XLSX.writeFile(workbook, "Daftar_Urut_Kepangkatan_DPPKBP3A.xlsx");
+        }
+
+        // Export PDF
+        function exportToPDF() {
+            window.print();
+        }
+
         window.onload = function() {
-            loadLoggedInUser();
             renderTable(dataDUK);
         };
     </script>
-    
+</body>
+</html>
