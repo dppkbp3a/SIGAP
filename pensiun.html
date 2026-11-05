@@ -3,72 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usulan Kenaikan Gaji Berkala (KGB) - SIGAP DPPKBP3A</title>
+    <title>Pensiun Pegawai - SIGAP DPPKBP3A</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Library Export Excel & PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-
-    <!-- Style Khusus Cetak / Print -->
+    
     <style>
+        /* Gaya Khusus untuk Cetak Laporan (Print / Save as PDF) */
         @media print {
-            @page {
-                size: A4 landscape;
-                margin: 10mm;
-            }
-            aside, header, footer, .no-print, .stat-cards, .filter-bar, .page-header {
+            aside, header, .no-print, #searchInput, #tahunFilter {
                 display: none !important;
             }
-            body, html {
-                background: #ffffff !important;
-                color: #000000 !important;
-                height: auto !important;
-                margin: 0 !important;
+            body, .flex, .flex-1, main {
+                background: white !important;
                 padding: 0 !important;
+                margin: 0 !important;
                 overflow: visible !important;
+                height: auto !important;
             }
-            .flex, .flex-1, main {
+            .print-header {
                 display: block !important;
-                height: auto !important;
-                overflow: visible !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .table-container {
-                border: none !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
+                margin-bottom: 20px;
+                text-align: center;
             }
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
-                margin: 0 !important;
+                font-size: 10pt !important;
             }
             th, td {
                 border: 1px solid #333 !important;
                 padding: 6px 8px !important;
-                font-size: 8pt !important;
                 color: #000 !important;
-                vertical-align: middle !important;
             }
             thead {
                 display: table-header-group;
             }
-            thead tr {
-                background-color: #0f172a !important;
-                color: #ffffff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
             tr {
                 page-break-inside: avoid;
             }
+        }
+        .print-header {
+            display: none;
         }
     </style>
 </head>
@@ -76,16 +52,13 @@
 
     <div class="flex h-screen overflow-hidden">
         
-       <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between shrink-0 no-print">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between">
             <div>
                 <!-- Brand -->
                 <div class="h-16 flex items-center px-6 bg-slate-950 text-white font-bold text-lg gap-3">
                     <i class="fa-solid fa-calendar-check text-blue-500"></i>
-                    <div class="flex flex-col">
-                        <span class="leading-tight">SIGAP DPPKBP3A</span>
-                        <span class="text-xs text-slate-400 font-normal">Kab.Kuningan</span>
-                    </div>
+                    <span>SIGAP DPPKBP3A</span>
                 </div>
                 <!-- Nav Links -->
                 <nav class="p-4 space-y-1 text-sm">
@@ -104,10 +77,10 @@
                     <a href="penghargaan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-award w-5"></i> Penghargaan
                     </a>
-                    <a href="pensiun.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
+                    <a href="pensiun.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium">
                         <i class="fa-solid fa-user-xmark w-5"></i> Pensiun
                     </a>
-                    <a href="usulan-kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium">
+                    <a href="usulan-kgb.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
                         <i class="fa-solid fa-money-bill-wave w-5"></i> Kenaikan Gaji Berkala
                     </a>
                     <a href="laporan.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition">
@@ -129,112 +102,100 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar (Tombol Role Selector Dihapus, Menyesuaikan Akun Login) -->
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
+            <!-- Top Navbar (Role Switcher Dihapus persis seperti Penghargaan) -->
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
                 <div class="flex items-center gap-4">
-                    <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
+                    <span class="font-semibold text-gray-700">Proyeksi & Usulan Batas Usia Pensiun (BUP) Pegawai</span>
                 </div>
-                
                 <div class="flex items-center gap-4">
-                    <!-- Profile Info -->
                     <div class="flex items-center gap-3">
                         <div class="text-right">
-                            <p class="text-sm font-bold text-gray-800" id="profileName">NOPA PUJIHASTUTI, SE., M.A.P.</p>
-                            <p class="text-xs text-gray-500" id="profileSub">NIP. 19811110 200604 2 007</p>
+                            <p class="text-sm font-bold text-gray-800" id="roleProfileName">Pegawai DPPKBP3A</p>
+                            <p class="text-xs text-gray-500" id="roleProfileDesc">Sistem Informasi Pegawai</p>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" id="profileAvatar">
-                            N
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" id="roleAvatar">
+                            P
                         </div>
                     </div>
                 </div>
             </header>
 
-            <!-- Main Content -->
+            <!-- Main Pensiun Content -->
             <main class="p-6">
-                <!-- Banner Header -->
-                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-6 text-white mb-6 shadow-md flex justify-between items-center">
+                <!-- Header khusus saat hasil cetak diprint / save pdf -->
+                <div class="print-header">
+                    <h1 style="font-size: 16pt; font-weight: bold; margin: 0;">DPPKBP3A KABUPATEN KUNINGAN</h1>
+                    <h2 style="font-size: 13pt; margin: 5px 0 15px 0;">DAFTAR USULAN PENSIUN KEPEGAWAIAN</h2>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 no-print">
                     <div>
-                        <h2 class="text-xl font-bold mb-1">Daftar Usulan Kenaikan Gaji Berkala (KGB) - TAHUN 2026</h2>
-                        <p class="text-sm text-blue-100">Monitoring dan pengelolaan berkas usulan KGB Pegawai Negeri Sipil DPPKBP3A Kuningan.</p>
+                        <h2 class="text-xl font-bold text-gray-800">Daftar Usulan Pensiun Kepegawaian</h2>
+                        <p class="text-sm text-gray-500">Pemantauan jadwal Batas Usia Pensiun (BUP) dan pengajuan berkas usulan pensiun tepat waktu.</p>
                     </div>
-                    <!-- Tombol Tambah Usulan KGB (Khusus Admin) -->
-                    <button id="btnTambahKgb" onclick="bukaModalKgb()" class="khusus-admin bg-white text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm shadow hover:bg-blue-50 transition flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Tambah Usulan KGB
-                    </button>
-                </div>
-
-                <!-- Section Card Summary -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium uppercase">Total Usulan 2026</p>
-                            <h3 id="totalUsulanCount" class="text-2xl font-bold text-gray-800 mt-1">53 Pegawai</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium uppercase">Periode KGB Terdekat</p>
-                            <h3 class="text-2xl font-bold text-amber-600 mt-1">Jan - Apr 2026</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium uppercase">KGB Berikutnya</p>
-                            <h3 class="text-2xl font-bold text-emerald-600 mt-1">Tahun 2028</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
+                    <div class="flex gap-2">
+                        <button onclick="window.print()" class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm flex items-center gap-2 transition">
+                            <i class="fa-solid fa-file-pdf text-red-600"></i> Cetak PDF
+                        </button>
                     </div>
                 </div>
 
-                <!-- Table & Filter Section -->
+                <!-- Highlight Stat Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 no-print">
+                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                        <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total Pegawai Terdata</p>
+                        <h3 class="text-2xl font-bold text-slate-800 mt-1" id="statTotal">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-red-200 bg-red-50/30 shadow-sm">
+                        <p class="text-xs text-red-600 font-semibold uppercase tracking-wider">Mendekati BUP (&lt;= 2 Th)</p>
+                        <h3 class="text-2xl font-bold text-red-700 mt-1" id="statUrgent">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-amber-200 bg-amber-50/30 shadow-sm">
+                        <p class="text-xs text-amber-600 font-semibold uppercase tracking-wider" id="labelStatNear">Pensiun Periode Ini</p>
+                        <h3 class="text-2xl font-bold text-amber-700 mt-1" id="statNear">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 shadow-sm">
+                        <p class="text-xs text-emerald-600 font-semibold uppercase tracking-wider">Usia Senior (55+ Th)</p>
+                        <h3 class="text-2xl font-bold text-emerald-700 mt-1" id="statSenior">0</h3>
+                    </div>
+                </div>
+
+                <!-- Filter & Search Bar -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center no-print">
+                    <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                        <div class="relative w-full md:w-80">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="text" id="searchInput" placeholder="Cari Nama atau NIP..." class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <select id="tahunFilter" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Semua Tahun Pensiun</option>
+                        </select>
+                    </div>
+                    <div class="text-xs text-gray-500 font-medium w-full md:w-auto text-right">
+                        Menampilkan <strong id="dataCount" class="text-gray-800">0</strong> Usulan Pegawai
+                    </div>
+                </div>
+
+                <!-- Table Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="p-5 border-b border-gray-200 flex flex-col md:flex-row gap-4 justify-between items-center">
-                        <h3 class="font-bold text-gray-800 text-base">Daftar Usulan KGB PNS</h3>
-                        
-                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-                            <!-- Tombol Export Excel & PDF -->
-                            <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button onclick="exportToExcel()" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-file-excel"></i> Export Excel
-                                </button>
-                                <button onclick="exportToPDF()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-file-pdf"></i> Cetak PDF
-                                </button>
-                            </div>
-
-                            <!-- Pencarian -->
-                            <div class="w-full md:w-64 relative">
-                                <input type="text" id="searchInput" onkeyup="filterKgbTable()" placeholder="Cari Nama, NIP, Golongan..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400 text-sm"></i>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse" id="tableKgb">
+                        <table class="w-full text-left border-collapse" id="pensiunTable">
                             <thead>
-                                <tr class="bg-gray-50 text-gray-600 text-xs uppercase font-semibold">
+                                <tr class="bg-slate-900 text-white text-xs uppercase font-semibold">
                                     <th class="py-3.5 px-4 text-center">No</th>
-                                    <th class="py-3.5 px-6">NIP & Nama Pegawai</th>
-                                    <th class="py-3.5 px-6">Jabatan & Gol.</th>
-                                    <th class="py-3.5 px-4 text-center">KGB Terakhir</th>
-                                    <th class="py-3.5 px-4 text-center">Usulan KGB 2026</th>
-                                    <th class="py-3.5 px-4 text-center">KGB Berikutnya</th>
-                                    <th class="py-3.5 px-6 text-center khusus-admin">Aksi</th>
+                                    <th class="py-3.5 px-4">NIP</th>
+                                    <th class="py-3.5 px-4">Nama Lengkap</th>
+                                    <th class="py-3.5 px-4 text-center">Usia saat Ini</th>
+                                    <th class="py-3.5 px-4 text-center">TMT BUP</th>
+                                    <th class="py-3.5 px-4 text-center">Jadwal Usulan</th>
+                                    <th class="py-3.5 px-4 text-center">Status Usulan</th>
+                                    <!-- Kolom Header khusus Admin -->
+                                    <th class="py-3.5 px-4 text-center admin-only-col">Aksi Admin</th>
                                 </tr>
                             </thead>
-                            <tbody id="kgbTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
-                                <!-- Data dimuat via JavaScript -->
+                            <tbody id="pensiunTableBody" class="divide-y divide-gray-200 text-sm text-gray-700">
+                                <!-- Render via JS -->
                             </tbody>
                         </table>
                     </div>
@@ -243,324 +204,342 @@
         </div>
     </div>
 
-    <!-- MODAL POP-UP TAMBAH / EDIT USULAN KGB (KHUSUS ADMIN) -->
-    <div id="modalTambahKgb" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            <div class="p-5 border-b flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-gray-800 flex items-center gap-2" id="modalTitle">
-                    <i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru
-                </h3>
-                <button onclick="tutupModalKgb()" class="text-gray-400 hover:text-gray-600 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+    <!-- Modal Edit Status Khusus Admin -->
+    <div id="editModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-gray-800">Edit Status Usulan Pensiun</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+            <p class="text-sm text-gray-600 mb-3" id="modalNamaPegawai">-</p>
+            <input type="hidden" id="modalIndexTarget">
             
-            <form id="formKgb" onsubmit="simpanKgb(event)" class="p-5 space-y-3 text-sm">
-                <input type="hidden" id="editIndex" value="-1">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">NIP Pegawai</label>
-                    <input type="text" id="inputNip" placeholder="Contoh: 19700810 199002 1 001" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Lengkap & Gelar</label>
-                    <input type="text" id="inputNama" placeholder="Contoh: H. APIP ROPI'I, Ners, S.Sos..." required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
+            <div class="mb-4">
+                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Pilih Status Baru</label>
+                <select id="selectStatusCustom" class="w-full bg-gray-50 border border-gray-300 text-sm rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500">
+                    <option value="Mendatang">Mendatang</option>
+                    <option value="Siap Berkas (BUP)">Siap Berkas (BUP)</option>
+                    <option value="Persiapan Usulan">Persiapan Usulan</option>
+                    <option value="Telah Pensiun">Telah Pensiun</option>
+                </select>
+            </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Jabatan</label>
-                        <input type="text" id="inputJabatan" placeholder="Pembina / Penata..." required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Gol / Ruang</label>
-                        <input type="text" id="inputGol" placeholder="IV/b, III/d, dll." required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">KGB Terakhir</label>
-                        <input type="date" id="inputKgbTerakhir" required class="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Usulan KGB 2026</label>
-                        <input type="date" id="inputUsulan2026" required class="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">KGB Berikutnya</label>
-                        <input type="date" id="inputKgbBerikutnya" required class="w-full border border-gray-300 rounded-lg px-2 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                </div>
-
-                <div class="pt-3 flex justify-end gap-2 border-t">
-                    <button type="button" onclick="tutupModalKgb()" class="px-4 py-2 rounded-lg font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition">Simpan Usulan</button>
-                </div>
-            </form>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeModal()" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">Batal</button>
+                <button onclick="saveStatusCustom()" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">Simpan Perubahan</button>
+            </div>
         </div>
     </div>
 
-    <!-- SCRIPT MANAJEMEN DATA & LOCALSTORAGE -->
+    <!-- Script Utama -->
     <script>
-        // Data Bawaan KGB (53 Data Lengkap)
-        const dataExcelKgb = [
-            { id: 1, no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-02-01", usulan2026: "2026-02-01", kgbBerikutnya: "2028-02-01" },
-            { id: 2, no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 3, no: 3, nip: "19710323 199303 2 003", nama: "HJ. ENUNG NURAENI, S.Sos.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 4, no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 5, no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 6, no: 6, nip: "19770513 200604 1 012", nama: "WAHYUDIN, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 7, no: 7, nip: "19830825 201001 2 018", nama: "HERA RISMAWATI, S.Sos.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 8, no: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 9, no: 9, nip: "19821217 200604 2 012", nama: "RATNA DEWI PUSPITA SARI, S.Kep., Ners.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 10, no: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 11, no: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 12, no: 12, nip: "19770205 200801 1 007", nama: "DIDIN AWALUDIN, S.Pd.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 13, no: 13, nip: "19811104 200801 2 009", nama: "DINI NOVIANTI RATNA JUWITA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 14, no: 14, nip: "19780502 200801 2 009", nama: "SITI NURJANAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 15, no: 15, nip: "19730203 201001 1 001", nama: "SAID, SH.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 16, no: 16, nip: "19880718 201411 2 001", nama: "dr. ADHIANI KOESMAN", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-11-01", usulan2026: "2026-11-01", kgbBerikutnya: "2028-11-01" },
-            { id: 17, no: 17, nip: "19720210 200801 1 004", nama: "ERO JUHARA, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 18, no: 18, nip: "19741006 200801 1 004", nama: "DEDI ROSADI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 19, no: 19, nip: "19780516 201001 2 001", nama: "YOYOM SITI MARIAM, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 20, no: 20, nip: "19811110 200604 2 007", nama: "NOPA PUJIHASTUTI, SE., M.A.P.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 21, no: 21, nip: "19730619 200801 2 006", nama: "ETI SUARTI, SE., M.Si.", jabatan: "Pembina", gol: "IV/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 22, no: 22, nip: "19840228 201001 2 005", nama: "LINA HERLINA, SE.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 23, no: 23, nip: "19710831 200003 2 003", nama: "NUNUNG NURZAENAH, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 24, no: 24, nip: "19760823 200801 1 004", nama: "DIKDIK MEDIAGUSDIANA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 25, no: 25, nip: "19780826 201001 2 006", nama: "DIAN NURAENI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 26, no: 26, nip: "19840905 201001 2 015", nama: "SRI MULYATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 27, no: 27, nip: "19750716 200801 1 005", nama: "JAJANG JARKASIH, S.AP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 28, no: 28, nip: "19750409 200801 2 007", nama: "EUIS NURMALA, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 29, no: 29, nip: "19770513 200801 1 012", nama: "NANANG SUTISNA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 30, no: 30, nip: "19830514 201001 2 018", nama: "NURHAYATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 31, no: 31, nip: "19800720 201001 1 004", nama: "SUPRIATNA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 32, no: 32, nip: "19840416 201001 2 009", nama: "NURUL HIDAYAH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 33, no: 33, nip: "19740823 201001 1 001", nama: "MAS`UD, SE.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 34, no: 34, nip: "19810505 201001 2 017", nama: "SRI WAHYUNI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 35, no: 35, nip: "19830412 201001 2 010", nama: "TATI HARTATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 36, no: 36, nip: "19721204 200003 1 004", nama: "RADIMAN, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 37, no: 37, nip: "19851205 201001 2 001", nama: "TATI HERNAWATI, S.IP.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 38, no: 38, nip: "19820715 201001 2 012", nama: "ENI MULYANINGSIH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 39, no: 39, nip: "19810904 201001 2 011", nama: "YAYAH KODARIAH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 40, no: 40, nip: "19801012 201001 2 015", nama: "YETI ROKHAYATI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 41, no: 41, nip: "19840615 201001 2 008", nama: "IIS ISNAENI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 42, no: 42, nip: "19710720 200604 1 008", nama: "H. RAHMAN, S.Sos.", jabatan: "Penata Tk.I", gol: "III/d", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
-            { id: 43, no: 43, nip: "19810810 201001 2 016", nama: "SITI ROCHMAH, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 44, no: 44, nip: "19820512 201001 2 014", nama: "SUSI SUSANTI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 45, no: 45, nip: "19770920 201001 2 003", nama: "IDA SUCIATI, S.IP.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 46, no: 46, nip: "19831120 201001 2 011", nama: "EKA PURWANTI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 47, no: 47, nip: "19920524 202203 2 007", nama: "AYU SEKARDINI, S.KM.", jabatan: "Penata Muda Tk.I", gol: "III/b", kgbTerakhir: "2024-03-01", usulan2026: "2026-03-01", kgbBerikutnya: "2028-03-01" },
-            { id: 48, no: 48, nip: "19850110 201001 2 005", nama: "LILIS SURYANI, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 49, no: 49, nip: "19790507 201001 1 003", nama: "DEDE ALIMUDINSYAH, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 50, no: 50, nip: "19860214 201001 2 004", nama: "DEWI KARTIKA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 51, no: 51, nip: "19840715 201001 2 002", nama: "RINA MARLINA, S.IP.", jabatan: "Penata", gol: "III/c", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" },
-            { id: 52, no: 52, nip: "19730109 201409 1 001", nama: "TOTO SUGIANTO, S.IP.", jabatan: "Penata Muda", gol: "III/a", kgbTerakhir: "2024-09-01", usulan2026: "2026-09-01", kgbBerikutnya: "2028-09-01" },
-            { id: 53, no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", jabatan: "Pengatur Tk.I", gol: "II/d", kgbTerakhir: "2024-01-01", usulan2026: "2026-01-01", kgbBerikutnya: "2028-01-01" }
+        // Ambil role langsung dari localStorage (mengikuti akun login)
+        let currentUserRole = localStorage.getItem("userRole") || 'pegawai';
+
+        // Set Header Profil Berdasarkan Role Login
+        const storedName = localStorage.getItem("user_nama");
+        const profName = document.getElementById('roleProfileName');
+        const profDesc = document.getElementById('roleProfileDesc');
+        const avatar = document.getElementById('roleAvatar');
+
+        if (currentUserRole === 'admin') {
+            profName.textContent = storedName || "Admin DPPKBP3A";
+            profDesc.textContent = "Sistem Informasi Pegawai";
+            avatar.textContent = "A";
+        } else {
+            profName.textContent = storedName || "Pegawai DPPKBP3A";
+            profDesc.textContent = "Akses Mandiri";
+            avatar.textContent = "P";
+        }
+
+        const dataPensiun = [
+            { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", usia: "56", tmt_bup: "01-09-2030", usulan: "2029-09-01", customStatus: null },
+            { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", usia: "54", tmt_bup: "01-04-2030", usulan: "2029-04-01", customStatus: null },
+            { no: 3, nip: "19791029 200501 1 003", nama: "ANWAR NASIHIN, S.Kom., M.Si.", usia: "46", tmt_bup: "01-11-2037", usulan: "2036-11-01", customStatus: null },
+            { no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", usia: "45", tmt_bup: "01-07-2039", usulan: "2038-07-01", customStatus: null },
+            { no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", usia: "51", tmt_bup: "01-12-2032", usulan: "2031-12-01", customStatus: null },
+            { no: 6, nip: "19760504 199901 2 001", nama: "IJAH HODIJAH, SE.", usia: "50", tmt_bup: "01-06-2034", usulan: "2033-06-01", customStatus: null },
+            { no: 7, nip: "19680823 199312 1 001", nama: "Drs. NANANG JUHANA", usia: "58", tmt_bup: "01-09-2026", usulan: "2025-09-01", customStatus: null },
+            { no: 8, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", usia: "57", tmt_bup: "01-10-2026", usulan: "2025-10-01", customStatus: null },
+            { no: 9, nip: "19780416 200901 2 003", nama: "EUIS KOMARIAH, S.Pd., M.M.", usia: "48", tmt_bup: "01-05-2036", usulan: "2035-05-01", customStatus: null },
+            { no: 10, nip: "19690215 199003 1 003", nama: "YAYAT SUDRAJAT, S.Pd.", usia: "57", tmt_bup: "01-03-2027", usulan: "2026-03-01", customStatus: null },
+            { no: 11, nip: "19780627 200604 2 017", nama: "INDRIASARI, S.Kep., Ners.", usia: "45", tmt_bup: "01-07-2036", usulan: "2035-07-01", customStatus: null },
+            { no: 12, nip: "19770205 200801 1 007", nama: "DIDIN AWALUDIN, S.Pd..", usia: "46", tmt_bup: "01-03-2035", usulan: "2034-03-01", customStatus: null },
+            { no: 13, nip: "19811104 200801 2 009", nama: "DINI NOVIANTI RATNA JUWITA, SE.", usia: "43", tmt_bup: "01-12-2039", usulan: "2038-12-01", customStatus: null },
+            { no: 14, nip: "19780502 200801 2 009", nama: "SITI NURJANAH, SE.", usia: "43", tmt_bup: "01-06-2036", usulan: "2035-06-01", customStatus: null },
+            { no: 15, nip: "19730203 201001 1 001", nama: "SAID, SH.", usia: "49", tmt_bup: "01-03-2031", usulan: "2030-03-01", customStatus: null },
+            { no: 16, nip: "19880718 201411 2 001", nama: "dr. ADHIANI KOESMAN", usia: "38", tmt_bup: "01-08-2046", usulan: "2045-08-01", customStatus: null },
+            { no: 17, nip: "19720210 200801 1 004", nama: "ERO JUHARA, S.AP.", usia: "46", tmt_bup: "01-03-2030", usulan: "2029-03-01", customStatus: null },
+            { no: 18, nip: "19811025 200501 1 006", nama: "DENI WAHYUDI PRIADI, SKM., M.A.P..", usia: "45", tmt_bup: "01-11-2039", usulan: "2038-11-01", customStatus: null },
+            { no: 19, nip: "19780516 201001 2 001", nama: "YOYOM SITI MARIAM, S.IP.", usia: "48", tmt_bup: "01-06-2036", usulan: "2035-06-01", customStatus: null },
+            { no: 20, nip: "19811110 200604 2 007", nama: "NOPA PUJIHASTUTI, SE., M.A.P", usia: "44", tmt_bup: "01-12-2039", usulan: "2038-12-01", customStatus: null },
+            { no: 21, nip: "19730619 200801 2 006", nama: "ETI SUARTI, SE., M.Si.", usia: "46", tmt_bup: "01-07-2031", usulan: "2030-07-01", customStatus: null },
+            { no: 22, nip: "19700127 199503 2 002", nama: "Dra. NARUL HAYATI", usia: "57", tmt_bup: "01-02-2028", usulan: "2027-02-01", customStatus: null },
+            { no: 23, nip: "19710831 200003 2 003", nama: "NUNUNG NURZAENAH, SE.", usia: "53", tmt_bup: "01-09-2029", usulan: "2028-09-01", customStatus: null },
+            { no: 24, nip: "19760823 200801 1 004", nama: "DIKDIK MEDIAGUSDIANA, SE..", usia: "46", tmt_bup: "01-09-2034", usulan: "2033-09-01", customStatus: null },
+            { no: 25, nip: "19831209 200901 2 002", nama: "SRI YATI, SE.", usia: "46", tmt_bup: "01-01-2042", usulan: "2041-01-01", customStatus: null },
+            { no: 26, nip: "19821211 201101 1 001", nama: "HENDRA SUHENDRA, S.Sos.", usia: "43", tmt_bup: "01-01-2041", usulan: "2040-01-01", customStatus: null },
+            { no: 27, nip: "19750716 200801 1 005", nama: "JAJANG JARKASIH, S.AP.", usia: "49", tmt_bup: "01-08-2033", usulan: "2032-08-01", customStatus: null },
+            { no: 28, nip: "19750409 200801 2 007", nama: "EUIS NURMALA, SE.", usia: "48", tmt_bup: "01-05-2033", usulan: "2032-05-01", customStatus: null },
+            { no: 29, nip: "19720720 200701 1 013", nama: "UDIN MAHRUDIN, S.Sos.", usia: "47", tmt_bup: "01-08-2030", usulan: "2029-08-01", customStatus: null },
+            { no: 30, nip: "19830620 200901 2 006", nama: "NINA NURAFNI, S.Pd.", usia: "46", tmt_bup: "01-07-2041", usulan: "2040-07-01", customStatus: null },
+            { no: 31, nip: "19800802 200901 2 002", nama: "ELIS KARMANAH, S.Pd.", usia: "46", tmt_bup: "01-09-2038", usulan: "2037-09-01", customStatus: null },
+            { no: 32, nip: "19741228 200701 2 009", nama: "YENI MULYATI, SE.", usia: "45", tmt_bup: "01-01-2033", usulan: "2032-01-01", customStatus: null },
+            { no: 33, nip: "19740823 201001 1 001", nama: "MAS`UD, SE.", usia: "45", tmt_bup: "01-09-2032", usulan: "2031-09-01", customStatus: null },
+            { no: 34, nip: "19760404 200701 1 013", nama: "MAMAN SULAEMAN, S.IP., M.A.P..", usia: "44", tmt_bup: "01-05-2034", usulan: "2033-05-01", customStatus: null },
+            { no: 35, nip: "19830213 200901 1 001", nama: "NANAN HERDIAMAN, S.IP.", usia: "43", tmt_bup: "01-03-2041", usulan: "2040-03-01", customStatus: null },
+            { no: 36, nip: "19721204 200003 1 004", nama: "RADIMAN, S.IP.", usia: "54", tmt_bup: "01-01-2031", usulan: "2030-01-01", customStatus: null },
+            { no: 37, nip: "19851205 201001 2 001", nama: "TATI HERNAWATI, S.IP.", usia: "46", tmt_bup: "01-01-2044", usulan: "2043-01-01", customStatus: null },
+            { no: 38, nip: "19690228 199503 1 001", nama: "Drs. WAWAN IKHWANUDIN", usia: "60", tmt_bup: "01-02-2024", usulan: "2023-02-01", customStatus: null },
+            { no: 39, nip: "19700706 200501 1 011", nama: "UDI RUDI, S.Pd.,MM.", usia: "47", tmt_bup: "01-08-2028", usulan: "2027-08-01", customStatus: null },
+            { no: 40, nip: "19810216 200501 2 011", nama: "GINA MERANI SARIFIANTI, S.Sos.", usia: "46", tmt_bup: "01-03-2039", usulan: "2038-03-01", customStatus: null },
+            { no: 41, nip: "19700101 200701 2 030", nama: "KUSTINI, SE., MM.", usia: "53", tmt_bup: "01-02-2028", usulan: "2027-02-01", customStatus: null },
+            { no: 42, nip: "19710720 200604 1 008", nama: "H. RAHMAN, S.Sos.", usia: "51", tmt_bup: "01-08-2029", usulan: "2028-08-01", customStatus: null },
+            { no: 43, nip: "19810715 200901 2 008", nama: "LINA HERLINA, SE.", usia: "47", tmt_bup: "01-08-2039", usulan: "2038-08-01", customStatus: null },
+            { no: 44, nip: "19710515 200701 2 013", nama: "ENOK SUNDARSIH, SE.", usia: "46", tmt_bup: "01-06-2029", usulan: "2028-06-01", customStatus: null },
+            { no: 45, nip: "19770920 201001 2 003", nama: "IDA SUCIATI, S.IP.", usia: "44", tmt_bup: "01-10-2035", usulan: "2034-10-01", customStatus: null },
+            { no: 46, nip: "19750128 200701 1 001", nama: "UCI SANUSI, S.IP.", usia: "43", tmt_bup: "01-02-2033", usulan: "2032-02-01", customStatus: null },
+            { no: 47, nip: "19920524 202203 2 007", nama: "AYU SEKARDINI, S.KM.", usia: "28", tmt_bup: "01-06-2050", usulan: "2049-06-01", customStatus: null },
+            { no: 48, nip: "19941116 202521 2 005", nama: "TIA NURWULAN, S.E.", usia: "40", tmt_bup: "01-12-2052", usulan: "2051-12-01", customStatus: null },
+            { no: 49, nip: "19790507 201001 1 003", nama: "DEDE ALIMUDINSYAH, S.IP.", usia: "45", tmt_bup: "01-06-2037", usulan: "2036-06-01", customStatus: null },
+            { no: 50, nip: "19810427 200701 2 006", nama: "YANI SUPRIYANI", usia: "45", tmt_bup: "01-05-2039", usulan: "2038-05-01", customStatus: null },
+            { no: 51, nip: "19881005 202321 1 029", nama: "KOMARUDIN, SE.", usia: "43", tmt_bup: "01-11-2046", usulan: "2045-11-01", customStatus: null },
+            { no: 52, nip: "19730109 201409 1 001", nama: "TOTO SUGIANTO, S.IP.", usia: "40", tmt_bup: "01-02-2031", usulan: "2030-02-01", customStatus: null },
+            { no: 53, nip: "19710713 200801 2 002", nama: "AENI NURAENI", usia: "46", tmt_bup: "01-08-2029", usulan: "2028-08-01", customStatus: null },
+            { no: 54, nip: "19691127 200906 1 003", nama: "HERY HERYANTO", usia: "45", tmt_bup: "01-12-2027", usulan: "2026-12-01", customStatus: null },
+            { no: 55, nip: "19921028 202521 1 011", nama: "INDRA HARTONO", usia: "42", tmt_bup: "01-11-2050", usulan: "2049-11-01", customStatus: null },
+            { no: 56, nip: "19810503 202521 2 004", nama: "MELY MELIAWATI", usia: "41", tmt_bup: "01-06-2039", usulan: "2038-06-01", customStatus: null },
+            { no: 57, nip: "19910915 202521 1 095", nama: "SULAEMAN", usia: "48", tmt_bup: "01-10-2049", usulan: "2048-10-01", customStatus: null },
+            { no: 58, nip: "19870606 202521 1 132", nama: "SARYOMAN", usia: "47", tmt_bup: "01-07-2045", usulan: "2044-07-01", customStatus: null },
+            { no: 59, nip: "19940720 202521 1 078", nama: "DANI KURNIAWAN", usia: "41", tmt_bup: "01-08-2052", usulan: "2051-08-01", customStatus: null },
+            { no: 60, nip: "19930228 202521 1 087", nama: "INDRA CAHYA, S.Pd..", usia: "44", tmt_bup: "01-03-2051", usulan: "2050-03-01", customStatus: null },
+            { no: 61, nip: "19950217 202521 2 066", nama: "SISKA ANJAR LESTARY, S.KM.", usia: "28", tmt_bup: "01-03-2053", usulan: "2052-03-01", customStatus: null },
+            { no: 62, nip: "19941014 202521 1 051", nama: "OBY RIZKI BASKARA, S.E.", usia: "32", tmt_bup: "01-11-2052", usulan: "2051-11-01", customStatus: null },
+            { no: 63, nip: "19970307 202521 2 076", nama: "DIANA SRI WAHYUNI, S.Ak.", usia: "29", tmt_bup: "01-04-2055", usulan: "2054-04-01", customStatus: null },
+            { no: 64, nip: "19970506 202521 2 057", nama: "NISA NADILA FAJARINI, S.H..", usia: "28", tmt_bup: "01-06-2055", usulan: "2054-06-01", customStatus: null },
+            { no: 65, nip: "19740707 202521 2 039", nama: "SAPTINAH, S.Pd..", usia: "32", tmt_bup: "01-08-2032", usulan: "2031-08-01", customStatus: null },
+            { no: 66, nip: "19820507 202521 2 051", nama: "INDAH WULANSARI PURNAMANINGRUM, S.Pd.", usia: "30", tmt_bup: "01-06-2040", usulan: "2039-06-01", customStatus: null },
+            { no: 67, nip: "19820917 202521 2 042", nama: "FENY SUKMA ASIH, S.P..", usia: "28", tmt_bup: "01-10-2040", usulan: "2039-10-01", customStatus: null },
+            { no: 68, nip: "19851219 202521 1 060", nama: "DICKA FAHRUL ILMI", usia: "28", tmt_bup: "01-01-2044", usulan: "2043-01-01", customStatus: null },
+            { no: 69, nip: "19921016 202521 1 076", nama: "GIAN NURADITIYA, S.Pd.", usia: "31", tmt_bup: "01-11-2050", usulan: "2049-11-01", customStatus: null },
+            { no: 70, nip: "19960404 202521 1 073", nama: "DEDE SOPIYAN, SE..", usia: "43", tmt_bup: "01-05-2054", usulan: "2053-05-01", customStatus: null },
+            { no: 71, nip: "19931217 202521 1 080", nama: "RENANDRA ADLICA JUHITMAH, S.P..", usia: "28", tmt_bup: "01-01-2052", usulan: "2051-01-01", customStatus: null },
+            { no: 72, nip: "19900523 202521 1 079", nama: "TETEN NUGRAHA", usia: "43", tmt_bup: "01-06-2048", usulan: "2047-06-01", customStatus: null },
+            { no: 73, nip: "19940209 202521 1 064", nama: "MOCHAMAD RIDZAL FEBRYANA", usia: "40", tmt_bup: "01-03-2052", usulan: "2051-03-01", customStatus: null },
+            { no: 74, nip: "19930930 202521 2 084", nama: "IRMA SRIYANI, S.KM.", usia: "39", tmt_bup: "01-10-2051", usulan: "2050-10-01", customStatus: null },
+            { no: 75, nip: "19830215 202521 2 056", nama: "HELLI SUSANTI, S.I.Kom.", usia: "39", tmt_bup: "01-03-2041", usulan: "2040-03-01", customStatus: null },
+            { no: 76, nip: "19930816 202521 1 087", nama: "AGUS SUSANTO", usia: "48", tmt_bup: "01-09-2051", usulan: "2050-09-01", customStatus: null },
+            { no: 77, nip: "19860320 202521 2 049", nama: "MELA AMELIAWATI, S. Pd.", usia: "46", tmt_bup: "01-04-2044", usulan: "2043-04-01", customStatus: null },
+            { no: 78, nip: "19881222 202521 2 059", nama: "DESI INDRIANI", usia: "45", tmt_bup: "01-01-2047", usulan: "2046-01-01", customStatus: null },
+            { no: 79, nip: "19900328 202521 1 066", nama: "TAUFIK RACHMANDANI, S.AP.", usia: "45", tmt_bup: "01-04-2048", usulan: "2047-04-01", customStatus: null },
+            { no: 80, nip: "19951128 202521 2 073", nama: "RIZTNYA PAQUEENA ANANDYA, S.H..", usia: "32", tmt_bup: "01-12-2053", usulan: "2052-12-01", customStatus: null },
+            { no: 81, nip: "19950415 202521 2 110", nama: "TIKA APRILIYANI, S.Pd.", usia: "35", tmt_bup: "01-05-2053", usulan: "2052-05-01", customStatus: null },
+            { no: 82, nip: "19820726 202521 2 033", nama: "YANTHI YULIANTHI", usia: "43", tmt_bup: "01-08-2040", usulan: "2039-08-01", customStatus: null },
+            { no: 83, nip: "19860825 202521 1 066", nama: "DIDIN ROSIDIN, S.IP..", usia: "48", tmt_bup: "01-09-2044", usulan: "2043-09-01", customStatus: null },
+            { no: 84, nip: "19910304 202521 1 095", nama: "ANGGI TRIANSYAH, S.E..", usia: "41", tmt_bup: "01-04-2049", usulan: "2048-04-01", customStatus: null },
+            { no: 85, nip: "19870601 202521 1 096", nama: "YAN ROBIANSYAH", usia: "48", tmt_bup: "01-07-2045", usulan: "2044-07-01", customStatus: null },
+            { no: 86, nip: "19850414 202521 1 095", nama: "ARIS SUHERMAN", usia: "46", tmt_bup: "01-05-2043", usulan: "2042-05-01", customStatus: null },
+            { no: 87, nip: "19900918 202521 1 065", nama: "RICKY MAHARDIKA, S.E.", usia: "40", tmt_bup: "01-10-2048", usulan: "2047-10-01", customStatus: null },
+            { no: 88, nip: "19850113 202521 2 040", nama: "E. SITI NURLAELA", usia: "54", tmt_bup: "01-02-2043", usulan: "2042-02-01", customStatus: null },
+            { no: 89, nip: "19870812 202521 1 136", nama: "DWIKA BANON, S.Pd..", usia: "41", tmt_bup: "01-09-2045", usulan: "2044-09-01", customStatus: null },
+            { no: 90, nip: "19930811 202521 1 077", nama: "TITO RAHAYU BACHTIAR, S.Kom.", usia: "41", tmt_bup: "01-09-2051", usulan: "2050-09-01", customStatus: null },
+            { no: 91, nip: "19891226 202521 1 068", nama: "EKA GULIT TANGGUNG SUTARNO", usia: "48", tmt_bup: "01-01-2048", usulan: "2047-01-01", customStatus: null },
+            { no: 92, nip: "20020919 202521 1 008", nama: "RIZKI ALY SANTOSA", usia: "46", tmt_bup: "01-10-2060", usulan: "2059-10-01", customStatus: null },
+            { no: 93, nip: "19870511 202521 1 088", nama: "INDRA SURYA MANGGALA", usia: "44", tmt_bup: "01-06-2045", usulan: "2044-06-01", customStatus: null }
         ];
 
-        // Format Tanggal Indonesia
-        function formatTglIndo(tglStr) {
-            if (!tglStr) return "-";
-            const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
-            return new Date(tglStr).toLocaleDateString('id-ID', opsi);
-        }
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const nextYear = currentYear + 1;
 
-        // Ambil data dari LocalStorage
-        function ambilDataKgb() {
-            const disimpan = localStorage.getItem('sigap_kgb_list');
-            if (!disimpan) {
-                localStorage.setItem('sigap_kgb_list', JSON.stringify(dataExcelKgb));
-                return dataExcelKgb;
-            }
-            return JSON.parse(disimpan);
-        }
+        const pensiunTableBody = document.getElementById('pensiunTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const tahunFilter = document.getElementById('tahunFilter');
+        const dataCount = document.getElementById('dataCount');
 
-        // Ambil Role User dari LocalStorage secara otomatis
-        function getActiveRole() {
-            return localStorage.getItem('userRole') || 'admin';
-        }
+        function populateFilterYears() {
+            const years = new Set();
+            dataPensiun.forEach(item => {
+                const year = parseInt(item.tmt_bup.split('-')[2]);
+                if (!isNaN(year)) years.add(year);
+            });
 
-        function terapkanHakAkses() {
-            const role = getActiveRole();
-            const elemenAdmin = document.querySelectorAll('.khusus-admin');
-            const storedName = localStorage.getItem("user_nama");
-            const storedNip = localStorage.getItem("userNip") || localStorage.getItem("user_nip");
-
-            if (role === 'admin') {
-                elemenAdmin.forEach(el => el.classList.remove('hidden'));
-                document.getElementById('profileName').innerText = storedName || "NOPA PUJIHASTUTI, SE., M.A.P.";
-                document.getElementById('profileSub').innerText = storedNip ? `NIP. ${storedNip} (Admin)` : "Admin DPPKBP3A";
-                document.getElementById('profileAvatar').innerText = "A";
-            } else {
-                elemenAdmin.forEach(el => el.classList.add('hidden'));
-                document.getElementById('profileName').innerText = storedName || "PEGAWAI DPPKBP3A";
-                document.getElementById('profileSub').innerText = storedNip ? `NIP. ${storedNip}` : "Akses Mandiri Pegawai";
-                document.getElementById('profileAvatar').innerText = "P";
-            }
-        }
-
-        // Render Tabel KGB
-        function renderTabelKgb(data = null) {
-            const listData = data || ambilDataKgb();
-            const tbody = document.getElementById('kgbTableBody');
-            const totalEl = document.getElementById('totalUsulanCount');
+            const sortedYears = Array.from(years).sort((a, b) => a - b);
+            tahunFilter.innerHTML = '<option value="all">Semua Tahun Pensiun</option>';
             
-            if (totalEl) totalEl.innerText = `${listData.length} Pegawai`;
-            tbody.innerHTML = '';
+            sortedYears.forEach(year => {
+                const opt = document.createElement('option');
+                opt.value = year.toString();
+                opt.textContent = `Tahun BUP ${year}`;
+                tahunFilter.appendChild(opt);
+            });
+        }
 
-            if (listData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-400">Tidak ada data usulan KGB yang ditemukan.</td></tr>`;
+        function hitungUsiaDariNIP(nipStr, defaultUsia) {
+            const cleanNip = nipStr.replace(/\s+/g, '');
+            if (cleanNip.length >= 8) {
+                const birthYear = parseInt(cleanNip.substring(0, 4));
+                const birthMonth = parseInt(cleanNip.substring(4, 6)) - 1;
+                const birthDay = parseInt(cleanNip.substring(6, 8));
+
+                if (!isNaN(birthYear) && !isNaN(birthMonth) && !isNaN(birthDay)) {
+                    let age = currentYear - birthYear;
+                    const monthDiff = today.getMonth() - birthMonth;
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+                        age--;
+                    }
+                    return age;
+                }
+            }
+            return parseInt(defaultUsia);
+        }
+
+        function renderPensiun(data) {
+            pensiunTableBody.innerHTML = '';
+            dataCount.textContent = data.length;
+
+            document.getElementById('labelStatNear').textContent = `PENSIUN ${currentYear} - ${nextYear}`;
+
+            let countUrgent = 0;
+            let countNear = 0;
+            let countSenior = 0;
+
+            if (data.length === 0) {
+                pensiunTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-400">Data usulan pensiun tidak ditemukan.</td></tr>`;
                 return;
             }
 
-            listData.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
-                tr.innerHTML = `
-                    <td class="py-3 px-4 text-center font-medium text-gray-500">${index + 1}</td>
-                    <td class="py-3 px-6">
-                        <div class="font-bold text-gray-900">${item.nama}</div>
-                        <div class="text-xs text-gray-500 font-mono">NIP. ${item.nip}</div>
-                    </td>
-                    <td class="py-3 px-6">
-                        <div class="text-gray-800 font-medium">${item.jabatan}</div>
-                        <div class="text-xs text-blue-600 font-semibold">${item.gol}</div>
-                    </td>
-                    <td class="py-3 px-4 text-center text-gray-600">${formatTglIndo(item.kgbTerakhir)}</td>
-                    <td class="py-3 px-4 text-center font-bold text-blue-600">${formatTglIndo(item.usulan2026)}</td>
-                    <td class="py-3 px-4 text-center text-emerald-600 font-semibold">${formatTglIndo(item.kgbBerikutnya)}</td>
-                    <td class="py-3 px-6 text-center khusus-admin">
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="editKgb(${item.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 p-1.5 rounded-lg text-xs transition" title="Edit">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                            </button>
-                            <button onclick="hapusKgb(${item.id})" class="bg-red-50 text-red-600 hover:bg-red-100 p-1.5 rounded-lg text-xs transition" title="Hapus">
-                                <i class="fa-solid fa-trash"></i> Hapus
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-            terapkanHakAkses();
-        }
-
-        // Fitur Pencarian Tabel
-        function filterKgbTable() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const allData = ambilDataKgb();
-            const filtered = allData.filter(item => 
-                item.nama.toLowerCase().includes(keyword) || 
-                item.nip.toLowerCase().includes(keyword) || 
-                item.gol.toLowerCase().includes(keyword) ||
-                item.jabatan.toLowerCase().includes(keyword)
-            );
-            renderTabelKgb(filtered);
-        }
-
-        // Modal Control
-        function bukaModalKgb() {
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
-            document.getElementById('formKgb').reset();
-            document.getElementById('editIndex').value = "-1";
-            document.getElementById('modalTambahKgb').classList.remove('hidden');
-        }
-
-        function tutupModalKgb() {
-            document.getElementById('modalTambahKgb').classList.add('hidden');
-        }
-
-        // Simpan / Tambah / Edit Data
-        function simpanKgb(event) {
-            event.preventDefault();
-            const idEdit = document.getElementById('editIndex').value;
-            const nip = document.getElementById('inputNip').value;
-            const nama = document.getElementById('inputNama').value;
-            const jabatan = document.getElementById('inputJabatan').value;
-            const gol = document.getElementById('inputGol').value;
-            const kgbTerakhir = document.getElementById('inputKgbTerakhir').value;
-            const usulan2026 = document.getElementById('inputUsulan2026').value;
-            const kgbBerikutnya = document.getElementById('inputKgbBerikutnya').value;
-
-            let dataList = ambilDataKgb();
-
-            if (idEdit === "-1") {
-                const newId = dataList.length > 0 ? Math.max(...dataList.map(d => d.id)) + 1 : 1;
-                const newData = { id: newId, no: dataList.length + 1, nip, nama, jabatan, gol, kgbTerakhir, usulan2026, kgbBerikutnya };
-                dataList.push(newData);
-            } else {
-                const index = dataList.findIndex(d => d.id == idEdit);
-                if (index !== -1) {
-                    dataList[index] = { ...dataList[index], nip, nama, jabatan, gol, kgbTerakhir, usulan2026, kgbBerikutnya };
+            // Atur Visibilitas Kolom Header Aksi Admin secara otomatis sesuai role
+            const adminCols = document.querySelectorAll('.admin-only-col');
+            adminCols.forEach(el => {
+                if(currentUserRole === 'admin') {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
                 }
+            });
+
+            data.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition';
+
+                const bupYear = parseInt(item.tmt_bup.split('-')[2]);
+                const usulanYear = parseInt(item.usulan.split('-')[0]);
+                const ageNum = hitungUsiaDariNIP(item.nip, item.usia);
+
+                if (bupYear - currentYear <= 2 && bupYear >= currentYear) countUrgent++;
+                if (bupYear === currentYear || bupYear === nextYear) countNear++;
+                if (ageNum >= 55) countSenior++;
+
+                let statusBadge = '<span class="bg-slate-100 text-slate-700 border-slate-300 border px-2 py-0.5 rounded text-xs font-semibold">Mendatang</span>';
+                
+                if (item.customStatus) {
+                    if(item.customStatus === 'Siap Berkas (BUP)') {
+                        statusBadge = '<span class="bg-red-100 text-red-800 border-red-300 border px-2 py-0.5 rounded text-xs font-bold animate-pulse">Siap Berkas (BUP)</span>';
+                    } else if(item.customStatus === 'Persiapan Usulan') {
+                        statusBadge = '<span class="bg-amber-100 text-amber-800 border-amber-300 border px-2 py-0.5 rounded text-xs font-semibold">Persiapan Usulan</span>';
+                    } else if(item.customStatus === 'Telah Pensiun') {
+                        statusBadge = '<span class="bg-gray-100 text-gray-600 border-gray-300 border px-2 py-0.5 rounded text-xs font-semibold">Telah Pensiun</span>';
+                    } else {
+                        statusBadge = `<span class="bg-blue-100 text-blue-800 border-blue-300 border px-2 py-0.5 rounded text-xs font-semibold">${item.customStatus}</span>`;
+                    }
+                } else {
+                    if (bupYear < currentYear) {
+                        statusBadge = '<span class="bg-gray-100 text-gray-600 border-gray-300 border px-2 py-0.5 rounded text-xs font-semibold">Telah Pensiun</span>';
+                    } else if (usulanYear <= currentYear && bupYear >= currentYear) {
+                        statusBadge = '<span class="bg-red-100 text-red-800 border-red-300 border px-2 py-0.5 rounded text-xs font-bold animate-pulse">Siap Berkas (BUP)</span>';
+                    } else if (usulanYear === nextYear) {
+                        statusBadge = '<span class="bg-amber-100 text-amber-800 border-amber-300 border px-2 py-0.5 rounded text-xs font-semibold">Persiapan Usulan</span>';
+                    }
+                }
+
+                const originalIndex = dataPensiun.findIndex(p => p.nip === item.nip);
+
+                let adminActionCell = '';
+                if(currentUserRole === 'admin') {
+                    adminActionCell = `
+                        <td class="py-3.5 px-4 text-center admin-only-col">
+                            <button onclick="openEditModal(${originalIndex})" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white px-2.5 py-1 rounded text-xs font-semibold transition flex items-center gap-1 mx-auto">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit Status
+                            </button>
+                        </td>
+                    `;
+                } else {
+                    adminActionCell = `<td class="py-3.5 px-4 text-center admin-only-col hidden"></td>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-center font-bold text-slate-800 text-xs">${item.no}</td>
+                    <td class="py-3.5 px-4 font-mono text-xs text-gray-600">${item.nip}</td>
+                    <td class="py-3.5 px-4 font-bold text-gray-900">${item.nama}</td>
+                    <td class="py-3.5 px-4 text-center">
+                        <span class="inline-block px-2 py-0.5 rounded text-xs font-bold ${ageNum >= 55 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700'}">
+                            ${ageNum} Tahun
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center font-mono font-bold text-blue-700 text-xs">${item.tmt_bup}</td>
+                    <td class="py-3.5 px-4 text-center font-mono text-xs text-emerald-700 font-bold">${item.usulan}</td>
+                    <td class="py-3.5 px-4 text-center">${statusBadge}</td>
+                    ${adminActionCell}
+                `;
+                pensiunTableBody.appendChild(tr);
+            });
+
+            document.getElementById('statTotal').textContent = dataPensiun.length;
+            document.getElementById('statUrgent').textContent = countUrgent;
+            document.getElementById('statNear').textContent = countNear;
+            document.getElementById('statSenior').textContent = countSenior;
+        }
+
+        function openEditModal(index) {
+            const peg = dataPensiun[index];
+            document.getElementById('modalIndexTarget').value = index;
+            document.getElementById('modalNamaPegawai').textContent = `${peg.nama} (${peg.nip})`;
+            
+            let currentActiveStatus = peg.customStatus || 'Siap Berkas (BUP)';
+            document.getElementById('selectStatusCustom').value = currentActiveStatus;
+            
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        function saveStatusCustom() {
+            const idx = parseInt(document.getElementById('modalIndexTarget').value);
+            const newStatus = document.getElementById('selectStatusCustom').value;
+            
+            if(!isNaN(idx) && dataPensiun[idx]) {
+                dataPensiun[idx].customStatus = newStatus;
+                closeModal();
+                filterData();
             }
-
-            localStorage.setItem('sigap_kgb_list', JSON.stringify(dataList));
-            tutupModalKgb();
-            renderTabelKgb();
         }
 
-        // Edit Trigger
-        function editKgb(id) {
-            const dataList = ambilDataKgb();
-            const item = dataList.find(d => d.id == id);
-            if (!item) return;
+        function filterData() {
+            const searchVal = searchInput.value.toLowerCase();
+            const tahunVal = tahunFilter.value;
 
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Usulan KGB`;
-            document.getElementById('editIndex').value = item.id;
-            document.getElementById('inputNip').value = item.nip;
-            document.getElementById('inputNama').value = item.nama;
-            document.getElementById('inputJabatan').value = item.jabatan;
-            document.getElementById('inputGol').value = item.gol;
-            document.getElementById('inputKgbTerakhir').value = item.kgbTerakhir;
-            document.getElementById('inputUsulan2026').value = item.usulan2026;
-            document.getElementById('inputKgbBerikutnya').value = item.kgbBerikutnya;
+            const filtered = dataPensiun.filter(item => {
+                const matchSearch = item.nama.toLowerCase().includes(searchVal) || 
+                                    item.nip.toLowerCase().includes(searchVal);
+                
+                const bupYear = item.tmt_bup.split('-')[2];
+                let matchTahun = (tahunVal === 'all') || (bupYear === tahunVal);
 
-            document.getElementById('modalTambahKgb').classList.remove('hidden');
+                return matchSearch && matchTahun;
+            });
+
+            renderPensiun(filtered);
         }
 
-        // Hapus Data
-        function hapusKgb(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
-                let dataList = ambilDataKgb();
-                dataList = dataList.filter(d => d.id != id);
-                dataList.forEach((d, idx) => d.no = idx + 1);
-                localStorage.setItem('sigap_kgb_list', JSON.stringify(dataList));
-                renderTabelKgb();
-            }
-        }
+        searchInput.addEventListener('input', filterData);
+        tahunFilter.addEventListener('change', filterData);
 
-        // Export Excel
-        function exportToExcel() {
-            const dataList = ambilDataKgb();
-            const formatted = dataList.map((d, i) => ({
-                "No": i + 1,
-                "NIP Pegawai": d.nip,
-                "Nama Pegawai": d.nama,
-                "Jabatan": d.jabatan,
-                "Golongan": d.gol,
-                "KGB Terakhir": d.kgbTerakhir,
-                "Usulan KGB 2026": d.usulan2026,
-                "KGB Berikutnya": d.kgbBerikutnya
-            }));
-            const worksheet = XLSX.utils.json_to_sheet(formatted);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Usulan KGB 2026");
-            XLSX.writeFile(workbook, "Data_Usulan_KGB_DPPKBP3A_2026.xlsx");
-        }
-
-        // Export PDF
-        function exportToPDF() {
-            window.print();
-        }
-
-        // Inisialisasi saat halaman dimuat
-        window.onload = function() {
-            terapkanHakAkses();
-            renderTabelKgb();
-        };
+        // Inisialisasi Pertama
+        populateFilterYears();
+        renderPensiun(dataPensiun);
     </script>
 </body>
 </html>
