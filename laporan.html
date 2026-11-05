@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Library untuk Ekspor PDF & Excel -->
+    <!-- Library untuk Ekspor PDF & Excel (Opsional) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -125,20 +125,14 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar -->
+            <!-- Top Navbar (Tombol Role Dihapus, Menyesuaikan Akun Login) -->
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 no-print">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Laporan Rekapitulasi Kepegawaian</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <div class="bg-gray-100 p-1 rounded-lg flex items-center text-xs font-semibold">
-                        <span class="text-gray-500 px-2">Role:</span>
-                        <button onclick="setRole('admin')" id="btnRoleAdmin" class="px-3 py-1 rounded-md transition bg-blue-600 text-white shadow-sm">Admin</button>
-                        <button onclick="setRole('user')" id="btnRoleUser" class="px-3 py-1 rounded-md transition text-gray-600 hover:text-black">Pegawai</button>
-                    </div>
-
-                    <div class="flex items-center gap-3 border-l pl-4">
+                    <div class="flex items-center gap-3">
                         <div class="text-right">
                             <p class="text-sm font-bold text-gray-800" id="profileName">Admin Kepegawaian</p>
                             <p class="text-xs text-gray-500" id="profileRoleDesc">DPPKBP3A Kabupaten Kuningan</p>
@@ -152,10 +146,11 @@
 
             <!-- Main Laporan Content -->
             <main class="p-6">
+                <!-- Action & Filter Bar -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 no-print">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Rekapitulasi Kenaikan Pangkat & Penghargaan</h2>
-                        <p class="text-sm text-gray-500">Ringkasan berkas pengajuan kenaikan pangkat (12 Periode) dan usulan Tanda Kehormatan Satyalancana.</p>
+                        <p class="text-sm text-gray-500">Ringkasan berkas pengajuan kenaikan pangkat dan usulan Tanda Kehormatan Satyalancana Karya Satya.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 items-center">
                         <select id="periodeFilter" onchange="switchTahun(this.value)" class="bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
@@ -175,7 +170,9 @@
                     </div>
                 </div>
 
+                <!-- Area yang akan dicetak/di-export -->
                 <div id="printableArea" class="bg-gray-100 md:bg-transparent p-0">
+                    <!-- Kop Surat Laporan -->
                     <div class="hidden print:block text-center border-b-2 border-black pb-4 mb-6">
                         <h3 class="text-base font-bold uppercase">Pemerintah Kabupaten Kuningan</h3>
                         <h2 class="text-lg font-extrabold uppercase">Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak (DPPKBP3A)</h2>
@@ -206,7 +203,7 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
-                                <i class="fa-solid fa-arrow-up-right-dots text-blue-400"></i> Rekapitulasi Kenaikan Pangkat (KP) - 12 Periode / Tahun
+                                <i class="fa-solid fa-arrow-up-right-dots text-blue-400"></i> Rekapitulasi Kenaikan Pangkat (KP)
                             </h3>
                             <span id="badgeKP" class="text-xs bg-slate-800 px-2.5 py-1 rounded border border-slate-700">Periode 2026</span>
                         </div>
@@ -218,12 +215,15 @@
                                         <th class="py-3 px-4">NIP & Nama Pegawai</th>
                                         <th class="py-3 px-4 text-center">Gol. Lama</th>
                                         <th class="py-3 px-4 text-center">Gol. Baru (Usulan)</th>
-                                        <th class="py-3 px-4 text-center">Periode KP (1-12)</th>
+                                        <th class="py-3 px-4 text-center">Periode KP</th>
                                         <th class="py-3 px-4 text-center">Status Berkas</th>
+                                        <!-- Kolom Aksi hanya dirender jika admin -->
                                         <th class="py-3 px-4 text-center no-print admin-only-col">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tableKP" class="divide-y divide-gray-200 text-sm text-gray-700"></tbody>
+                                <tbody id="tableKP" class="divide-y divide-gray-200 text-sm text-gray-700">
+                                    <!-- Rendered via JS -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -232,7 +232,7 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
                         <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between">
                             <h3 class="font-bold text-sm uppercase tracking-wide flex items-center gap-2">
-                                <i class="fa-solid fa-award text-amber-400"></i> Rekapitulasi Usulan Tanda Kehormatan Satyalancana
+                                <i class="fa-solid fa-award text-amber-400"></i> Rekapitulasi Usulan Tanda Kehormatan / Penghargaan
                             </h3>
                             <span id="badgePenghargaan" class="text-xs bg-slate-800 px-2.5 py-1 rounded border border-slate-700">Periode 2026</span>
                         </div>
@@ -246,10 +246,13 @@
                                         <th class="py-3 px-4 text-center">Masa Kerja</th>
                                         <th class="py-3 px-4 text-center">Tahun Usulan</th>
                                         <th class="py-3 px-4 text-center">Status usulan</th>
+                                        <!-- Kolom Aksi hanya dirender jika admin -->
                                         <th class="py-3 px-4 text-center no-print admin-only-col">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablePenghargaan" class="divide-y divide-gray-200 text-sm text-gray-700"></tbody>
+                                <tbody id="tablePenghargaan" class="divide-y divide-gray-200 text-sm text-gray-700">
+                                    <!-- Rendered via JS -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -265,11 +268,12 @@
                         </div>
                     </div>
                 </div>
+
             </main>
         </div>
     </div>
 
-    <!-- Modal Edit Data -->
+    <!-- Modal Edit Data (Hanya untuk Admin) -->
     <div id="editModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 no-print">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4 overflow-hidden">
             <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
@@ -279,6 +283,7 @@
             <form id="editForm" onsubmit="saveEdit(event)" class="p-5 space-y-4">
                 <input type="hidden" id="editType">
                 <input type="hidden" id="editIndex">
+                
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Nama Pegawai</label>
                     <input type="text" id="editNama" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100" readonly>
@@ -287,6 +292,8 @@
                     <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">NIP</label>
                     <input type="text" id="editNip" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-100" readonly>
                 </div>
+
+                <!-- Field Dinamis KP -->
                 <div id="fieldKP" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Golongan Baru (Usulan)</label>
@@ -301,6 +308,8 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- Field Dinamis Penghargaan -->
                 <div id="fieldPenghargaan" class="space-y-4 hidden">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Jenis Penghargaan</label>
@@ -314,6 +323,7 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="flex justify-end gap-2 pt-3 border-t">
                     <button type="button" onclick="closeEditModal()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition">Batal</button>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">Simpan Perubahan</button>
@@ -322,17 +332,36 @@
         </div>
     </div>
 
+    <!-- Script Data & Role Validation Logic -->
     <script>
-        let currentUserRole = 'admin';
+        // Ambil role langsung dari localStorage secara otomatis
+        let currentUserRole = localStorage.getItem("userRole") || 'admin';
+
+        // Set Header Profil Berdasarkan Role Login
+        const storedName = localStorage.getItem("user_nama");
+        const profName = document.getElementById('profileName');
+        const profDesc = document.getElementById('profileRoleDesc');
+        const avatar = document.getElementById('profileInitial');
+
+        if (currentUserRole === 'admin') {
+            profName.textContent = storedName || "Admin Kepegawaian";
+            profDesc.textContent = "DPPKBP3A Kabupaten Kuningan";
+            avatar.textContent = "A";
+        } else {
+            profName.textContent = storedName || "Pegawai DPPKBP3A";
+            profDesc.textContent = "Akses Mandiri";
+            avatar.textContent = "P";
+        }
+
         const dbLaporan = {
             "2026": {
                 kp: [
-                    { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", gol_lama: "IV/b", gol_baru: "IV/c", periode: "1 April", status: "SK Terbit" },
-                    { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", gol_lama: "IV/a", gol_baru: "IV/b", periode: "1 April", status: "SK Terbit" },
-                    { no: 3, nip: "19791029 200501 1 003", nama: "ANWAR NASIHIN, S.Kom., M.Si.", gol_lama: "III/d", gol_baru: "IV/a", periode: "1 April", status: "Proses BKN" },
-                    { no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", gol_lama: "III/c", gol_baru: "III/d", periode: "1 Oktober", status: "Verifikasi Berkas" },
-                    { no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", gol_lama: "III/c", gol_baru: "III/d", periode: "1 April", status: "SK Terbit" },
-                    { no: 6, nip: "19760504 199901 2 001", nama: "IJAH HODIJAH, SE.", gol_lama: "III/b", gol_baru: "III/c", periode: "1 Oktober", status: "Verifikasi Berkas" }
+                    { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", gol_lama: "IV/b", gol_baru: "IV/c", periode: "April 2026", status: "SK Terbit" },
+                    { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", gol_lama: "IV/a", gol_baru: "IV/b", periode: "April 2026", status: "SK Terbit" },
+                    { no: 3, nip: "19791029 200501 1 003", nama: "ANWAR NASIHIN, S.Kom., M.Si.", gol_lama: "III/d", gol_baru: "IV/a", periode: "April 2026", status: "Proses BKN" },
+                    { no: 4, nip: "19810602 200801 1 006", nama: "ANTON SUPRAPTO, S.Kep.Ners. ,M.K.M.", gol_lama: "III/c", gol_baru: "III/d", periode: "Oktober 2026", status: "Verifikasi Berkas" },
+                    { no: 5, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", gol_lama: "III/c", gol_baru: "III/d", periode: "April 2026", status: "SK Terbit" },
+                    { no: 6, nip: "19760504 199901 2 001", nama: "IJAH HODIJAH, SE.", gol_lama: "III/b", gol_baru: "III/c", periode: "Oktober 2026", status: "Verifikasi Berkas" }
                 ],
                 penghargaan: [
                     { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jenis: "Satyalancana Karya Satya XXX Tahun", masa_kerja: "30 Tahun", tahun: "2026", status: "Disetujui / Piagam Rilis" },
@@ -345,10 +374,10 @@
             },
             "2025": {
                 kp: [
-                    { no: 1, nip: "19680823 199312 1 001", nama: "Drs. NANANG JUHANA", gol_lama: "III/d", gol_baru: "IV/a", periode: "1 April", status: "SK Terbit" },
-                    { no: 2, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", gol_lama: "III/d", gol_baru: "IV/a", periode: "1 Oktober", status: "SK Terbit" },
-                    { no: 3, nip: "19780416 200901 2 003", nama: "EUIS KOMARIAH, S.Pd., M.M.", gol_lama: "III/b", gol_baru: "III/c", periode: "1 April", status: "SK Terbit" },
-                    { no: 4, nip: "19820512 201001 1 004", nama: "BUDI SANTOSO, ST.", gol_lama: "III/a", gol_baru: "III/b", periode: "1 Oktober", status: "SK Terbit" }
+                    { no: 1, nip: "19680823 199312 1 001", nama: "Drs. NANANG JUHANA", gol_lama: "III/d", gol_baru: "IV/a", periode: "April 2025", status: "SK Terbit" },
+                    { no: 2, nip: "19680911 199003 1 006", nama: "KOMARUDIN, SKM., MMKes.", gol_lama: "III/d", gol_baru: "IV/a", periode: "Oktober 2025", status: "SK Terbit" },
+                    { no: 3, nip: "19780416 200901 2 003", nama: "EUIS KOMARIAH, S.Pd., M.M.", gol_lama: "III/b", gol_baru: "III/c", periode: "April 2025", status: "SK Terbit" },
+                    { no: 4, nip: "19820512 201001 1 004", nama: "BUDI SANTOSO, ST.", gol_lama: "III/a", gol_baru: "III/b", periode: "Oktober 2025", status: "SK Terbit" }
                 ],
                 penghargaan: [
                     { no: 1, nip: "19741110 200801 1 018", nama: "H. NOVI PRIHAWAN, A.KS.", jenis: "Satyalancana Karya Satya X Tahun", masa_kerja: "10 Tahun", tahun: "2025", status: "Disetujui / Piagam Rilis" },
@@ -358,20 +387,6 @@
             }
         };
 
-        function setRole(role) {
-            currentUserRole = role;
-            const btnAdmin = document.getElementById('btnRoleAdmin');
-            const btnUser = document.getElementById('btnRoleUser');
-            if (role === 'admin') {
-                btnAdmin.className = "px-3 py-1 rounded-md transition bg-blue-600 text-white shadow-sm";
-                btnUser.className = "px-3 py-1 rounded-md transition text-gray-600 hover:text-black";
-            } else {
-                btnUser.className = "px-3 py-1 rounded-md transition bg-slate-700 text-white shadow-sm";
-                btnAdmin.className = "px-3 py-1 rounded-md transition text-gray-600 hover:text-black";
-            }
-            renderLaporan(document.getElementById('periodeFilter').value);
-        }
-
         function renderLaporan(tahun) {
             const currentData = dbLaporan[tahun];
             if (!currentData) return;
@@ -379,9 +394,14 @@
             document.getElementById('badgeKP').textContent = `Periode ${tahun}`;
             document.getElementById('badgePenghargaan').textContent = `Periode ${tahun}`;
 
-            document.querySelectorAll('.admin-only-col').forEach(col => {
-                if (currentUserRole === 'admin') col.classList.remove('hidden');
-                else col.classList.add('hidden');
+            // Sembunyikan atau tampilkan kolom aksi pada header tabel berdasarkan role
+            const adminCols = document.querySelectorAll('.admin-only-col');
+            adminCols.forEach(col => {
+                if (currentUserRole === 'admin') {
+                    col.classList.remove('hidden');
+                } else {
+                    col.classList.add('hidden');
+                }
             });
 
             const tbodyKP = document.getElementById('tableKP');
@@ -390,19 +410,37 @@
 
             currentData.kp.forEach((item, index) => {
                 if (item.status === 'SK Terbit') countApprovedKP++;
-                let badgeClass = item.status === 'SK Terbit' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-amber-100 text-amber-800 border-amber-300';
-                let actionTd = currentUserRole === 'admin' ? `<td class="py-3 px-4 text-center no-print"><button onclick="openEditModal('kp', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600"><i class="fa-solid fa-pen-to-square"></i> Edit</button></td>` : '';
+                
+                let badgeClass = 'bg-amber-100 text-amber-800 border-amber-300';
+                if (item.status === 'SK Terbit') badgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                else if (item.status === 'Verifikasi Berkas') badgeClass = 'bg-blue-100 text-blue-800 border-blue-300';
+                
+                let actionTd = currentUserRole === 'admin' ? `
+                    <td class="py-3 px-4 text-center no-print">
+                        <button onclick="openEditModal('kp', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600 shadow-sm transition flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                    </td>
+                ` : '';
 
                 tbodyKP.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="py-3 px-4 text-center font-bold text-slate-700 text-xs">${item.no}</td>
-                        <td class="py-3 px-4"><div class="font-bold text-gray-900">${item.nama}</div><div class="text-xs text-gray-500 font-mono">${item.nip}</div></td>
+                        <td class="py-3 px-4">
+                            <div class="font-bold text-gray-900">${item.nama}</div>
+                            <div class="text-xs text-gray-500 font-mono">${item.nip}</div>
+                        </td>
                         <td class="py-3 px-4 text-center font-medium">${item.gol_lama}</td>
                         <td class="py-3 px-4 text-center font-bold text-blue-700">${item.gol_baru}</td>
                         <td class="py-3 px-4 text-center font-medium text-xs">${item.periode}</td>
-                        <td class="py-3 px-4 text-center"><span class="border px-2 py-0.5 rounded text-xs font-semibold ${badgeClass}">${item.status}</span></td>
+                        <td class="py-3 px-4 text-center">
+                            <span class="border px-2 py-0.5 rounded text-xs font-semibold ${badgeClass}">
+                                ${item.status}
+                            </span>
+                        </td>
                         ${actionTd}
-                    </tr>`;
+                    </tr>
+                `;
             });
 
             const tbodyPenghargaan = document.getElementById('tablePenghargaan');
@@ -411,19 +449,36 @@
 
             currentData.penghargaan.forEach((item, index) => {
                 if (item.status.includes('Disetujui')) countApprovedPenghargaan++;
-                let badgeClass = item.status.includes('Disetujui') ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-purple-100 text-purple-800 border-purple-300';
-                let actionTd = currentUserRole === 'admin' ? `<td class="py-3 px-4 text-center no-print"><button onclick="openEditModal('penghargaan', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600"><i class="fa-solid fa-pen-to-square"></i> Edit</button></td>` : '';
+
+                let badgeClass = 'bg-purple-100 text-purple-800 border-purple-300';
+                if (item.status.includes('Disetujui')) badgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+
+                let actionTd = currentUserRole === 'admin' ? `
+                    <td class="py-3 px-4 text-center no-print">
+                        <button onclick="openEditModal('penghargaan', ${index})" class="bg-amber-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-amber-600 shadow-sm transition flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                    </td>
+                ` : '';
 
                 tbodyPenghargaan.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="py-3 px-4 text-center font-bold text-slate-700 text-xs">${item.no}</td>
-                        <td class="py-3 px-4"><div class="font-bold text-gray-900">${item.nama}</div><div class="text-xs text-gray-500 font-mono">${item.nip}</div></td>
+                        <td class="py-3 px-4">
+                            <div class="font-bold text-gray-900">${item.nama}</div>
+                            <div class="text-xs text-gray-500 font-mono">${item.nip}</div>
+                        </td>
                         <td class="py-3 px-4 font-semibold text-slate-800">${item.jenis}</td>
                         <td class="py-3 px-4 text-center text-xs font-bold text-amber-700">${item.masa_kerja}</td>
                         <td class="py-3 px-4 text-center font-medium text-xs">${item.tahun}</td>
-                        <td class="py-3 px-4 text-center"><span class="border px-2 py-0.5 rounded text-xs font-semibold ${badgeClass}">${item.status}</span></td>
+                        <td class="py-3 px-4 text-center">
+                            <span class="border px-2 py-0.5 rounded text-xs font-semibold ${badgeClass}">
+                                ${item.status}
+                            </span>
+                        </td>
                         ${actionTd}
-                    </tr>`;
+                    </tr>
+                `;
             });
 
             document.getElementById('totalKP').textContent = currentData.kp.length;
@@ -432,35 +487,58 @@
             document.getElementById('satyaCount').textContent = countApprovedPenghargaan;
         }
 
-        function switchTahun(tahun) { renderLaporan(tahun); }
+        function switchTahun(tahun) {
+            renderLaporan(tahun);
+        }
+
         function openEditModal(type, index) {
-            if (currentUserRole !== 'admin') { alert('Akses ditolak!'); return; }
-            const item = dbLaporan[document.getElementById('periodeFilter').value][type][index];
+            if (currentUserRole !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat mengedit data.');
+                return;
+            }
+
+            const tahun = document.getElementById('periodeFilter').value;
+            const item = dbLaporan[tahun][type][index];
+
             document.getElementById('editType').value = type;
             document.getElementById('editIndex').value = index;
             document.getElementById('editNama').value = item.nama;
             document.getElementById('editNip').value = item.nip;
+
+            const fieldKP = document.getElementById('fieldKP');
+            const fieldPenghargaan = document.getElementById('fieldPenghargaan');
+
             if (type === 'kp') {
-                document.getElementById('fieldKP').classList.remove('hidden');
-                document.getElementById('fieldPenghargaan').classList.add('hidden');
+                document.getElementById('modalTitle').textContent = 'Edit Data Kenaikan Pangkat';
+                fieldKP.classList.remove('hidden');
+                fieldPenghargaan.classList.add('hidden');
                 document.getElementById('editGolBaru').value = item.gol_baru;
                 document.getElementById('editStatusKP').value = item.status;
             } else {
-                document.getElementById('fieldKP').classList.add('hidden');
-                document.getElementById('fieldPenghargaan').classList.remove('hidden');
+                document.getElementById('modalTitle').textContent = 'Edit Data Penghargaan';
+                fieldKP.classList.add('hidden');
+                fieldPenghargaan.classList.remove('hidden');
                 document.getElementById('editJenisPenghargaan').value = item.jenis;
                 document.getElementById('editStatusPenghargaan').value = item.status;
             }
+
             document.getElementById('editModal').classList.remove('hidden');
             document.getElementById('editModal').classList.add('flex');
         }
-        function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('flex');
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
         function saveEdit(event) {
             event.preventDefault();
+            if (currentUserRole !== 'admin') return;
+
             const tahun = document.getElementById('periodeFilter').value;
             const type = document.getElementById('editType').value;
             const index = document.getElementById('editIndex').value;
-            
+
             if (type === 'kp') {
                 dbLaporan[tahun].kp[index].gol_baru = document.getElementById('editGolBaru').value;
                 dbLaporan[tahun].kp[index].status = document.getElementById('editStatusKP').value;
@@ -468,16 +546,55 @@
                 dbLaporan[tahun].penghargaan[index].jenis = document.getElementById('editJenisPenghargaan').value;
                 dbLaporan[tahun].penghargaan[index].status = document.getElementById('editStatusPenghargaan').value;
             }
+
             closeEditModal();
             renderLaporan(tahun);
         }
-        function exportPDF() { html2pdf().from(document.getElementById('printableArea')).save(`Laporan-DPPKBP3A.pdf`); }
-        function exportExcel() {
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dbLaporan[document.getElementById('periodeFilter').value].kp), "Rekap KP");
-            XLSX.writeFile(wb, "Laporan-DPPKBP3A.xlsx");
+
+        function exportPDF() {
+            const element = document.getElementById('printableArea');
+            const tahun = document.getElementById('periodeFilter').value;
+            const options = {
+                margin:       10,
+                filename:     `Laporan-Rekapitulasi-DPPKBP3A-${tahun}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().from(element).set(options).save();
         }
-        document.addEventListener('DOMContentLoaded', () => renderLaporan('2026'));
+
+        function exportExcel() {
+            const tahun = document.getElementById('periodeFilter').value;
+            const currentData = dbLaporan[tahun];
+
+            let dataExcel = [
+                ["REKAPITULASI KENAIKAN PANGKAT (KP) - TAHUN " + tahun],
+                ["No", "NIP", "Nama Pegawai", "Golongan Lama", "Golongan Baru", "Periode KP", "Status Berkas"]
+            ];
+            currentData.kp.forEach(item => {
+                dataExcel.push([item.no, item.nip, item.nama, item.gol_lama, item.gol_baru, item.periode, item.status]);
+            });
+
+            dataExcel.push([]);
+            dataExcel.push(["REKAPITULASI USULAN TANDA KEHORMATAN / PENGHARGAAN - TAHUN " + tahun]);
+            dataExcel.push(["No", "NIP", "Nama Pegawai", "Jenis Penghargaan", "Masa Kerja", "Tahun Usulan", "Status Usulan"]);
+            currentData.penghargaan.forEach(item => {
+                dataExcel.push([item.no, item.nip, item.nama, item.jenis, item.masa_kerja, item.tahun, item.status]);
+            });
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(dataExcel);
+            XLSX.utils.book_append_sheet(wb, ws, "Laporan Rekapitulasi");
+            
+            XLSX.writeFile(wb, `Laporan-Rekapitulasi-DPPKBP3A-${tahun}.xlsx`);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialYear = document.getElementById('periodeFilter').value;
+            renderLaporan(initialYear);
+        });
     </script>
 </body>
 </html>
