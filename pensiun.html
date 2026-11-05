@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pensiun Pegawai - SIGAP DPPKBP3A</title>
-    <!-- Tailwind CSS CDN -->https://github.com/dppkbp3a/SIGAP/edit/main/pensiun.html
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -109,7 +109,7 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <!-- Simulasi Pengganti Role (Admin / Pegawai) -->
-                    <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg border text-xs">
+                    <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg border text-xs no-print">
                         <span class="text-gray-500 font-medium px-2">Role:</span>
                         <button onclick="switchRole('admin')" id="btnRoleAdmin" class="px-3 py-1 rounded-md font-bold transition bg-blue-600 text-white">Admin</button>
                         <button onclick="switchRole('pegawai')" id="btnRolePegawai" class="px-3 py-1 rounded-md font-bold transition text-gray-600 hover:bg-gray-200">Pegawai</button>
@@ -240,30 +240,40 @@
 
     <!-- Script Utama -->
     <script>
-        // State Role Pengguna (Default: 'admin')
-        let currentUserRole = 'admin';
+        // State Role Pengguna (Default: Berdasarkan localStorage atau Admin)
+        let currentUserRole = localStorage.getItem("userRole") || 'admin';
 
-        function switchRole(role) {
-            currentUserRole = role;
+        function applyUserRoleUI() {
             const btnAdmin = document.getElementById('btnRoleAdmin');
             const btnPegawai = document.getElementById('btnRolePegawai');
             const profName = document.getElementById('roleProfileName');
             const profDesc = document.getElementById('roleProfileDesc');
             const avatar = document.getElementById('roleAvatar');
 
-            if(role === 'admin') {
+            if(currentUserRole === 'admin') {
                 btnAdmin.className = "px-3 py-1 rounded-md font-bold transition bg-blue-600 text-white";
                 btnPegawai.className = "px-3 py-1 rounded-md font-bold transition text-gray-600 hover:bg-gray-200";
-                profName.textContent = "Admin DPPKBP3A";
+                profName.textContent = localStorage.getItem("user_nama") || "Admin DPPKBP3A";
                 profDesc.textContent = "Sistem Informasi Pegawai";
                 avatar.textContent = "A";
             } else {
                 btnPegawai.className = "px-3 py-1 rounded-md font-bold transition bg-blue-600 text-white";
                 btnAdmin.className = "px-3 py-1 rounded-md font-bold transition text-gray-600 hover:bg-gray-200";
-                profName.textContent = "Pegawai DPPKBP3A";
+                profName.textContent = localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
                 profDesc.textContent = "Akses Mandiri";
                 avatar.textContent = "P";
             }
+        }
+
+        function switchRole(role) {
+            currentUserRole = role;
+            localStorage.setItem("userRole", role);
+            if(role === 'admin') {
+                localStorage.setItem("user_nama", "Admin DPPKBP3A");
+            } else {
+                localStorage.setItem("user_nama", "Pegawai DPPKBP3A");
+            }
+            applyUserRoleUI();
             filterData();
         }
 
@@ -446,7 +456,6 @@
                 if (bupYear === currentYear || bupYear === nextYear) countNear++;
                 if (ageNum >= 55) countSenior++;
 
-                // Tentukan Badge Status (Bisa ditimpa lewat customStatus jika diedit admin)
                 let statusBadge = '<span class="bg-slate-100 text-slate-700 border-slate-300 border px-2 py-0.5 rounded text-xs font-semibold">Mendatang</span>';
                 
                 if (item.customStatus) {
@@ -469,7 +478,6 @@
                     }
                 }
 
-                // Cari indeks asli di dataPensiun besar untuk tombol edit
                 const originalIndex = dataPensiun.findIndex(p => p.nip === item.nip);
 
                 let adminActionCell = '';
@@ -508,13 +516,11 @@
             document.getElementById('statSenior').textContent = countSenior;
         }
 
-        // Fungsi Modal Edit Status
         function openEditModal(index) {
             const peg = dataPensiun[index];
             document.getElementById('modalIndexTarget').value = index;
             document.getElementById('modalNamaPegawai').textContent = `${peg.nama} (${peg.nip})`;
             
-            // Set value dropdown saat ini
             let currentActiveStatus = peg.customStatus || 'Siap Berkas (BUP)';
             document.getElementById('selectStatusCustom').value = currentActiveStatus;
             
@@ -532,7 +538,7 @@
             if(!isNaN(idx) && dataPensiun[idx]) {
                 dataPensiun[idx].customStatus = newStatus;
                 closeModal();
-                filterData(); // Render ulang tabel secara dinamis
+                filterData();
             }
         }
 
@@ -557,6 +563,7 @@
         tahunFilter.addEventListener('change', filterData);
 
         // Inisialisasi Pertama
+        applyUserRoleUI();
         populateFilterYears();
         renderPensiun(dataPensiun);
     </script>
