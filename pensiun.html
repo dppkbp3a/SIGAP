@@ -102,26 +102,19 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar -->
+            <!-- Top Navbar (Role Switcher Dihapus persis seperti Penghargaan) -->
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Proyeksi & Usulan Batas Usia Pensiun (BUP) Pegawai</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <!-- Simulasi Pengganti Role (Admin / Pegawai) -->
-                    <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg border text-xs no-print">
-                        <span class="text-gray-500 font-medium px-2">Role:</span>
-                        <button onclick="switchRole('admin')" id="btnRoleAdmin" class="px-3 py-1 rounded-md font-bold transition bg-blue-600 text-white">Admin</button>
-                        <button onclick="switchRole('pegawai')" id="btnRolePegawai" class="px-3 py-1 rounded-md font-bold transition text-gray-600 hover:bg-gray-200">Pegawai</button>
-                    </div>
-
                     <div class="flex items-center gap-3">
                         <div class="text-right">
-                            <p class="text-sm font-bold text-gray-800" id="roleProfileName">Admin DPPKBP3A</p>
+                            <p class="text-sm font-bold text-gray-800" id="roleProfileName">Pegawai DPPKBP3A</p>
                             <p class="text-xs text-gray-500" id="roleProfileDesc">Sistem Informasi Pegawai</p>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" id="roleAvatar">
-                            A
+                            P
                         </div>
                     </div>
                 </div>
@@ -240,41 +233,23 @@
 
     <!-- Script Utama -->
     <script>
-        // State Role Pengguna (Default: Berdasarkan localStorage atau Admin)
-        let currentUserRole = localStorage.getItem("userRole") || 'admin';
+        // Ambil role langsung dari localStorage (mengikuti akun login)
+        let currentUserRole = localStorage.getItem("userRole") || 'pegawai';
 
-        function applyUserRoleUI() {
-            const btnAdmin = document.getElementById('btnRoleAdmin');
-            const btnPegawai = document.getElementById('btnRolePegawai');
-            const profName = document.getElementById('roleProfileName');
-            const profDesc = document.getElementById('roleProfileDesc');
-            const avatar = document.getElementById('roleAvatar');
+        // Set Header Profil Berdasarkan Role Login
+        const storedName = localStorage.getItem("user_nama");
+        const profName = document.getElementById('roleProfileName');
+        const profDesc = document.getElementById('roleProfileDesc');
+        const avatar = document.getElementById('roleAvatar');
 
-            if(currentUserRole === 'admin') {
-                btnAdmin.className = "px-3 py-1 rounded-md font-bold transition bg-blue-600 text-white";
-                btnPegawai.className = "px-3 py-1 rounded-md font-bold transition text-gray-600 hover:bg-gray-200";
-                profName.textContent = localStorage.getItem("user_nama") || "Admin DPPKBP3A";
-                profDesc.textContent = "Sistem Informasi Pegawai";
-                avatar.textContent = "A";
-            } else {
-                btnPegawai.className = "px-3 py-1 rounded-md font-bold transition bg-blue-600 text-white";
-                btnAdmin.className = "px-3 py-1 rounded-md font-bold transition text-gray-600 hover:bg-gray-200";
-                profName.textContent = localStorage.getItem("user_nama") || "Pegawai DPPKBP3A";
-                profDesc.textContent = "Akses Mandiri";
-                avatar.textContent = "P";
-            }
-        }
-
-        function switchRole(role) {
-            currentUserRole = role;
-            localStorage.setItem("userRole", role);
-            if(role === 'admin') {
-                localStorage.setItem("user_nama", "Admin DPPKBP3A");
-            } else {
-                localStorage.setItem("user_nama", "Pegawai DPPKBP3A");
-            }
-            applyUserRoleUI();
-            filterData();
+        if (currentUserRole === 'admin') {
+            profName.textContent = storedName || "Admin DPPKBP3A";
+            profDesc.textContent = "Sistem Informasi Pegawai";
+            avatar.textContent = "A";
+        } else {
+            profName.textContent = storedName || "Pegawai DPPKBP3A";
+            profDesc.textContent = "Akses Mandiri";
+            avatar.textContent = "P";
         }
 
         const dataPensiun = [
@@ -434,7 +409,7 @@
                 return;
             }
 
-            // Atur Visibilitas Kolom Header Aksi Admin
+            // Atur Visibilitas Kolom Header Aksi Admin secara otomatis sesuai role
             const adminCols = document.querySelectorAll('.admin-only-col');
             adminCols.forEach(el => {
                 if(currentUserRole === 'admin') {
@@ -563,7 +538,6 @@
         tahunFilter.addEventListener('change', filterData);
 
         // Inisialisasi Pertama
-        applyUserRoleUI();
         populateFilterYears();
         renderPensiun(dataPensiun);
     </script>
