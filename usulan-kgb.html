@@ -129,24 +129,15 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar -->
+            <!-- Top Navbar (Tombol Role Selector Dihapus, Menyesuaikan Akun Login) -->
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <!-- Switcher Simulasi Role Login -->
-                    <div class="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200 text-xs">
-                        <span class="text-gray-500 font-medium px-2"><i class="fa-solid fa-user-shield mr-1"></i> Mode:</span>
-                        <select id="roleSelector" onchange="ubahRole(this.value)" class="bg-white text-gray-800 font-bold py-1 px-2 rounded border border-gray-300 outline-none cursor-pointer focus:ring-2 focus:ring-blue-500">
-                            <option value="admin">ADMIN</option>
-                            <option value="pegawai">PEGAWAI</option>
-                        </select>
-                    </div>
-
                     <!-- Profile Info -->
-                    <div class="flex items-center gap-3 pl-2 border-l border-gray-200">
+                    <div class="flex items-center gap-3">
                         <div class="text-right">
                             <p class="text-sm font-bold text-gray-800" id="profileName">NOPA PUJIHASTUTI, SE., M.A.P.</p>
                             <p class="text-xs text-gray-500" id="profileSub">NIP. 19811110 200604 2 007</p>
@@ -386,32 +377,26 @@
             return JSON.parse(disimpan);
         }
 
-        // Ambil & Simpan Role User
+        // Ambil Role User dari LocalStorage secara otomatis
         function getActiveRole() {
-            return localStorage.getItem('sigap_user_role') || 'admin';
-        }
-
-        function ubahRole(role) {
-            localStorage.setItem('sigap_user_role', role);
-            terapkanHakAkses();
+            return localStorage.getItem('userRole') || 'admin';
         }
 
         function terapkanHakAkses() {
             const role = getActiveRole();
-            const roleSelectorEl = document.getElementById('roleSelector');
-            if (roleSelectorEl) roleSelectorEl.value = role;
-
             const elemenAdmin = document.querySelectorAll('.khusus-admin');
-            
+            const storedName = localStorage.getItem("user_nama");
+            const storedNip = localStorage.getItem("userNip") || localStorage.getItem("user_nip");
+
             if (role === 'admin') {
                 elemenAdmin.forEach(el => el.classList.remove('hidden'));
-                document.getElementById('profileName').innerText = "NOPA PUJIHASTUTI, SE., M.A.P.";
-                document.getElementById('profileSub').innerText = "NIP. 19811110 200604 2 007 (Admin)";
-                document.getElementById('profileAvatar').innerText = "N";
+                document.getElementById('profileName').innerText = storedName || "NOPA PUJIHASTUTI, SE., M.A.P.";
+                document.getElementById('profileSub').innerText = storedNip ? `NIP. ${storedNip} (Admin)` : "Admin DPPKBP3A";
+                document.getElementById('profileAvatar').innerText = "A";
             } else {
                 elemenAdmin.forEach(el => el.classList.add('hidden'));
-                document.getElementById('profileName').innerText = "PEGAWAI SIGAP";
-                document.getElementById('profileSub').innerText = "Mode Akses: Pegawai Negeri Sipil";
+                document.getElementById('profileName').innerText = storedName || "PEGAWAI DPPKBP3A";
+                document.getElementById('profileSub').innerText = storedNip ? `NIP. ${storedNip}` : "Akses Mandiri Pegawai";
                 document.getElementById('profileAvatar').innerText = "P";
             }
         }
@@ -502,12 +487,10 @@
             let dataList = ambilDataKgb();
 
             if (idEdit === "-1") {
-                // Tambah Baru
                 const newId = dataList.length > 0 ? Math.max(...dataList.map(d => d.id)) + 1 : 1;
                 const newData = { id: newId, no: dataList.length + 1, nip, nama, jabatan, gol, kgbTerakhir, usulan2026, kgbBerikutnya };
                 dataList.push(newData);
             } else {
-                // Edit Data
                 const index = dataList.findIndex(d => d.id == idEdit);
                 if (index !== -1) {
                     dataList[index] = { ...dataList[index], nip, nama, jabatan, gol, kgbTerakhir, usulan2026, kgbBerikutnya };
@@ -543,7 +526,6 @@
             if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
                 let dataList = ambilDataKgb();
                 dataList = dataList.filter(d => d.id != id);
-                // Re-numbering no urut
                 dataList.forEach((d, idx) => d.no = idx + 1);
                 localStorage.setItem('sigap_kgb_list', JSON.stringify(dataList));
                 renderTabelKgb();
