@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-4">
                 <label class="block text-sm font-medium mb-2" for="password">Kata Sandi</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
@@ -41,6 +41,21 @@
                     </span>
                     <input type="password" id="password" required placeholder="••••••••" 
                         class="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:border-blue-400 text-sm placeholder-gray-400 text-white">
+                </div>
+            </div>
+
+            <!-- Pilihan Mode Admin / Pegawai -->
+            <div class="mb-6">
+                <label class="block text-xs font-medium text-blue-200 uppercase tracking-wider mb-2">Masuk Sebagai:</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="flex items-center space-x-2 bg-white/5 border border-white/20 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/10 transition">
+                        <input type="radio" name="loginMode" value="admin" class="text-blue-600 focus:ring-blue-400">
+                        <span class="text-xs font-medium"><i class="fa-solid fa-user-shield mr-1"></i> Mode Admin</span>
+                    </label>
+                    <label class="flex items-center space-x-2 bg-white/5 border border-white/20 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/10 transition">
+                        <input type="radio" name="loginMode" value="pegawai" checked class="text-blue-600 focus:ring-blue-400">
+                        <span class="text-xs font-medium"><i class="fa-solid fa-user mr-1"></i> Mode Pegawai</span>
+                    </label>
                 </div>
             </div>
 
@@ -71,13 +86,12 @@
 
       const ADMIN_NIP = "198111102006042007";
 
-      
-
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
         const usernameInput = document.getElementById('username').value.trim();
         const passwordInput = document.getElementById('password').value.trim();
+        const selectedMode = document.querySelector('input[name="loginMode"]:checked').value;
         const kataSandiSama = "31Agustus2026";
 
         if (passwordInput === kataSandiSama) {
@@ -87,8 +101,12 @@
           localStorage.removeItem("user_nip");
           localStorage.removeItem("user_nama");
 
-          // 1. JIKA LOGIN SEBAGAI ADMIN (HANYA UNTUK USERNAME 'admin' ATAU NIP NOPA)
-          if (usernameInput.toLowerCase() === "admin" || usernameInput === ADMIN_NIP) {
+          // 1. JIKA MEMILIH MODE ADMIN
+          if (selectedMode === "admin") {
+            if (usernameInput !== ADMIN_NIP) {
+              alert("Akses Ditolak! NIP tersebut bukan NIP Administrator yang sah.");
+              return;
+            }
             localStorage.setItem("userRole", "admin");
             localStorage.setItem("userNip", ADMIN_NIP);
             localStorage.setItem("user_nip", ADMIN_NIP);
@@ -97,17 +115,23 @@
             return;
           } 
           
-          // 2. JIKA LOGIN SEBAGAI PEGAWAI (SEMUA NIP SELAIN ADMIN)
-          if (/^\d+$/.test(usernameInput)) {
-            const namaPegawai = DATA_PEGAWAI[usernameInput] || "Pegawai DPPKBP3A";
+          // 2. JIKA MEMILIH MODE PEGAWAI
+          if (selectedMode === "pegawai") {
+            if (usernameInput === ADMIN_NIP) {
+              alert("NIP ini merupakan NIP Administrator. Silakan pilih 'Mode Admin' untuk masuk.");
+              return;
+            }
+            if (/^\d+$/.test(usernameInput)) {
+              const namaPegawai = DATA_PEGAWAI[usernameInput] || "Pegawai DPPKBP3A";
 
-            localStorage.setItem("userRole", "pegawai");
-            localStorage.setItem("userNip", usernameInput);
-            localStorage.setItem("user_nip", usernameInput);
-            localStorage.setItem("user_nama", namaPegawai);
+              localStorage.setItem("userRole", "pegawai");
+              localStorage.setItem("userNip", usernameInput);
+              localStorage.setItem("user_nip", usernameInput);
+              localStorage.setItem("user_nama", namaPegawai);
 
-            window.location.href = "dashboard.html";
-            return;
+              window.location.href = "dashboard.html";
+              return;
+            }
           }
 
           alert("Username atau NIP tidak valid!");
