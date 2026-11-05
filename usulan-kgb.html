@@ -129,7 +129,7 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-y-auto">
             
-            <!-- Top Navbar (Tombol Role Selector Dihapus, Menyesuaikan Akun Login) -->
+            <!-- Top Navbar (Mengikuti Akun Login secara Otomatis) -->
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 sticky top-0">
                 <div class="flex items-center gap-4">
                     <span class="font-semibold text-gray-700">Manajemen Kenaikan Gaji Berkala (KGB)</span>
@@ -303,7 +303,7 @@
 
     <!-- SCRIPT MANAJEMEN DATA & LOCALSTORAGE -->
     <script>
-        // Data Bawaan KGB (53 Data Lengkap)
+        // Data Bawaan KGB (53 Data Lengkap)[cite: 19]
         const dataExcelKgb = [
             { id: 1, no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-02-01", usulan2026: "2026-02-01", kgbBerikutnya: "2028-02-01" },
             { id: 2, no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", jabatan: "Pembina Tk.I", gol: "IV/b", kgbTerakhir: "2024-04-01", usulan2026: "2026-04-01", kgbBerikutnya: "2028-04-01" },
@@ -406,6 +406,7 @@
             const listData = data || ambilDataKgb();
             const tbody = document.getElementById('kgbTableBody');
             const totalEl = document.getElementById('totalUsulanCount');
+            const role = getActiveRole();
             
             if (totalEl) totalEl.innerText = `${listData.length} Pegawai`;
             tbody.innerHTML = '';
@@ -418,6 +419,20 @@
             listData.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
+                
+                let aksiTd = role === 'admin' ? `
+                    <td class="py-3 px-6 text-center khusus-admin">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="editKgb(${item.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 p-1.5 rounded-lg text-xs transition" title="Edit">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                            <button onclick="hapusKgb(${item.id})" class="bg-red-50 text-red-600 hover:bg-red-100 p-1.5 rounded-lg text-xs transition" title="Hapus">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </td>
+                ` : `<td class="py-3 px-6 text-center khusus-admin hidden"></td>`;
+
                 tr.innerHTML = `
                     <td class="py-3 px-4 text-center font-medium text-gray-500">${index + 1}</td>
                     <td class="py-3 px-6">
@@ -431,16 +446,7 @@
                     <td class="py-3 px-4 text-center text-gray-600">${formatTglIndo(item.kgbTerakhir)}</td>
                     <td class="py-3 px-4 text-center font-bold text-blue-600">${formatTglIndo(item.usulan2026)}</td>
                     <td class="py-3 px-4 text-center text-emerald-600 font-semibold">${formatTglIndo(item.kgbBerikutnya)}</td>
-                    <td class="py-3 px-6 text-center khusus-admin">
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="editKgb(${item.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 p-1.5 rounded-lg text-xs transition" title="Edit">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
-                            </button>
-                            <button onclick="hapusKgb(${item.id})" class="bg-red-50 text-red-600 hover:bg-red-100 p-1.5 rounded-lg text-xs transition" title="Hapus">
-                                <i class="fa-solid fa-trash"></i> Hapus
-                            </button>
-                        </div>
-                    </td>
+                    ${aksiTd}
                 `;
                 tbody.appendChild(tr);
             });
@@ -462,6 +468,10 @@
 
         // Modal Control
         function bukaModalKgb() {
+            if (getActiveRole() !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat menambah usulan KGB.');
+                return;
+            }
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-signature text-blue-600"></i> Tambah Usulan KGB Baru`;
             document.getElementById('formKgb').reset();
             document.getElementById('editIndex').value = "-1";
@@ -475,6 +485,8 @@
         // Simpan / Tambah / Edit Data
         function simpanKgb(event) {
             event.preventDefault();
+            if (getActiveRole() !== 'admin') return;
+
             const idEdit = document.getElementById('editIndex').value;
             const nip = document.getElementById('inputNip').value;
             const nama = document.getElementById('inputNama').value;
@@ -504,6 +516,10 @@
 
         // Edit Trigger
         function editKgb(id) {
+            if (getActiveRole() !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat mengedit data KGB.');
+                return;
+            }
             const dataList = ambilDataKgb();
             const item = dataList.find(d => d.id == id);
             if (!item) return;
@@ -523,6 +539,10 @@
 
         // Hapus Data
         function hapusKgb(id) {
+            if (getActiveRole() !== 'admin') {
+                alert('Akses ditolak! Hanya Admin yang dapat menghapus data KGB.');
+                return;
+            }
             if (confirm("Apakah Anda yakin ingin menghapus data usulan KGB ini?")) {
                 let dataList = ambilDataKgb();
                 dataList = dataList.filter(d => d.id != id);
