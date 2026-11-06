@@ -391,14 +391,13 @@
             }
         }
 
-        // 2. Render Tabel Data
+        // Render Tabel Data
         function renderTable(data) {
             const tbody = document.getElementById('pegawaiTableBody');
             const countEl = document.getElementById('pegawaiCount');
             tbody.innerHTML = '';
             countEl.textContent = data.length;
 
-            // Atur visibilitas tombol tambah dan kolom aksi berdasarkan role
             const adminElements = document.querySelectorAll('.khusus-admin');
             adminElements.forEach(el => {
                 if (currentUserRole === 'admin') el.classList.remove('hidden');
@@ -452,7 +451,7 @@
             });
         }
 
-        // 3. Filter Pencarian
+        // Filter Pencarian
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase();
             filteredData = dataPegawai.filter(item => 
@@ -465,7 +464,7 @@
             renderTable(filteredData);
         });
 
-        // 4. Modal Detail
+        // Modal Detail
         function openModal(nip) {
             const item = dataPegawai.find(p => p.nip === nip);
             if (!item) return;
@@ -484,7 +483,7 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
-        // 5. Modal Tambah (Khusus Admin)
+        // Modal Tambah (Khusus Admin)
         function openAddModal() {
             if (currentUserRole !== 'admin') {
                 alert('Akses ditolak! Hanya Admin yang dapat menambah pegawai.');
@@ -518,7 +517,7 @@
             renderTable(filteredData);
         }
 
-        // 6. Modal Edit & Hapus (Khusus Admin)
+        // Modal Edit & Hapus (Khusus Admin)
         function openEditModal(index) {
             if (currentUserRole !== 'admin') {
                 alert('Akses ditolak! Hanya Admin yang dapat mengedit pegawai.');
@@ -575,12 +574,15 @@
             }
         }
 
-        // 7. Export PDF
+        // Export PDF
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            const doc = new jsPDF('landscape', 'mm', 'a4');
 
-            doc.text("Daftar Pegawai - SIGAP DPPKBP3A", 14, 15);
+            doc.setFontSize(14);
+            doc.text("DAFTAR PEGAWAI DPPKBP3A KABUPATEN KUNINGAN", 14, 15);
+            doc.setFontSize(9);
+            doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 21);
             
             const tableHeaders = [["No", "Nama Pegawai", "NIP", "Gol/Ruang", "Jabatan", "Unit Kerja"]];
             const tableRows = filteredData.map((item, index) => [
@@ -595,7 +597,7 @@
             doc.autoTable({
                 head: tableHeaders,
                 body: tableRows,
-                startY: 20,
+                startY: 25,
                 styles: { fontSize: 8 },
                 headStyles: { fillColor: [15, 23, 42] }
             });
@@ -603,7 +605,7 @@
             doc.save("Data_Pegawai_DPPKBP3A.pdf");
         }
 
-        // 8. Export Excel
+        // Export Excel
         function exportToExcel() {
             const exportData = filteredData.map((item, index) => ({
                 "No": index + 1,
@@ -621,7 +623,7 @@
             XLSX.writeFile(workbook, "Data_Pegawai_DPPKBP3A.xlsx");
         }
 
-        // 9. Logout
+        // Logout
         function logout() {
             localStorage.removeItem('userNip');
             localStorage.removeItem('userRole');
