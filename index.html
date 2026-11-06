@@ -7,10 +7,28 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Elemen background khusus dengan efek blur tipis/sedang */
+        .bg-blur-custom {
+            background-image: url('logoSIGAP1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(3px); /* Nilai 3px ini bikin blurnya tipis/sedang, tidak terlalu buram */
+            transform: scale(1.03); /* Memperbesar sedikit gambar agar pinggiran putih bekas blur tertutup */
+        }
+    </style>
 </head>
-<body style="background-image: url('logoSIGAP1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" class="h-screen flex items-center justify-center text-white">
+<body class="h-screen flex items-center justify-center text-white relative overflow-hidden">
 
-    <div class="w-full max-w-md p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/10">
+    <!-- Layer Gambar Background (Berada di paling belakang) -->
+    <div class="absolute inset-0 bg-blur-custom z-0"></div>
+    
+    <!-- Lapisan gelap sangat tipis (15%) agar teks & kotak login semakin tegas -->
+    <div class="absolute inset-0 bg-black/15 z-0"></div>
+
+    <!-- Form Login (Berada di depan background agar tidak ikut blur) -->
+    <div class="relative z-10 w-full max-w-md p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/10">
         <!-- Logo / Header -->
         <div class="text-center mb-8">
             <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
