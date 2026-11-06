@@ -102,7 +102,7 @@
             <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm flex items-center justify-between">
                 <div>
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pegawai</span>
-                    <h3 class="text-2xl font-bold text-slate-800 mt-1">93</h3>
+                    <h3 class="text-2xl font-bold text-slate-800 mt-1" id="stat-total-pegawai">93</h3>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-users"></i>
@@ -254,8 +254,24 @@
             }
 
             muatDataUser();
+            hitungTotalPegawai();
             muatAgenda();
         });
+
+        // Fungsi memperbarui total pegawai secara otomatis dari localStorage datapegawai
+        function hitungTotalPegawai() {
+            const savedPegawai = localStorage.getItem("sigap_pegawai_list");
+            if (savedPegawai) {
+                try {
+                    const parsedData = JSON.parse(savedPegawai);
+                    if (Array.isArray(parsedData)) {
+                        document.getElementById("stat-total-pegawai").textContent = parsedData.length;
+                    }
+                } catch (e) {
+                    console.error("Gagal memparsing data pegawai", e);
+                }
+            }
+        }
 
         function muatDataUser() {
             const role = localStorage.getItem("userRole") || "pegawai";
