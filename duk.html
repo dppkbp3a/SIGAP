@@ -158,6 +158,13 @@
 
             <!-- Content DUK -->
             <main class="p-4 md:p-6">
+                <!-- Header khusus saat hasil cetak -->
+                <div class="print-header">
+                    <h1 class="text-xl font-bold uppercase">Daftar Urut Kepangkatan (DUK) DPPKBP3A</h1>
+                    <p class="text-sm">Dinas Pengendalian Penduduk, Keluarga Berencana, Pemberdayaan Perempuan dan Perlindungan Anak</p>
+                    <hr class="my-2 border-black">
+                </div>
+
                 <!-- Header Actions & Tombol Ekspor -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <div>
@@ -379,7 +386,7 @@
             if(elAvatar) elAvatar.innerText = "P";
         }
 
-        // Data DUK Pegawai lengkap 93 data dari Excel Master DUK DPPKBP3A
+        // Data DUK Pegawai lengkap 93 data dari Excel Master DUK DPPKBP3A[cite: 22]
         let dataDUK = JSON.parse(localStorage.getItem('dukPegawaiList')) || [
             { no: 1, nip: "19700810 199002 1 001", nama: "H. APIP ROPI'I, Ners, S.Sos, S.KM, MMKes.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2026-03-01", jabatan: "Kepala Dinas", mk: "36,06 th", pendidikan: "Magister Kesehatan (S.2)", usia: "56" },
             { no: 2, nip: "19720301 200604 1 011", nama: "dr. EDDY SYARIEF, MM., MM.RS.", pangkat: "Pembina Tk.I", gol: "IV/b", tmt_pangkat: "2024-02-01", jabatan: "Sekretaris Dinas", mk: "20,04 Th", pendidikan: "Magister Manajemen Sumber Daya Manusia (S.2)", usia: "54" },
@@ -710,9 +717,37 @@
             XLSX.writeFile(workbook, "Daftar_Urut_Kepangkatan_DPPKBP3A.xlsx");
         }
 
-        // Export PDF
+        // Export PDF menggunakan jsPDF & AutoTable
         function exportToPDF() {
-            window.print();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('landscape', 'mm', 'a4');
+
+            doc.setFontSize(14);
+            doc.text("DAFTAR URUT KEPANGKATAN (DUK) DPPKBP3A", 14, 15);
+            doc.setFontSize(9);
+            doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 21);
+            
+            const tableHeaders = [["NO", "NAMA & NIP PEGAWAI", "GOL/RUANG", "TMT PANGKAT", "JABATAN", "MASA KERJA", "PENDIDIKAN", "USIA"]];
+            const tableRows = currentFilteredData.map((item, index) => [
+                index + 1,
+                `${item.nama}\nNIP. ${item.nip}`,
+                item.gol,
+                item.tmt_pangkat || '-',
+                item.jabatan,
+                item.mk,
+                item.pendidikan,
+                `${item.usia} Th`
+            ]);
+
+            doc.autoTable({
+                head: tableHeaders,
+                body: tableRows,
+                startY: 25,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [15, 23, 42] }
+            });
+
+            doc.save("Daftar_Urut_Kepangkatan_DPPKBP3A.pdf");
         }
 
         window.onload = function() {
